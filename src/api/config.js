@@ -16,7 +16,7 @@ const service = axios.create({
 });
  
 // 请求拦截器
-let token = 'sk-Y0XzWKGxJbc8oeoQC9FeC7C2E6F84452A2325d18A49d5fB6'
+let token = 'sk-94piBrPZi2DriPw23142114aFeDc4c73Bd350aA64fBd6d0d'
 service.interceptors.request.use(
   config => {
     config.headers['Authorization'] = `Bearer ${token}`;

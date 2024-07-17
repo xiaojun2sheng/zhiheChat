@@ -9,12 +9,16 @@ let testHost =
 {
     host: '154.3.0.117',
     port: '11531',
-    username: '154_3_0_117',
-    password: 'AGmimZEy3a4y',
+    username: '154_3_0_117_9099',
+    password: '36Zz7nbQXjma',
     path: '/www/wwwroot/154.3.0.117'
     // 154.3.0.117
+    // 服务器
     // root
     // Ca3tz2PPxjPqIwEu
+    // 宝塔
+    // chatfire
+    // chatfirechtfire
 }
 
 client.scp('./dist',

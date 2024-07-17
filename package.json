@@ -11,6 +11,7 @@
     "deploy:dev": "vite build && node ./deploy"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.7.2",
     "chalk": "^5.3.0",
     "element-plus": "^2.7.7",
