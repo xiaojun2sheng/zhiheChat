@@ -7,13 +7,17 @@
     "dev": "vite",
     "dev:prod": "vite --mode production",
     "build": "vite build --mode production",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:dev": "vite build && node ./deploy"
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "chalk": "^5.3.0",
     "element-plus": "^2.7.7",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
+    "ora": "^8.0.1",
+    "scp2": "^0.5.0",
     "vue": "^3.4.31",
     "vue-router": "^4.4.0"
   },
