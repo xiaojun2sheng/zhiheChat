@@ -38,7 +38,6 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     // 对响应数据做处理，例如只返回data部分
-    debugger
     return response.data;
   },
   error => {
