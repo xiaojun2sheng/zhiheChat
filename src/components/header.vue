@@ -1,15 +1,13 @@
 
 
 <template>
-  <div class="header_box">
+  <div class="header_box" hadow="always">
     <div class="logo">
       Logo
     </div>
     <el-menu
       class="menulist"
       mode="horizontal"
-      @open="handleOpen"
-      @close="handleClose"
     >
       <el-menu-item 
         v-for="menuItem in menuList" 
@@ -21,23 +19,22 @@
         </template>
       </el-menu-item>
     </el-menu>
-    <div class="user_center">
-      userCenter
-    </div>
+    <UserCenter></UserCenter>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import UserCenter from './userCenter.vue'
 
 const router = useRouter()
 
 const menuList = [
-  { title: '视频', id: 1, url: '/video' },
-  { title: '音乐', id: 2, url: '/music' },
-  { title: '图片', id: 3, url: '/image' },
-  { title: '问答', id: 4, url: '/chat' }
+  { title: '视频', id: '1', url: '/video' },
+  { title: '音乐', id: '2', url: '/music' },
+  { title: '图片', id: '3', url: '/image' },
+  { title: '问答', id: '4', url: '/chat' }
 ]
 
 const jumpPage = (url) => {
@@ -53,14 +50,12 @@ const jumpPage = (url) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 55px;
   .logo {
     width: 100px;
   }
   .menulist {
     width: calc(100% - 200px);
-  }
-  .user_center {
-    width: 100px;
   }
 }
 </style>

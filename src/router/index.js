@@ -25,4 +25,16 @@ const router = createRouter({
   routes,
 });
  
+router.beforeEach((to, from, next) => {
+  // 确认是否要继续路由跳转
+  // if (Token) {
+    next(); // 继续路由跳转
+  // } else {
+  //   // 取消路由跳转，并且可以导航到一个新的路由地址或当前路由
+  //   next(false); // 取消跳转
+  //   // 或者
+  //   next('/login'); // 跳转到登录页面
+  // }
+});
+
 export default router;
