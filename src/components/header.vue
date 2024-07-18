@@ -34,7 +34,8 @@ const menuList = [
   { title: '视频', id: '1', url: '/video' },
   { title: '音乐', id: '2', url: '/music' },
   { title: '图片', id: '3', url: '/image' },
-  { title: '问答', id: '4', url: '/chat' }
+  { title: '问答', id: '4', url: '/chat' },
+  { title: '语音', id: '5', url: '/voice' }
 ]
 
 const jumpPage = (url) => {

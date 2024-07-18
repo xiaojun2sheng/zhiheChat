@@ -8,6 +8,7 @@ import Video from '../views/video.vue';
 import Music from '../views/music.vue';
 import Image from '../views/image.vue';
 import Chat from '../views/chat.vue';
+import Voice from '../views/voice.vue';
  
 // 定义路由
 const routes = [
@@ -17,6 +18,7 @@ const routes = [
   { path: '/music', component: Music },
   { path: '/image', component: Image },
   { path: '/chat', component: Chat },
+  { path: '/voice', component: Voice },
 ];
  
 // 创建router实例

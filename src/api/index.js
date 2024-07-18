@@ -23,3 +23,19 @@ export const getVideoKlingApi = (config = {}) =>
         method: 'get',
         ...config,
 })
+
+// 聊天
+export const chatCompletionsApi = (config = {}) =>
+    request({
+        url: '/v1/chat/completions',
+        method: 'post',
+        ...config,
+})
+
+// 文字转语音
+export const textToVoice = (config = {}) =>
+    request({
+        url: '/v1/audio/speech',
+        method: 'post',
+        ...config,
+})
