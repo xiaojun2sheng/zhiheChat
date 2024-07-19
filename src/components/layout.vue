@@ -8,7 +8,6 @@
 <script setup>
 
 import Header from './header.vue'
-import { ref } from 'vue'
 
 defineProps({
 })

@@ -17,10 +17,11 @@
                     <el-button class="width_btn" @click="createVideo" :disabled="!videoDesc" type="primary">生成视频</el-button>
                 </el-tab-pane>
                 <el-tab-pane label="图片生成视频" name="image">
-                    <UploadImage @uploadSuccess="uploadSuccess"></UploadImage>
+                    <h2>敬请期待</h2>
+                    <!-- <UploadImage @uploadSuccess="uploadSuccess"></UploadImage>
                     <div class="center_btn_box">
                         <el-button class="width_btn" @click="createVideo" :disabled="!videoDesc" type="primary">生成视频</el-button>
-                    </div>
+                    </div> -->
                 </el-tab-pane>
             </el-tabs>
         </el-card>

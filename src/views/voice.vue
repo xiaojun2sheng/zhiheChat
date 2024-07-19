@@ -6,20 +6,20 @@
             <el-tabs v-model="activeName">
                 <el-tab-pane label="文字生成音频" name="text">
                     <el-input
-                        v-model="voiceDesc"
+                        v-model="voiceSoundConfig.input"
                         style="width: 100%"
                         :autosize="{ minRows: 6, maxRows: 8 }"
                         type="textarea"
                         placeholder="请输入您要生成音频的文案"
                     />
-                    <el-button class="width_btn" @click="createVoice" :disabled="!voiceDesc" type="primary">生成音频</el-button>
+                    <el-button class="width_btn" @click="dialogVisible = true" type="primary">配置</el-button>
+                    <el-button class="width_btn" @click="createVoice" :disabled="!voiceSoundConfig.input" type="primary">生成音频</el-button>
                 </el-tab-pane>
-                <el-tab-pane label="克隆声音" name="image">
-                    <!-- <UploadImage @uploadSuccess="uploadSuccess"></UploadImage> -->
+                <!-- <el-tab-pane label="克隆声音" name="image">
                     <div class="center_btn_box">
-                        <el-button class="width_btn" @click="createVoice" :disabled="!voiceDesc" type="primary">生成音频</el-button>
+                        <el-button class="width_btn" @click="createVoice" :disabled="!voiceSoundConfig.input" type="primary">生成音频</el-button>
                     </div>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
         </el-card>
         <el-card 
@@ -35,6 +35,35 @@
             </div>
             <el-empty v-else description="请生成音频" />
         </el-card>
+
+
+        <!-- 音频配置 -->
+        <el-dialog
+            v-model="dialogVisible"
+            title="优化提示词"
+            width="500"
+            :before-close="cancelDialog"
+        >   
+            <label class="diglog_title">选择音色</label>
+            <div>
+                <el-check-tag
+                    class="sound_tag"
+                    v-for="item in voiceSoundTypeOptions" 
+                    :key="item" 
+                    :checked="item == voiceSoundConfig.voice"
+                    @click="voiceSoundConfig.voice = item"
+                    >{{ item }}
+                </el-check-tag>
+            </div>
+            <label class="diglog_title">声音速度</label>
+            <el-slider v-model="voiceSoundConfig.speed" :min="0.25" :max="4" :step="0.25"/>
+            <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="cancelDialog">取消</el-button>
+                <el-button type="primary" @click="submitDialog">替换</el-button>
+            </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -42,10 +71,8 @@
 import { onMounted, ref } from 'vue'
 import { textToVoice } from '@/api/index'
 import { ElMessage } from 'element-plus'
-import UploadImage from '@/components/uploadImage.vue';
 
 let activeName = ref('text')
-let voiceDesc = ref('')
 
 // 生成的音频
 let resData = ref(null)
@@ -61,22 +88,27 @@ const splitVoiceText = (str) => {
 }
 
 let loading = ref(false)
+
+// 文字生成语音参数
+let voiceSoundConfig = ref({
+    model: "tts-1",
+    input: '',
+    voice: '云健',
+    speed: 1
+})
 const createVoice = async () => {
-    let voiceTextList = splitVoiceText(voiceDesc.value)
+    let voiceTextList = splitVoiceText(voiceSoundConfig.value.input)
     let voiceBlobList = []
     loading.value = true
     for (const item of voiceTextList) {
         let res = await textToVoice({
-            data: {
-                model: "tts-1",
-                input: item,
-                voice: "shimmer"
-            },
+            data: item,
             responseType: 'blob'
         })
+        if (res == 'error') return loading.value = false
         if (res) {
             const elink = document.createElement('a');
-            elink.download = '文件名称.xls';
+            elink.download = 'voice.mp3';
             elink.style.display = 'none';
             const blob = new Blob([res], { type: 'audio/mpeg' });
             voiceBlobList.push(blob)
@@ -94,6 +126,19 @@ const mergeBlobToMp3 = (voiceBlobList) => {
     loading.value = false
 }
 
+// 音频配置
+let dialogVisible = ref(false)
+const voiceSoundTypeOptions = [
+    '晓晓','女声','晓伊','云健','云希','男声', '云夏', '云扬', '辽宁晓北', '陕西晓妮'
+]
+// 确认替换提示词
+const submitDialog = () => {
+    dialogVisible.value = false
+}
+// 取消替换提示词
+const cancelDialog = () => {
+    dialogVisible.value = false
+}
 </script>
 
 <style scoped lang="less">
@@ -115,5 +160,13 @@ const mergeBlobToMp3 = (voiceBlobList) => {
     width: 100%;
     display: flex;
     justify-content: center;
+}
+.diglog_title {
+    display: inline-block;
+    font-size: 14px;
+    margin: 8px 0;
+}
+.sound_tag {
+    margin-right: 8px;
 }
 </style>

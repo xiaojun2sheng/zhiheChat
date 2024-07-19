@@ -1,7 +1,9 @@
 
 <template>
   <Layout v-if="!isLogin"></Layout>
-  <router-view></router-view>
+  <div class="pagerouter">
+    <router-view></router-view>
+  </div>
 </template>
 
 
@@ -20,5 +22,8 @@ router.beforeEach((to, from, next) => {
 
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.pagerouter {
+  height: 100%;
+}
 </style>

@@ -18,7 +18,7 @@ let testHost =
     // Ca3tz2PPxjPqIwEu
     // 宝塔
     // chatfire
-    // chatfirechtfire
+    // chatfirechatfire
 }
 
 client.scp('./dist',

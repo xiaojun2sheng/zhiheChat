@@ -46,7 +46,7 @@ service.interceptors.response.use(
       message: error?.message,
       type: 'warning',
     })
-    return Promise.reject(error);
+    return 'error'
   }
 );
  

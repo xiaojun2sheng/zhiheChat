@@ -18,7 +18,8 @@
                     <el-button class="width_btn" @click="createImage" :disabled="!imageDesc" type="primary">生成图片</el-button>
                 </el-tab-pane>
                 <el-tab-pane label="图片生成图片" name="image">
-                    <UploadImage></UploadImage>
+                    <h2>敬请期待</h2>
+                    <!-- <UploadImage></UploadImage> -->
                 </el-tab-pane>
             </el-tabs>
         </el-card>

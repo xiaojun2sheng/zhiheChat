@@ -39,3 +39,11 @@ export const textToVoice = (config = {}) =>
         method: 'post',
         ...config,
 })
+
+// 优化提示词
+export const batterPromptApi = (config = {}) =>
+    request({
+        url: '/tools/v1/prompter',
+        method: 'get',
+        ...config,
+})

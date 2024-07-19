@@ -3,16 +3,17 @@
 <template>
   <div class="header_box" hadow="always">
     <div class="logo">
-      Logo
+      AI 百宝箱
     </div>
     <el-menu
       class="menulist"
       mode="horizontal"
+      :default-active="activeIndex"
     >
       <el-menu-item 
         v-for="menuItem in menuList" 
         :key="menuItem.id"
-        :index="menuItem.id"
+        :index="menuItem.url"
         @click="jumpPage(menuItem.url)">
         <template #title>
           <span>{{ menuItem.title }}</span>
@@ -24,18 +25,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { nextTick, onMounted, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import UserCenter from './userCenter.vue'
 
 const router = useRouter()
+const route = useRoute()
 
 const menuList = [
   { title: '视频', id: '1', url: '/video' },
-  { title: '音乐', id: '2', url: '/music' },
+  // { title: '音乐', id: '2', url: '/music' },
   { title: '图片', id: '3', url: '/image' },
   { title: '问答', id: '4', url: '/chat' },
-  { title: '语音', id: '5', url: '/voice' }
+  { title: '语音', id: '5', url: '/voice' },
+  { title: '提示词优化', id: '6', url: '/batterPrompt' },
 ]
 
 const jumpPage = (url) => {
@@ -43,6 +46,22 @@ const jumpPage = (url) => {
     path: url,
   })
 }
+
+let activeIndex = ref('1')
+
+onMounted(() => {
+  setTimeout(() => {
+    getMenuActice()
+  }, 1000);
+})
+const getMenuActice = () => {
+  let menuItem = menuList.find(item => {
+    return item.url == route.path
+  })
+  if (!menuItem) return
+  activeIndex.value = menuItem.url
+}
+
 </script>
 
 <style lang="less" scoped>
@@ -54,6 +73,8 @@ const jumpPage = (url) => {
   height: 55px;
   .logo {
     width: 100px;
+    padding: 0 8px;
+    // color: #409eff;
   }
   .menulist {
     width: calc(100% - 200px);
