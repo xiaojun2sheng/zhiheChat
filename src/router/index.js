@@ -15,7 +15,7 @@ import BatterPrompt from '../views/BatterPrompt.vue';
 // 定义路由
 const routes = [
   { path: '/login', component: Login },
-  { path: '/', component: Home },
+  { path: '/', component: BatterPrompt },
   { path: '/video', component: Video },
   { path: '/music', component: Music },
   { path: '/image', component: Image },

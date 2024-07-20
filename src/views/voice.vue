@@ -80,7 +80,7 @@ let resData = ref(null)
 // 字符串不限制长度，按照1500个字符进行切割，切换成数组，然后生成数组blob
 const splitVoiceText = (str) => {
     const chunks = [];
-    const chunkSize = 1500;
+    const chunkSize = 15000;
     for (let i = 0; i < str.length; i += chunkSize) {
         chunks.push(str.slice(i, i + chunkSize));
     }
@@ -93,7 +93,7 @@ let loading = ref(false)
 let voiceSoundConfig = ref({
     model: "tts-1",
     input: '',
-    voice: '云健',
+    voice: '云健', //纪录片 8bad0cb3e890489a8925db005f85a765
     speed: 1
 })
 const createVoice = async () => {
@@ -102,7 +102,7 @@ const createVoice = async () => {
     loading.value = true
     for (const item of voiceTextList) {
         let res = await textToVoice({
-            data: item,
+            data: Object.assign({}, voiceSoundConfig.value, {input: item}),
             responseType: 'blob'
         })
         if (res == 'error') return loading.value = false
