@@ -78,13 +78,16 @@ let activeName = ref('text')
 let resData = ref(null)
 
 // 字符串不限制长度，按照1500个字符进行切割，切换成数组，然后生成数组blob
-const splitVoiceText = (str) => {
-    const chunks = [];
-    const chunkSize = 15000;
-    for (let i = 0; i < str.length; i += chunkSize) {
-        chunks.push(str.slice(i, i + chunkSize));
-    }
-    return chunks;
+const splitVoiceText = (input) => {
+  const regex = /【【([^】]+)】】([\s\S]*?)(?=【【|$)/g;
+  const matches = input.matchAll(regex);
+  const result = [];
+
+  for (const match of matches) {
+    result.push({ title: match[1], content: match[2].replace(/\n/g,'').trim() });
+  }
+
+  return result;
 }
 
 let loading = ref(false)
@@ -98,23 +101,29 @@ let voiceSoundConfig = ref({
 })
 const createVoice = async () => {
     let voiceTextList = splitVoiceText(voiceSoundConfig.value.input)
-    let voiceBlobList = []
+    let voiceBlobList = 0
     loading.value = true
     for (const item of voiceTextList) {
         let res = await textToVoice({
-            data: Object.assign({}, voiceSoundConfig.value, {input: item}),
+            data: Object.assign({}, voiceSoundConfig.value, {input: item.content}),
             responseType: 'blob'
         })
         if (res == 'error') return loading.value = false
         if (res) {
             const elink = document.createElement('a');
-            elink.download = 'voice.mp3';
+            elink.download = item.title + '.mp3';
             elink.style.display = 'none';
             const blob = new Blob([res], { type: 'audio/mpeg' });
-            voiceBlobList.push(blob)
+
+            elink.href = URL.createObjectURL(blob);
+            document.body.appendChild(elink);
+            elink.click();
+            document.body.removeChild(elink);
+            URL.revokeObjectURL(blob);
+            voiceBlobList = ++voiceBlobList
         }
-        if (voiceTextList.length == voiceBlobList.length) {
-            mergeBlobToMp3(voiceBlobList)
+        if (voiceTextList.length == voiceBlobList) {
+            loading.value = false
         }
     }
 }
