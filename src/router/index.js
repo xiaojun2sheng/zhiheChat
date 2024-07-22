@@ -9,19 +9,19 @@ import Music from '../views/music.vue';
 import Image from '../views/image.vue';
 import Chat from '../views/chat.vue';
 import Voice from '../views/voice.vue';
-import BatterPrompt from '../views/BatterPrompt.vue';
+import betterPrompt from '../views/betterPrompt.vue';
 
  
 // 定义路由
 const routes = [
   { path: '/login', component: Login },
-  { path: '/', component: BatterPrompt },
+  { path: '/', component: betterPrompt },
   { path: '/video', component: Video },
   { path: '/music', component: Music },
   { path: '/image', component: Image },
   { path: '/chat', component: Chat },
   { path: '/voice', component: Voice },
-  { path: '/batterPrompt', component: BatterPrompt },
+  { path: '/better', component: betterPrompt },
 ];
  
 // 创建router实例
