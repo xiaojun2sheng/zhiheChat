@@ -13,7 +13,7 @@
                         type="textarea"
                         placeholder="请输入您要生成视频的描述，可以描述主题，场景，风格等等"
                     />
-                    <el-button class="width_btn" @click="batterPrompt" :disabled="!videoDesc" type="primary">优化提示词</el-button>
+                    <el-button class="width_btn" @click="betterPrompt" :disabled="!videoDesc" type="primary">优化提示词</el-button>
                     <el-button class="width_btn" @click="createVideo" :disabled="!videoDesc" type="primary">生成视频</el-button>
                 </el-tab-pane>
                 <el-tab-pane label="图片生成视频" name="image">
@@ -48,14 +48,14 @@
             v-model="dialogVisible"
             title="优化提示词"
             width="500"
-            :before-close="cancelBatterPrompt"
+            :before-close="cancelBetterPrompt"
         >
             <span v-if="batterVideoDesc">{{ batterVideoDesc }}</span>
             <span v-else>正在生成提示词优化，请耐心等待...</span>
             <template #footer>
             <div class="dialog-footer">
-                <el-button @click="cancelBatterPrompt">取消</el-button>
-                <el-button type="primary" :disabled="!batterVideoDesc" @click="submitBatterPrompt">替换</el-button>
+                <el-button @click="cancelBetterPrompt">取消</el-button>
+                <el-button type="primary" :disabled="!batterVideoDesc" @click="submitBetterPrompt">替换</el-button>
             </div>
             </template>
         </el-dialog>
@@ -75,7 +75,7 @@ let videoDesc = ref('')
 let batterVideoDesc = ref('')
 // 优化提示词
 let dialogVisible = ref(false)
-const batterPrompt = async () => {
+const betterPrompt = async () => {
     dialogVisible.value = true
     // https://openai.chatfire.cn/prompts?prompt=一直带有雄鹰翅膀的老虎，飞翔在大海上方
     axios.get('https://openai.chatfire.cn/prompts?prompt=' + videoDesc.value).then(res => {
@@ -87,13 +87,13 @@ const batterPrompt = async () => {
 }
 
 // 确认替换提示词
-const submitBatterPrompt = () => {
+const submitBetterPrompt = () => {
     videoDesc.value = batterVideoDesc.value
     batterVideoDesc.value = ''
     dialogVisible.value = false
 }
 // 取消替换提示词
-const cancelBatterPrompt = () => {
+const cancelBetterPrompt = () => {
     batterVideoDesc.value = ''
     dialogVisible.value = false
 }

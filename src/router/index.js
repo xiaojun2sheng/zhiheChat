@@ -21,7 +21,7 @@ const routes = [
   { path: '/image', component: Image },
   { path: '/chat', component: Chat },
   { path: '/voice', component: Voice },
-  { path: '/better', component: betterPrompt },
+  { path: '/betterPrompt', component: betterPrompt },
 ];
  
 // 创建router实例
