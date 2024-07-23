@@ -1,29 +1,24 @@
-
-<template>
-  <Layout v-if="!isLogin"></Layout>
-  <div class="pagerouter">
-    <router-view></router-view>
-  </div>
-</template>
-
-
 <script setup>
-import { onMounted, ref } from 'vue';
-import Layout from './components/layout.vue';
-import { useRouter } from 'vue-router'
+import { NConfigProvider } from "naive-ui"
+import { zhCN, dateZhCN } from "naive-ui"
+import NaiveProvider from "@/components/common/NaiveProvider/index.vue"
+import { useTheme } from "@/hooks/useTheme"
+import Layout from '@/components/layout.vue';
 
-const router = useRouter()
-
-let isLogin = ref(false)
-router.beforeEach((to, from, next) => {
-  isLogin.value = to.path == '/login'
-  next()
-});
-
+const { theme } = useTheme()
 </script>
 
-<style scoped lang="less">
-.pagerouter {
-  height: 100%;
-}
-</style>
+<template>
+  <n-config-provider
+    class="h-full w-full"
+    :theme="theme"
+    :locale="zhCN"
+    :date-locale="dateZhCN"
+  >
+    <NaiveProvider>
+      <Layout></Layout>
+    </NaiveProvider>
+  </n-config-provider>
+</template>
+
+<style scoped></style>

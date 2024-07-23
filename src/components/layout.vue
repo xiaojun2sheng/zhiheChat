@@ -1,18 +1,13 @@
-
-
 <template>
-    <div>
-        <Header></Header>
-    </div>
+  <div>
+    <Header></Header>
+    <RouterView></RouterView>
+  </div>
 </template>
 <script setup>
+import Header from "./header.vue"
 
-import Header from './header.vue'
-
-defineProps({
-})
-
+defineProps({})
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
