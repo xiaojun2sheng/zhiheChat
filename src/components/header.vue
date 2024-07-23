@@ -38,7 +38,7 @@ const menuList = [
   { title: '图片', id: '3', url: '/image' },
   { title: '问答', id: '4', url: '/chat' },
   { title: '语音', id: '5', url: '/voice' },
-  { title: '提示词优化', id: '6', url: '/batterPrompt' },
+  { title: '提示词优化', id: '6', url: '/betterPrompt' },
 ]
 
 const jumpPage = (url) => {

@@ -13,29 +13,48 @@
                         placeholder="请输入您要生成音频的文案"
                     />
                     <el-button class="width_btn" @click="dialogVisible = true" type="primary">配置</el-button>
-                    <el-button class="width_btn" @click="createVoice" :disabled="!voiceSoundConfig.input" type="primary">生成音频</el-button>
+                    <el-button class="width_btn" @click="createVoice(true)" type="primary">润色并音频</el-button>
+                    <div>
+                        <el-button class="width_btn" @click="createVoice(false)" :disabled="!voiceSoundConfig.input" type="primary">生成音频</el-button>
+                    </div>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="克隆声音" name="image">
                     <div class="center_btn_box">
-                        <el-button class="width_btn" @click="createVoice" :disabled="!voiceSoundConfig.input" type="primary">生成音频</el-button>
+                        <el-button class="width_btn" @click="createVoice(false)" :disabled="!voiceSoundConfig.input" type="primary">生成音频</el-button>
                     </div>
                 </el-tab-pane> -->
             </el-tabs>
         </el-card>
         <el-card 
             class="right"
-            shadow="always" 
-            v-loading="loading"
-            element-loading-text="音频正在生成中，请耐心等待...">
+            shadow="always">
             <label class="waring_desc">
-                <el-icon size="14"><WarnTriangleFilled /></el-icon>
-                请遵守中华人民共和国网络安全法， 严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</label>
-            <div v-if="resData">
-                <audio :src="resData" controls="controls"></audio>
-            </div>
-            <el-empty v-else description="请生成音频" />
-        </el-card>
+            <el-icon size="14"><WarnTriangleFilled /></el-icon>
+            请遵守中华人民共和国网络安全法， 严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</label>
+            <div v-if="voiceTextList.length > 0" v-loading="loading" element-loading-text="音频正在生成中，请耐心等待...">
+                <h2>一共{{ voiceTextList.length }}语音</h2>
+                <h2>正在生成第{{ resData.length }}语音</h2>
 
+            </div>
+            <el-empty v-else></el-empty>
+            <el-card
+                v-for="item in resData" 
+                :key="item.url"
+                class="blob_box"
+                shadow="always" >
+                <audio 
+                    
+                    :src="item.url"
+                    controls="controls">
+                </audio>
+                <div 
+                    :key="item.url" 
+                    class="polish_text" >
+                    {{ item.content }}
+                </div>
+                <el-button type="primary" @click="handleCopy(item.content)">复制</el-button>
+            </el-card>
+        </el-card>
 
         <!-- 音频配置 -->
         <el-dialog
@@ -69,13 +88,16 @@
 <script setup>
 
 import { onMounted, ref } from 'vue'
-import { textToVoice } from '@/api/index'
+import { textToVoice, chatCompletionsApi } from '@/api/index'
 import { ElMessage } from 'element-plus'
+import { useClipboard } from '@vueuse/core'
+
+const { copy } = useClipboard({ legacy: true })
 
 let activeName = ref('text')
 
 // 生成的音频
-let resData = ref(null)
+let resData = ref([])
 
 // 字符串不限制长度，按照1500个字符进行切割，切换成数组，然后生成数组blob
 const splitVoiceText = (input) => {
@@ -99,11 +121,16 @@ let voiceSoundConfig = ref({
     voice: '云健', //纪录片 8bad0cb3e890489a8925db005f85a765
     speed: 1
 })
-const createVoice = async () => {
-    let voiceTextList = splitVoiceText(voiceSoundConfig.value.input)
-    let voiceBlobList = 0
+
+// isPolish 是否润色
+let voiceTextList = ref([])
+const createVoice = async (isPolish) => {
+    voiceTextList.value = splitVoiceText(voiceSoundConfig.value.input)
     loading.value = true
-    for (const item of voiceTextList) {
+    for (const item of voiceTextList.value ) {
+        if (isPolish) {
+            item.content = await polishText(item.content)
+        }
         let res = await textToVoice({
             data: Object.assign({}, voiceSoundConfig.value, {input: item.content}),
             responseType: 'blob'
@@ -114,26 +141,31 @@ const createVoice = async () => {
             elink.download = item.title + '.mp3';
             elink.style.display = 'none';
             const blob = new Blob([res], { type: 'audio/mpeg' });
-
             elink.href = URL.createObjectURL(blob);
+            resData.value.push(
+                {
+                    url: elink.href,
+                    content: item.content
+                }
+            )
             document.body.appendChild(elink);
             elink.click();
             document.body.removeChild(elink);
             URL.revokeObjectURL(blob);
-            voiceBlobList = ++voiceBlobList
         }
-        if (voiceTextList.length == voiceBlobList) {
+        if (voiceTextList.value.length == resData.value.length) {
             loading.value = false
         }
     }
 }
 
-const mergeBlobToMp3 = (voiceBlobList) => {
-    const blob = new Blob(voiceBlobList, { type: 'audio/mpeg' });
-    const audioUrl = URL.createObjectURL(blob);
-    resData.value = audioUrl
-    loading.value = false
-}
+// 合并 blob 文件 
+// const mergeBlobToMp3 = (voiceBlobList) => {
+//     const blob = new Blob(voiceBlobList, { type: 'audio/mpeg' });
+//     const audioUrl = URL.createObjectURL(blob);
+//     resData.value = audioUrl
+//     loading.value = false
+// }
 
 // 音频配置
 let dialogVisible = ref(false)
@@ -147,6 +179,37 @@ const submitDialog = () => {
 // 取消替换提示词
 const cancelDialog = () => {
     dialogVisible.value = false
+}
+
+// 润色文案
+// 帮我整理以下信息，去除所有的英文单词，和字符例如：*，然后按照讲诉故事方式整理以下文案，要求不要太多重复的字，要求过审核，文案如下：
+// 
+let polishList = ref([])
+const polishText = async (input) => {
+    if (!input) return
+    let res = await chatCompletionsApi({
+        data: {
+            model: "gpt-4o",
+            messages: [
+                {
+                    role: "system",
+                    content: "请你以一位资深读书博主的角色讲解以下知识点，要求语言诙谐幽默，通熟易懂。用现实当中交谈的方式讲述出来，知识点深入浅出，去除英文单词和特殊符号"
+                },
+                {
+                    role: "user",
+                    content: input
+                }
+            ]
+        }
+    })
+    if (res.choices[0].message) {
+        return res.choices[0].message.content
+    }
+}
+
+function handleCopy(content) {
+    copy(content)
+    ElMessage.success('复制成功')
 }
 </script>
 
@@ -177,5 +240,12 @@ const cancelDialog = () => {
 }
 .sound_tag {
     margin-right: 8px;
+}
+.blob_box {
+    margin: 8px 0;
+    .polish_text {
+        width: 100%;
+        margin: 8px 0;
+    }
 }
 </style>

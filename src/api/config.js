@@ -12,7 +12,7 @@ if (process.MODE === 'development') {
 // 创建axios实例
 const service = axios.create({
   baseURL: process.VITE_APP_BASE_API, // api的base_url
-  timeout: 60000 // 请求超时时间
+  timeout: 600000 // 请求超时时间
 });
  
 // 请求拦截器

@@ -45,7 +45,7 @@ import {reactive, ref, onMounted, watch, toRefs} from "vue"
 import {ElMessage} from 'element-plus'
 import axios from 'axios';
 import { useClipboard } from '@vueuse/core'
-import { batterPromptApi } from '@/api/index'
+import { betterPromptApi } from '@/api/index'
 const { copy } = useClipboard({ legacy: true })
 
 let prompt = ref("")
@@ -59,7 +59,7 @@ const handlePrompt = async () => {
     }
     loading.value = true
     responseText.value = ""
-    let res = await batterPromptApi({
+    let res = await betterPromptApi({
         params: {
             prompt: prompt.value
         }

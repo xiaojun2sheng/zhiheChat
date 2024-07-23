@@ -41,7 +41,7 @@ export const textToVoice = (config = {}) =>
 })
 
 // 优化提示词
-export const batterPromptApi = (config = {}) =>
+export const betterPromptApi = (config = {}) =>
     request({
         url: '/tools/v1/prompter',
         method: 'get',
