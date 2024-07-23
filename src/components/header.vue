@@ -1,7 +1,12 @@
 <template>
   <div class="header_box" hadow="always">
     <div class="logo">AI 百宝箱</div>
-    <n-tabs type="line" animated @update:value="jumpPage">
+    <n-tabs
+      v-model:value="tabName"
+      type="line"
+      animated
+      @update:value="jumpPage"
+    >
       <n-tab-pane
         v-for="menuItem in menuList"
         :key="menuItem.id"
@@ -10,15 +15,27 @@
       >
       </n-tab-pane>
     </n-tabs>
+    <SvgIcon
+      :width="25"
+      :height="25"
+      hover
+      :icon="
+        appStore.theme == 'light' ? 'ic:round-dark-mode' : 'ic:round-light-mode'
+      "
+      @click="switchTheme"
+    ></SvgIcon>
     <UserCenter></UserCenter>
   </div>
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref } from "vue"
+import { onMounted, ref, computed } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import UserCenter from "./userCenter.vue"
+import SvgIcon from "@/components/common/SvgIcon/index.vue"
+import { useAppStore } from "@/stores"
 
+const appStore = useAppStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -31,8 +48,11 @@ const menuList = [
   { title: "提示词优化", id: "6", url: "/betterPrompt" },
 ]
 
+const tabName = computed(() => {
+  return route.path
+})
+
 const jumpPage = (url) => {
-  debugger
   router.push({
     path: url,
   })
@@ -52,9 +72,14 @@ const getMenuActice = () => {
   if (!menuItem) return
   activeIndex.value = menuItem.url
 }
+
+const switchTheme = () => {
+  if (appStore.theme == "light") appStore.theme = "dark"
+  else appStore.theme = "light"
+}
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .header_box {
   width: 100%;
   display: flex;

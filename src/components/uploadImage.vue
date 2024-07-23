@@ -26,7 +26,7 @@ const beforeAvatarUpload = () => {
 }
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .avatar-uploader {
     width: 99%;
     height: 200px;

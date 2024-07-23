@@ -3,9 +3,9 @@ import { NConfigProvider } from "naive-ui"
 import { zhCN, dateZhCN } from "naive-ui"
 import NaiveProvider from "@/components/common/NaiveProvider/index.vue"
 import { useTheme } from "@/hooks/useTheme"
-import Layout from '@/components/layout.vue';
+import Layout from "@/components/layout.vue"
 
-const { theme } = useTheme()
+const { theme, themeOverrides } = useTheme()
 </script>
 
 <template>

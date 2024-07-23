@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
 
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .pagerouter {
   height: 100%;
 }

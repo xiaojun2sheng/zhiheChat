@@ -45,7 +45,7 @@
           </video>
         </div>
       </div>
-      <el-empty v-else description="请生成视频" />
+      <n-empty v-else description="请生成视频" />
     </n-spin>
     <!-- 优化提示词 -->
     <el-dialog
@@ -163,8 +163,7 @@ const getVideoTask = async () => {
 }
 </script>
 
-<style scoped lang="less">
-@import "@/commonCss/index.less";
+<style scoped lang="scss">
 .width_btn {
   width: calc(50% - 8px);
   margin-top: 8px;

@@ -25,7 +25,7 @@ import { ref } from 'vue'
 import weixinkefu from '@/assets/images/help/weixinqun.jpg'
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .usercenter_page {
     display: flex;
     font-size: 14px;
