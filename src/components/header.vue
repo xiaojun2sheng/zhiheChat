@@ -16,6 +16,7 @@
       </n-tab-pane>
     </n-tabs>
     <SvgIcon
+      class="mr-2"
       :width="25"
       :height="25"
       hover
