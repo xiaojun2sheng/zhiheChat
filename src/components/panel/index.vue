@@ -7,7 +7,7 @@
     <div class="content">
       <slot name="content"></slot>
     </div>
-    <div class="footer">
+    <div class="footer mt-2">
       <slot name="footer"></slot>
     </div>
   </div>

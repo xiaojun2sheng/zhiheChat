@@ -15,7 +15,7 @@
       >
       </n-tab-pane>
     </n-tabs>
-    <SvgIcon
+    <!-- <SvgIcon
       class="mr-2"
       :width="35"
       :height="35"
@@ -24,7 +24,7 @@
         appStore.theme == 'light' ? 'ic:round-dark-mode' : 'ic:round-light-mode'
       "
       @click="switchTheme"
-    ></SvgIcon>
+    ></SvgIcon> -->
     <SvgIcon
       class="mr-2"
       :width="35"

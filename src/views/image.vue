@@ -25,6 +25,17 @@
                 ></n-input>
               </div>
             </template>
+            <template #footer>
+              <div class="footer">
+                <span class="label">推荐尝试：</span>
+                <span
+                  class="val mr-2 cursor-pointer"
+                  v-for="item in imageRecommendPrompt"
+                  @click="imageDesc = item.desc"
+                  >{{ item.label }}</span
+                >
+              </div>
+            </template>
           </Panel>
           <div class="flex justify-end mt-2 gap-4">
             <n-button
@@ -58,7 +69,11 @@
           class="video-box w-full flex justify-center"
           v-if="resData.length > 0"
         >
-          <div class="flex justify-center" v-for="item in resData" :key="item.url">
+          <div
+            class="flex justify-center"
+            v-for="item in resData"
+            :key="item.url"
+          >
             <img class="image_item" :src="item.url" />
           </div>
         </div>
@@ -96,6 +111,7 @@ import { ElMessage } from "element-plus"
 import axios from "axios"
 import UploadImage from "@/components/uploadImage.vue"
 import Panel from "@/components/panel/index.vue"
+import { imageRecommendPrompt } from "@/utils"
 
 let activeName = ref("text")
 
@@ -148,10 +164,6 @@ const createImage = async () => {
 </script>
 
 <style scoped lang="scss">
-.width_btn {
-  width: calc(50% - 8px);
-  margin-top: 8px;
-}
 .waring_desc {
   font-size: 12px;
   color: #f56c6c;
@@ -163,5 +175,13 @@ const createImage = async () => {
 }
 .image_item {
   width: 40%;
+}
+.footer {
+  .label {
+    color: rgb(153, 155, 172);
+  }
+  .val:hover {
+    color: #6bf0dc;
+  }
 }
 </style>
