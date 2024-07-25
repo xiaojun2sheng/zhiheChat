@@ -1,46 +1,70 @@
 <template>
   <div class="common_page flex gap-2">
-    <div class="w-56">
+    <div class="w-[400px]">
       <n-tabs
         type="line"
         v-model:value="activeName"
         animated
         @update:value="jumpPage"
         ><n-tab-pane name="text" tab="文字生成图片">
-          <n-input
-            v-model:value="imageDesc"
-            :maxlength="200"
-            :autosize="{ minRows: 6, maxRows: 8 }"
-            type="textarea"
-            placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
-          />
-          <div class="flex justify-between mt-2">
+          <Panel icon="flat-color-icons:idea" title="创意描述">
+            <template #content>
+              <div class="prompt">
+                <n-input
+                  v-model:value="imageDesc"
+                  class="textarea__inner"
+                  rows="4"
+                  autocomplete="off"
+                  placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
+                  type="textarea"
+                  :style="{
+                    '--n-border-hover': 'transparent',
+                    '--n-border-focus': 'transparent',
+                    '--n-box-shadow-focus': 'none',
+                  }"
+                ></n-input>
+              </div>
+            </template>
+          </Panel>
+          <div class="flex justify-end mt-2 gap-4">
             <n-button
+              class="prompt-btn__primary"
+              round
               @click="betterPrompt"
               :disabled="!imageDesc"
               type="primary"
               >优化提示词</n-button
             >
-            <n-button @click="createImage" :disabled="!imageDesc" type="primary"
+            <n-button
+              class="prompt-btn__primary"
+              round
+              @click="createImage"
+              :disabled="!imageDesc"
+              type="primary"
               >生成图片</n-button
             >
           </div>
         </n-tab-pane></n-tabs
       >
     </div>
-    <n-spin :show="!!createLoading">
-      <label class="waring_desc">
-        <el-icon size="14"><WarnTriangleFilled /></el-icon>
-        请遵守中华人民共和国网络安全法，
-        严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理
-      </label>
-      <div v-if="resData.length > 0">
-        <div v-for="item in resData" :key="item.url">
-          <img class="image_item" :src="item.url" />
+    <div class="flex flex-col">
+      <n-spin :show="!!createLoading">
+        <!-- <label class="waring_desc">
+          <el-icon size="14"><WarnTriangleFilled /></el-icon>
+          请遵守中华人民共和国网络安全法，
+          严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理
+        </label> -->
+        <div
+          class="video-box w-full flex justify-center"
+          v-if="resData.length > 0"
+        >
+          <div class="flex justify-center" v-for="item in resData" :key="item.url">
+            <img class="image_item" :src="item.url" />
+          </div>
         </div>
-      </div>
-      <n-empty v-else description="请生成图片" />
-    </n-spin>
+        <n-empty v-else description="请生成图片" />
+      </n-spin>
+    </div>
 
     <!-- 优化提示词 -->
     <el-dialog
@@ -71,6 +95,7 @@ import { createImgeApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import UploadImage from "@/components/uploadImage.vue"
+import Panel from "@/components/panel/index.vue"
 
 let activeName = ref("text")
 
@@ -111,7 +136,7 @@ const createImage = async () => {
   createLoading.value = true
   let res = await createImgeApi({
     data: {
-      model: "stable-diffusion-3",
+      model: "kolors",
       prompt: imageDesc.value,
       n: 1,
       size: "1024x1024",

@@ -17,13 +17,20 @@
     </n-tabs>
     <SvgIcon
       class="mr-2"
-      :width="25"
-      :height="25"
+      :width="35"
+      :height="35"
       hover
       :icon="
         appStore.theme == 'light' ? 'ic:round-dark-mode' : 'ic:round-light-mode'
       "
       @click="switchTheme"
+    ></SvgIcon>
+    <SvgIcon
+      class="mr-2"
+      :width="35"
+      :height="35"
+      hover
+      icon="mingcute:user-4-fill"
     ></SvgIcon>
     <UserCenter></UserCenter>
   </div>
@@ -33,7 +40,6 @@
 import { onMounted, ref, computed } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import UserCenter from "./userCenter.vue"
-import SvgIcon from "@/components/common/SvgIcon/index.vue"
 import { useAppStore } from "@/stores"
 
 const appStore = useAppStore()

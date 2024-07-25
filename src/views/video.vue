@@ -1,6 +1,6 @@
 <template>
   <div class="common_page flex gap-2">
-    <div class="w-56">
+    <div class="w-[400px]">
       <n-tabs
         type="line"
         v-model:value="activeName"
@@ -8,45 +8,75 @@
         @update:value="jumpPage"
       >
         <n-tab-pane name="text" tab="文字生成视频">
-          <n-input
-            v-model:value="videoDesc"
-            :maxlength="200"
-            :autosize="{ minRows: 6, maxRows: 8 }"
-            type="textarea"
-            placeholder="请输入您要生成视频的描述，可以描述主题，场景，风格等等"
-          />
-          <div class="flex justify-between mt-2">
+          <Panel icon="flat-color-icons:idea" title="创意描述">
+            <template #content>
+              <div class="prompt">
+                <n-input
+                  v-model:value="videoDesc"
+                  class="textarea__inner"
+                  rows="4"
+                  autocomplete="off"
+                  placeholder="请输入您要生成视频的描述，可以描述主题，场景，风格等等"
+                  type="textarea"
+                  :style="{
+                    '--n-border-hover': 'transparent',
+                    '--n-border-focus': 'transparent',
+                    '--n-box-shadow-focus': 'none',
+                  }"
+                ></n-input>
+              </div>
+            </template>
+          </Panel>
+          <Panel icon="flat-color-icons:settings" title="参数设置"></Panel>
+          <div class="flex justify-end mt-2 gap-4">
             <n-button
+              class="prompt-btn__primary"
+              round
               @click="betterPrompt"
               :disabled="!videoDesc"
               type="primary"
               >优化提示词</n-button
             >
-            <n-button @click="createVideo" :disabled="!videoDesc" type="primary"
+            <n-button
+              class="prompt-btn__primary"
+              round
+              @click="createVideo"
+              :disabled="!videoDesc"
+              type="primary"
               >生成视频</n-button
             >
           </div>
         </n-tab-pane>
-        <n-tab-pane name="image" tab="图片生成视频"
-          ><h2>敬请期待</h2></n-tab-pane
-        >
+        <n-tab-pane name="image" tab="图片生成视频">
+          <Panel icon="flat-color-icons:idea" title="请期待"> </Panel>
+        </n-tab-pane>
       </n-tabs>
     </div>
-    <n-spin :show="!!createVideoTaskId">
-      <label class="waring_desc">
-        <el-icon size="14"><WarnTriangleFilled /></el-icon>
-        请遵守中华人民共和国网络安全法，
-        严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</label
-      >
-      <div v-if="resData.length > 0">
-        <div v-for="item in resData" :key="item.url">
-          <video width="100%" height="300px" controls>
-            <source :src="item.resource.resource" type="video/mp4" />
+    <div class="flex flex-col">
+      <n-spin :show="!!createVideoTaskId">
+        <div class="video-box w-full flex justify-center">
+          <video class="w-3/5 rounded-xl" controls>
+            <source
+              src="https://h1.inkwai.com/bs2/upload-ylab-stunt/special-effect/output/HB1_PROD_ai_web_41379409/3932614183368399947/output.mp4"
+              type="video/mp4"
+            />
           </video>
         </div>
-      </div>
-      <n-empty v-else description="请生成视频" />
-    </n-spin>
+
+        <!-- <div v-if="resData.length > 0">
+          <div v-for="item in resData" :key="item.url">
+            <video width="100%" height="300px" controls>
+              <source :src="item.resource.resource" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        <n-empty v-else description="请生成视频" /> -->
+      </n-spin>
+      <span class="waring_desc justify-self-end">
+        请遵守中华人民共和国网络安全法，
+        严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</span
+      >
+    </div>
     <!-- 优化提示词 -->
     <el-dialog
       v-model="dialogVisible"
@@ -76,6 +106,7 @@ import { createVideoKlingApi, getVideoKlingApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import UploadImage from "@/components/uploadImage.vue"
+import Panel from "@/components/panel/index.vue"
 
 let activeName = ref("text")
 
@@ -164,22 +195,13 @@ const getVideoTask = async () => {
 </script>
 
 <style scoped lang="scss">
-.width_btn {
-  width: calc(50% - 8px);
-  margin-top: 8px;
-}
 .waring_desc {
+  text-align: center;
+  color: rgb(106, 114, 124);
   font-size: 12px;
-  color: #f56c6c;
-  display: flex;
-  align-items: center;
-  .el-icon {
-    margin-right: 8px;
-  }
+  margin-top: 36px;
 }
-.center_btn_box {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
+
+
+
 </style>

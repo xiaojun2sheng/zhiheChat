@@ -5,6 +5,7 @@
 }
 * {
   margin: 0;
+  outline: none;
 }
 html,
 body,
@@ -22,30 +23,6 @@ ul {
   margin: 0;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-.fr {
-  float: right;
-}
-
-.fl {
-  float: left;
-}
-
-.h-full {
-  height: 100%;
-}
-.w-full {
-  width: 100%;
-}
-
-.cursor-p {
-  cursor: pointer;
-}
-
 /* 滚动条 */
 ::-webkit-scrollbar {
   width: 2px;
@@ -53,4 +30,31 @@ h1 {
 }
 ::-webkit-scrollbar-thumb {
   background: #dcdfe6;
+}
+
+.prompt {
+  border-radius: 10px;
+  background: #0d1116;
+  border: 1px solid transparent;
+  transition: all 0.2s ease 0s;
+  .textarea__inner {
+    color: rgb(255, 255, 255);
+    line-height: 24px;
+    background: transparent !important;
+    padding: 0px !important;
+    font-size: inherit !important;
+    resize: none !important;
+    box-shadow: none !important;
+    .n-input-wrapper {
+      resize: none !important;
+    }
+  }
+}
+.prompt-btn__primary {
+  background: linear-gradient(
+    89.86deg,
+    rgb(167, 255, 26),
+    rgb(130, 250, 194),
+    rgb(71, 212, 255)
+  );
 }

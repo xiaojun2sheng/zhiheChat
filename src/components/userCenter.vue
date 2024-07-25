@@ -2,7 +2,13 @@
   <div class="usercenter_page">
     <n-popover placement="bottom" :width="300" trigger="click">
       <template #trigger>
-        <n-button text type="primary">联系客服</n-button>
+        <SvgIcon
+          :width="25"
+          :height="25"
+          hover
+          icon="ri:customer-service-2-fill"
+        ></SvgIcon>
+        <!-- <n-button text type="primary">联系客服</n-button> -->
       </template>
       <div>
         <p>请扫描二维码联系客服人员</p>
@@ -11,8 +17,7 @@
     </n-popover>
   </div>
 </template>
-<script setup>
-</script>
+<script setup></script>
 
 <style lang="scss" scoped>
 .usercenter_page {

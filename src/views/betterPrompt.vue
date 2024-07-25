@@ -46,14 +46,7 @@
   </div>
 </template>
 <script setup>
-/**
- 功能描述
- @author yanyue
- @since 2024-07-18 9:23
- */
-import { reactive, ref, onMounted, watch, toRefs } from "vue"
-import { ElMessage } from "element-plus"
-import axios from "axios"
+import { ref } from "vue"
 import { useClipboard } from "@vueuse/core"
 import { betterPromptApi } from "@/api/index"
 const { copy } = useClipboard({ legacy: true })
@@ -64,21 +57,14 @@ let loading = ref(false)
 
 const handlePrompt = async () => {
   if (!prompt.value) {
-    ElMessage.warning("输入的文本不能为空")
+    window.warning("输入的文本不能为空")
     return
   }
   loading.value = true
   responseText.value = ""
-  let res = await betterPromptApi({
-    params: {
-      prompt: prompt.value,
-    },
-  })
-  if (res == "error")
-    return ElMessage({
-      message: "优化提示词失败，请重新尝试一下",
-      type: "warning",
-    })
+  let res = await betterPromptApi(prompt.value).finally(
+    () => (loading.value = false)
+  )
   responseText.value = res.result
   loading.value = false
 }
@@ -90,7 +76,7 @@ const handlePrompt = async () => {
 
 function handleCopy() {
   copy(responseText.value)
-  ElMessage.success("复制成功")
+  window.$message.success("复制成功")
 }
 </script>
 <style lang="scss" scoped>
