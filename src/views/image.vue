@@ -176,12 +176,4 @@ const createImage = async () => {
 .image_item {
   width: 40%;
 }
-.footer {
-  .label {
-    color: rgb(153, 155, 172);
-  }
-  .val:hover {
-    color: #6bf0dc;
-  }
-}
 </style>

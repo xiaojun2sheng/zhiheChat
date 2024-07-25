@@ -26,6 +26,17 @@
                 ></n-input>
               </div>
             </template>
+            <template #footer>
+              <div class="footer">
+                <span class="label">推荐尝试：</span>
+                <span
+                  class="val mr-2 cursor-pointer"
+                  v-for="item in videoRecommendPrompt"
+                  @click="videoDesc = item.desc"
+                  >{{ item.label }}</span
+                >
+              </div>
+            </template>
           </Panel>
           <Panel icon="flat-color-icons:settings" title="参数设置"></Panel>
           <div class="flex justify-end mt-2 gap-4">
@@ -61,7 +72,10 @@
               type="video/mp4"
             />
           </video> -->
-          <div class="video-box w-full flex justify-center" v-if="resData.length > 0">
+          <div
+            class="video-box w-full flex justify-center"
+            v-if="resData.length > 0"
+          >
             <div v-for="item in resData" :key="item.url">
               <video width="100%" height="300px" controls>
                 <source :src="item.resource.resource" type="video/mp4" />
@@ -70,7 +84,6 @@
           </div>
           <n-empty v-else description="请生成视频" />
         </div>
-
       </n-spin>
       <span class="waring_desc justify-self-end">
         请遵守中华人民共和国网络安全法，
@@ -107,6 +120,7 @@ import { ElMessage } from "element-plus"
 import axios from "axios"
 import UploadImage from "@/components/uploadImage.vue"
 import Panel from "@/components/panel/index.vue"
+import { videoRecommendPrompt } from "@/utils"
 
 let activeName = ref("text")
 
@@ -201,7 +215,4 @@ const getVideoTask = async () => {
   font-size: 12px;
   margin-top: 36px;
 }
-
-
-
 </style>

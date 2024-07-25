@@ -50,6 +50,14 @@ ul {
     }
   }
 }
+.footer {
+  .label {
+    color: rgb(153, 155, 172);
+  }
+  .val:hover {
+    color: #6bf0dc;
+  }
+}
 .prompt-btn__primary {
   background: linear-gradient(
     89.86deg,
