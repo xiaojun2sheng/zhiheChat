@@ -55,22 +55,22 @@
     <div class="flex flex-col">
       <n-spin :show="!!createVideoTaskId">
         <div class="video-box w-full flex justify-center">
-          <video class="w-3/5 rounded-xl" controls>
+          <!-- <video class="w-3/5 rounded-xl" controls>
             <source
               src="https://h1.inkwai.com/bs2/upload-ylab-stunt/special-effect/output/HB1_PROD_ai_web_41379409/3932614183368399947/output.mp4"
               type="video/mp4"
             />
-          </video>
+          </video> -->
+          <div class="video-box w-full flex justify-center" v-if="resData.length > 0">
+            <div v-for="item in resData" :key="item.url">
+              <video width="100%" height="300px" controls>
+                <source :src="item.resource.resource" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+          <n-empty v-else description="请生成视频" />
         </div>
 
-        <!-- <div v-if="resData.length > 0">
-          <div v-for="item in resData" :key="item.url">
-            <video width="100%" height="300px" controls>
-              <source :src="item.resource.resource" type="video/mp4" />
-            </video>
-          </div>
-        </div>
-        <n-empty v-else description="请生成视频" /> -->
       </n-spin>
       <span class="waring_desc justify-self-end">
         请遵守中华人民共和国网络安全法，
