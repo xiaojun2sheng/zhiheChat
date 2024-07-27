@@ -22,9 +22,11 @@ export const useCountDown = () => {
   watch(
     () => progress.value,
     () => {
-      if (progress.value == 30) step *= 0.6
-      else if (progress.value == 60) step *= 0.6
-      else if (progress.value == 80) step *= 0.6
+      if (progress.value == 30) step = 0.5
+      else if (progress.value == 60) step = 0.25
+      else if (progress.value == 80) step *= 0.125
+      else if (progress.value == 90) step *= 0.075
+      else if (progress.value == 95) step *= 0.025
       else if (progress.value >= 100) clearCountDown()
     }
   )

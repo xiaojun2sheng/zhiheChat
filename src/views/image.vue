@@ -66,12 +66,12 @@
           严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理
         </label> -->
         <div
-          class="video-box w-full flex justify-center"
-          v-if="resData.length > 0"
+          class="image-box w-4/5 h-[300px] mt-10 flex justify-center items-center"
+          v-if="imageUrls.length > 0"
         >
           <div
             class="flex justify-center"
-            v-for="item in resData"
+            v-for="item in imageUrls"
             :key="item.url"
           >
             <img class="image_item" :src="item.url" />
@@ -146,7 +146,7 @@ const cancelBetterPrompt = () => {
 }
 
 // 生成的图片
-let resData = ref([])
+let imageUrls = ref([])
 let createLoading = ref(false)
 const createImage = async () => {
   createLoading.value = true
@@ -158,7 +158,7 @@ const createImage = async () => {
       size: "1024x1024",
     },
   })
-  resData.value = res.data || []
+  imageUrls.value = res.data || []
   createLoading.value = false
 }
 </script>

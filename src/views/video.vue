@@ -201,7 +201,8 @@ const getVideoTask = async () => {
     },
   })
   if (res?.data?.works[0]?.resource?.resource) {
-    window.$message.success("视频生成成功请查看")
+    window.$message.success("视频生成成功")
+    console.log("视频地址：", res.data.works[0].resource.resource)
     videoUrl.value = res.data.works[0].resource.resource
     clearInterval(intervalId.value)
     createVideoTaskId.value = null
