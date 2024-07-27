@@ -51,7 +51,7 @@
             <n-button
               class="prompt-btn__primary"
               round
-              @click="createVideo"
+              @click="createVideoTask"
               :disabled="!videoDesc"
               type="primary"
               >生成视频</n-button
@@ -64,27 +64,30 @@
       </n-tabs>
     </div>
     <div class="flex flex-col">
-      <n-spin :show="!!createVideoTaskId">
-        <div class="video-box w-full flex justify-center">
-          <!-- <video class="w-3/5 rounded-xl" controls>
-            <source
-              src="https://h1.inkwai.com/bs2/upload-ylab-stunt/special-effect/output/HB1_PROD_ai_web_41379409/3932614183368399947/output.mp4"
-              type="video/mp4"
-            />
-          </video> -->
+      <div class="video-box w-full flex justify-center">
+        <div
+          class="video-box w-4/5 h-[300px] mt-10 flex justify-center items-center"
+        >
           <div
-            class="video-box w-full flex justify-center"
-            v-if="resData.length > 0"
+            v-if="createVideoTaskId"
+            class="video-progress-container w-full h-full flex flex-col justify-center items-center rounded-lg p-8"
           >
-            <div v-for="item in resData" :key="item.url">
-              <video width="100%" height="300px" controls>
-                <source :src="item.resource.resource" type="video/mp4" />
-              </video>
-            </div>
+            <n-progress
+              type="line"
+              color="#63E2B8"
+              :percentage="progress"
+              processing
+            />
+            <span class="text-sm mt-3"
+              >生成中，预计需要 2 - 5 分钟，请稍候~</span
+            >
           </div>
-          <n-empty v-else description="请生成视频" />
+          <video v-else-if="videoUrl" width="100%" height="300px" controls>
+            <source :src="videoUrl" type="video/mp4" />
+          </video>
+          <n-empty v-else description="快去生成你的创意吧" />
         </div>
-      </n-spin>
+      </div>
       <span class="waring_desc justify-self-end">
         请遵守中华人民共和国网络安全法，
         严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</span
@@ -114,13 +117,13 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue"
+import { ref } from "vue"
 import { createVideoKlingApi, getVideoKlingApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
-import UploadImage from "@/components/uploadImage.vue"
 import Panel from "@/components/panel/index.vue"
 import { videoRecommendPrompt } from "@/utils"
+import { useCountDown } from "@/hooks/useCountDown"
 
 let activeName = ref("text")
 
@@ -154,15 +157,14 @@ const cancelBetterPrompt = () => {
   dialogVisible.value = false
 }
 
-// 生成的视频
-let resData = ref([])
 let createVideoTaskId = ref("")
 // 轮训任务
 let intervalId = ref(null)
 
-const createVideo = async () => {
+const { progress, initCountDown, clearCountDown } = useCountDown()
+const createVideoTask = async () => {
   if (createVideoTaskId.value)
-    return ElMessage({ message: "正在生成视频中。。", type: "warning" })
+    return window.$message.warning("正在生成视频中。。")
   let res = await createVideoKlingApi({
     data: {
       aspect_ratio: "16:9",
@@ -184,9 +186,13 @@ const createVideo = async () => {
     },
   })
   createVideoTaskId.value = res.id
-  intervalId.value = setInterval(getVideoTask, 30000)
+  // 倒计时
+  initCountDown()
+  intervalId.value = setInterval(getVideoTask, 3000)
 }
 
+// 生成的视频
+let videoUrl = ref("")
 const getVideoTask = async () => {
   if (!createVideoTaskId.value) return
   let res = await getVideoKlingApi({
@@ -195,15 +201,13 @@ const getVideoTask = async () => {
     },
   })
   if (res?.data?.works[0]?.resource?.resource) {
-    ElMessage({
-      message: "视频生成成功请查看",
-      type: "success",
-    })
-    resData.value = res.data.works
+    window.$message.success("视频生成成功请查看")
+    videoUrl.value = res.data.works[0].resource.resource
     clearInterval(intervalId.value)
     createVideoTaskId.value = null
+    clearCountDown()
   } else {
-    // ElMessage({ message: '视频生成失败', type: 'error' })
+    // window.$message.error("视频生成失败")
   }
 }
 </script>
@@ -214,5 +218,9 @@ const getVideoTask = async () => {
   color: rgb(106, 114, 124);
   font-size: 12px;
   margin-top: 36px;
+}
+.video-progress-container {
+  background-color: #191d21dd;
+  color: #c5c7d5;
 }
 </style>
