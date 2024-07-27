@@ -1,6 +1,6 @@
 <template>
   <div class="common_page flex gap-2">
-    <div class="w-[400px]">
+    <div class="w-[400px] shrink-0">
       <n-tabs
         type="line"
         v-model:value="activeName"
@@ -58,27 +58,20 @@
         </n-tab-pane></n-tabs
       >
     </div>
-    <div class="flex flex-col">
-      <n-spin :show="!!createLoading">
-        <!-- <label class="waring_desc">
-          <el-icon size="14"><WarnTriangleFilled /></el-icon>
-          请遵守中华人民共和国网络安全法，
-          严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理
-        </label> -->
-        <div
-          class="image-box w-4/5 h-[300px] mt-10 flex justify-center items-center"
-          v-if="imageUrls.length > 0"
-        >
-          <div
-            class="flex justify-center"
+    <div class="flex flex-col w-full mt-10 items-center">
+      <div
+        class="image-box px-10 min-h-[300px] flex gap-2 justify-center items-center"
+      >
+        <template v-if="imageUrls.length > 0">
+          <ZImage
             v-for="item in imageUrls"
             :key="item.url"
-          >
-            <img class="image_item" :src="item.url" />
-          </div>
-        </div>
+            :url="item.url"
+          ></ZImage>
+        </template>
         <n-empty v-else description="请生成图片" />
-      </n-spin>
+      </div>
+      <Tips></Tips>
     </div>
 
     <!-- 优化提示词 -->
@@ -110,6 +103,7 @@ import { createImgeApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import UploadImage from "@/components/uploadImage.vue"
+import ZImage from "@/components/zImage/index.vue"
 import Panel from "@/components/panel/index.vue"
 import { imageRecommendPrompt } from "@/utils"
 
@@ -150,6 +144,7 @@ let imageUrls = ref([])
 let createLoading = ref(false)
 const createImage = async () => {
   createLoading.value = true
+  imageUrls.value = [{}]
   let res = await createImgeApi({
     data: {
       model: "kolors",
@@ -161,6 +156,9 @@ const createImage = async () => {
   imageUrls.value = res.data || []
   createLoading.value = false
 }
+// setTimeout(() => {
+//   imageUrls.value = [{}, {}, {}]
+// }, 2000)
 </script>
 
 <style scoped lang="scss">

@@ -1,6 +1,6 @@
 <template>
   <div class="common_page flex gap-2">
-    <div class="w-[400px]">
+    <div class="w-[400px] shrink-0">
       <n-tabs
         type="line"
         v-model:value="activeName"
@@ -63,35 +63,26 @@
         </n-tab-pane>
       </n-tabs>
     </div>
-    <div class="flex flex-col">
-      <div class="video-box w-full flex justify-center">
+    <div class="flex flex-col w-full mt-10  items-center">
+      <div class="video-box w-4/5 min-h-[300px] flex justify-center items-center">
         <div
-          class="video-box w-4/5 h-[300px] mt-10 flex justify-center items-center"
+          v-if="createVideoTaskId"
+          class="video-progress-container w-full h-full flex flex-col justify-center items-center rounded-lg p-8"
         >
-          <div
-            v-if="createVideoTaskId"
-            class="video-progress-container w-full h-full flex flex-col justify-center items-center rounded-lg p-8"
-          >
-            <n-progress
-              type="line"
-              color="#63E2B8"
-              :percentage="progress"
-              processing
-            />
-            <span class="text-sm mt-3"
-              >生成中，预计需要 2 - 5 分钟，请稍候~</span
-            >
-          </div>
-          <video v-else-if="videoUrl" width="100%" height="300px" controls>
-            <source :src="videoUrl" type="video/mp4" />
-          </video>
-          <n-empty v-else description="快去生成你的创意吧" />
+          <n-progress
+            type="line"
+            color="#63E2B8"
+            :percentage="progress"
+            processing
+          />
+          <span class="text-sm mt-3">生成中，预计需要 2 - 5 分钟，请稍候~</span>
         </div>
+        <video v-else-if="videoUrl" width="100%" height="300px" controls>
+          <source :src="videoUrl" type="video/mp4" />
+        </video>
+        <n-empty v-else description="快去生成你的创意吧" />
       </div>
-      <span class="waring_desc justify-self-end">
-        请遵守中华人民共和国网络安全法，
-        严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</span
-      >
+      <Tips></Tips>
     </div>
     <!-- 优化提示词 -->
     <el-dialog
@@ -122,6 +113,7 @@ import { createVideoKlingApi, getVideoKlingApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import Panel from "@/components/panel/index.vue"
+import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
 import { useCountDown } from "@/hooks/useCountDown"
 
@@ -214,12 +206,6 @@ const getVideoTask = async () => {
 </script>
 
 <style scoped lang="scss">
-.waring_desc {
-  text-align: center;
-  color: rgb(106, 114, 124);
-  font-size: 12px;
-  margin-top: 36px;
-}
 .video-progress-container {
   background-color: #191d21dd;
   color: #c5c7d5;
