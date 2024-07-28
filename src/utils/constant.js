@@ -34,3 +34,22 @@ export const imageRecommendPrompt = [
     desc: "糖醋排骨，吉卜力风格，笔触，最好的质量，超细节，8K画质",
   },
 ]
+export const voiceRecommendPrompt = [
+  {
+    label: "",
+    desc: "",
+  },
+]
+
+export const voiceSoundOptions = [
+  "晓晓",
+  "女声",
+  "晓伊",
+  "云健",
+  "云希",
+  "男声",
+  "云夏",
+  "云扬",
+  "辽宁晓北",
+  "陕西晓妮",
+]

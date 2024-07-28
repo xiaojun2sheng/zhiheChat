@@ -25,13 +25,13 @@
       "
       @click="switchTheme"
     ></SvgIcon> -->
-    <SvgIcon
+    <!-- <SvgIcon
       class="mr-2"
       :width="35"
       :height="35"
       hover
       icon="mingcute:user-4-fill"
-    ></SvgIcon>
+    ></SvgIcon> -->
     <UserCenter></UserCenter>
   </div>
 </template>

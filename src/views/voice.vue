@@ -1,6 +1,6 @@
 <template>
   <div class="common_page flex gap-2">
-    <div class="w-56">
+    <div class="w-[400px] shrink-0">
       <n-tabs
         type="line"
         v-model:value="activeName"
@@ -8,23 +8,61 @@
         @update:value="jumpPage"
       >
         <n-tab-pane name="text" tab="文字生成音频">
-          <n-input
-            v-model:value="voiceSoundConfig.input"
-            :autosize="{ minRows: 6, maxRows: 8 }"
-            type="textarea"
-            placeholder="请输入您要生成音频的文案"
-          />
-          <div class="flex justify-between mt-2">
+          <Panel icon="flat-color-icons:idea" title="创意描述">
+            <template #content>
+              <div class="prompt">
+                <n-input
+                  v-model:value="voiceSoundConfig.input"
+                  class="textarea__inner"
+                  rows="4"
+                  autocomplete="off"
+                  placeholder="请输入您要生成音频的文案"
+                  type="textarea"
+                  :style="{
+                    '--n-border-hover': 'transparent',
+                    '--n-border-focus': 'transparent',
+                    '--n-box-shadow-focus': 'none',
+                  }"
+                ></n-input>
+              </div>
+            </template>
+          </Panel>
+          <Panel icon="flat-color-icons:settings" title="参数设置">
+            <template #content>
+              <div>
+                <span>选择音色：</span>
+                <div>
+                  <n-tag
+                    class="m-1"
+                    v-for="item in voiceSounds"
+                    :key="item.label"
+                    v-model:checked="item.checked"
+                    checkable
+                    @click="voiceSoundSelect(item.label)"
+                    >{{ item.label }}
+                  </n-tag>
+                </div>
+              </div>
+              <div>
+                <span>声音速度：</span>
+                <div>
+                  <n-slider
+                    v-model:value="voiceSoundConfig.speed"
+                    :min="0.25"
+                    :max="4"
+                    :step="0.25"
+                  />
+                </div>
+              </div>
+            </template>
+          </Panel>
+
+          <div class="flex justify-end mt-2 gap-4">
             <n-button
-              class="width_btn"
-              @click="dialogVisible = true"
-              type="primary"
-              >配置</n-button
-            >
-            <n-button
-              class="width_btn"
+              class="prompt-btn__primary"
               @click="createVoice"
               :disabled="!voiceSoundConfig.input"
+              round
               type="primary"
               >生成音频</n-button
             >
@@ -44,45 +82,13 @@
       </div>
       <n-empty v-else description="请生成音频" />
     </n-spin>
-
-    <!-- 音频配置 -->
-    <el-dialog
-      v-model="dialogVisible"
-      title="优化提示词"
-      width="500"
-      :before-close="cancelDialog"
-    >
-      <label class="diglog_title">选择音色</label>
-      <div>
-        <el-check-tag
-          class="sound_tag"
-          v-for="item in voiceSoundTypeOptions"
-          :key="item"
-          :checked="item == voiceSoundConfig.voice"
-          @click="voiceSoundConfig.voice = item"
-          >{{ item }}
-        </el-check-tag>
-      </div>
-      <label class="diglog_title">声音速度</label>
-      <el-slider
-        v-model="voiceSoundConfig.speed"
-        :min="0.25"
-        :max="4"
-        :step="0.25"
-      />
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="cancelDialog">取消</el-button>
-          <el-button type="primary" @click="submitDialog">替换</el-button>
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue"
+import { onMounted, ref, computed } from "vue"
 import { textToVoice } from "@/api/index"
-import { ElMessage } from "element-plus"
+import Panel from "@/components/panel/index.vue"
+import { voiceSoundOptions } from "@/utils/constant"
 
 let activeName = ref("text")
 
@@ -100,6 +106,22 @@ const splitVoiceText = (str) => {
 }
 
 let loading = ref(false)
+
+const voiceSounds = ref([])
+onMounted(() => {
+  voiceSounds.value = voiceSoundOptions.map((t) => {
+    return { label: t, checked: false }
+  })
+})
+
+const voiceSoundSelect = (label) => {
+  voiceSounds.value.forEach((t) => {
+    if (t.label == label) {
+      t.checked = true
+      voiceSoundConfig.value.voice = label
+    } else t.checked = false
+  })
+}
 
 // 文字生成语音参数
 let voiceSoundConfig = ref({
@@ -140,18 +162,7 @@ const mergeBlobToMp3 = (voiceBlobList) => {
 
 // 音频配置
 let dialogVisible = ref(false)
-const voiceSoundTypeOptions = [
-  "晓晓",
-  "女声",
-  "晓伊",
-  "云健",
-  "云希",
-  "男声",
-  "云夏",
-  "云扬",
-  "辽宁晓北",
-  "陕西晓妮",
-]
+
 // 确认替换提示词
 const submitDialog = () => {
   dialogVisible.value = false
