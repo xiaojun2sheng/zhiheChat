@@ -38,7 +38,7 @@
       :class="['msg-item__box', 'msg-item__right']"
     >
       <p class="bg-[#2f2f2f] rounded p-2">{{ content }}</p>
-      <img :src="userStore.avatar" />
+      <!-- <img :src="userStore.avatar" /> -->
     </div>
   </div>
 </template>

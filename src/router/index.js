@@ -17,7 +17,7 @@ const routes = [
   { path: "/video", component: Video },
   { path: "/music", component: Music },
   { path: "/image", component: Image },
-  { path: "/chat/:id?", component: Chat },
+  { path: "/chat/:id?", name: "chat", component: Chat },
   { path: "/voice", component: Voice },
   { path: "/betterPrompt", component: betterPrompt },
 ]
