@@ -1,4 +1,6 @@
 import { request } from "@/utils"
+export * from './chat-stream'
+
 
 // 生成图片
 export const createImgeApi = (config = {}) =>
@@ -23,6 +25,7 @@ export const getVideoKlingApi = (config = {}) =>
     method: "get",
     ...config,
   })
+
 
 // 聊天
 export const chatCompletionsApi = (config = {}) =>

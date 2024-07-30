@@ -70,18 +70,17 @@
         </n-tab-pane>
       </n-tabs>
     </div>
-    <n-spin :show="!!loading">
-      <template #description> 音频正在生成中，请耐心等待... </template>
-      <label class="waring_desc">
-        <el-icon size="14"><WarnTriangleFilled /></el-icon>
-        请遵守中华人民共和国网络安全法，
-        严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</label
-      >
-      <div v-if="resData">
-        <audio :src="resData" controls="controls"></audio>
-      </div>
-      <n-empty v-else description="请生成音频" />
-    </n-spin>
+    <div class="flex flex-col w-full mt-10 items-center">
+      <n-spin :show="loading">
+        <div
+          class="image-box px-10 min-h-[300px] flex gap-2 justify-center items-center"
+        >
+          <audio v-if="resData" :src="resData" controls="controls"></audio>
+          <n-empty v-else description="请生成音频" />
+        </div>
+      </n-spin>
+      <Tips></Tips>
+    </div>
   </div>
 </template>
 <script setup>
