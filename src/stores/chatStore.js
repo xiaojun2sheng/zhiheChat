@@ -12,7 +12,7 @@ export const useChatStore = defineStore({
       messageList: [], // 当前聊天信息
       chatInfo: {}, // 当前聊天信息
       sendOptions: {
-        model: "gpt-3.5-turbo",
+        model: "qwen-turbo",
       }, // 发送的配置信息
     }
   },
