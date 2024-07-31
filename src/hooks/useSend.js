@@ -9,7 +9,6 @@ export const useSend = () => {
     // 发送之前进行套餐校验
     controller = new AbortController()
     running.value = true
-    debugger
     return chat2gpt(data, { signal: controller.signal })
       .then(async (res) => {
         if (res) {

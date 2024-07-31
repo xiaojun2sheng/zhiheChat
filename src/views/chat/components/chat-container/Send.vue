@@ -1,21 +1,6 @@
 <template>
   <div class="send-box">
     <div class="addition">
-      <div v-if="showFile">
-        <n-tag
-          round
-          :bordered="false"
-          closable
-          @close="chatStore.updateChatItem({ file: undefined })"
-        >
-          <span class="file-name">{{ chatStore.chat.file?.filename }}</span>
-          <template #avatar>
-            <NIcon size="15">
-              <!-- <DocumentTextOutline /> -->
-            </NIcon>
-          </template>
-        </n-tag>
-      </div>
     </div>
     <div class="tools">
       <!-- 模型切换 -->
@@ -94,11 +79,9 @@
 
 <script setup>
 import { ref, watch, computed } from "vue"
-// import Upload from "@/components/upload/index.vue"
 import { useSend } from "@/hooks/useSend"
 import { useChatStore, useAppStore } from "@/stores"
 import { isPhone } from "@/utils"
-// import { DocumentTextOutline } from "@vicons/ionicons5"
 
 const list = ref([])
 const appStore = useAppStore()
