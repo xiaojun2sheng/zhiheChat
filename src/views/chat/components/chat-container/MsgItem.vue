@@ -1,10 +1,9 @@
 <template>
   <div class="msg-item">
     <div v-if="position == 'left'" :class="['msg-item__box', 'msg-item__left']">
-      <!-- <img src="@/assets/zhihe_logo_blue.png" /> -->
       <div class="left_content">
         <!-- <v-md-preview class="md_content" :text="content"></v-md-preview> -->
-        <p class="bg-[#2f2f2f] rounded p-2">{{ content }}</p>
+        <p class="bg-[#2f2f2f] rounded p-2 min-h-[37px]">{{ content }}</p>
         <div v-if="status == 'loading'" class="loading">
           <NSpin :size="15"></NSpin>
         </div>

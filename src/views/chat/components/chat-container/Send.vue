@@ -1,58 +1,5 @@
 <template>
-  <div class="send-box">
-    <div class="addition">
-    </div>
-    <div class="tools">
-      <!-- 模型切换 -->
-      <NDropdown :options="appStore.modelList" @select="modelSelect">
-        <div class="item">
-          <SvgIcon
-            :width="20"
-            :height="20"
-            hover
-            icon="mingcute:openai-fill"
-          ></SvgIcon>
-        </div>
-      </NDropdown>
-
-      <!-- 温度修改 -->
-      <div class="item">
-        <NPopover
-          popper-class="popperClass"
-          placement="top"
-          :width="100"
-          trigger="hover"
-        >
-          <template #trigger>
-            <SvgIcon
-              :width="20"
-              :height="20"
-              hover
-              icon="mdi:temperature"
-            ></SvgIcon>
-          </template>
-          <NSlider
-            v-model:value="sendOptions.temperature"
-            size="small"
-            :step="0.1"
-            :min="0"
-            :max="1"
-          />
-        </NPopover>
-      </div>
-      <!-- 文件上传 -->
-      <!-- <Upload v-if="showUpload" @on-success="uploadSuccess">
-        <div class="item">
-          <SvgIcon
-            :width="20"
-            :height="20"
-            hover
-            icon="ci:cloud-upload"
-          ></SvgIcon>
-        </div>
-      </Upload> -->
-    </div>
-
+  <div class="send-box flex flex-col">
     <NInput
       type="textarea"
       :style="{
@@ -68,11 +15,14 @@
       @keydown.enter="submit"
     ></NInput>
     <div class="footer">
-      <NButton type="primary" :loading="running" @click="submit">
-        <NIcon v-if="!running" size="25">
-          <!-- <SendRound /> -->
-        </NIcon>
-      </NButton>
+      <SvgIcon
+        :width="20"
+        :height="20"
+        hover
+        :icon="running ? 'eos-icons:three-dots-loading' : 'ion:send'"
+        :disabled="running"
+        @click="submit"
+      ></SvgIcon>
     </div>
   </div>
 </template>
@@ -187,51 +137,15 @@ defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
 </script>
 <style lang="scss" scoped>
 .send-box {
-  // @include flex-layout(column, start, start);
   box-sizing: border-box;
+  height: 150px;
   padding-bottom: 10px;
-  .addition {
-    width: 100%;
-    padding-bottom: 5px;
-    border-bottom: 1px solid rgb(239, 239, 245);
-    font-size: 14px;
-    .file-name {
-      max-width: 60px;
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      display: -webkit-box;
-    }
-  }
-  .tools {
-    margin-top: 5px;
-    display: flex;
-    gap: 10px;
-    .item {
-      // @include flex-layout();
-      cursor: pointer;
-      border-radius: 8px;
-      height: 25px;
-      width: 25px;
-      flex-shrink: 0;
-      &.active,
-      &:hover {
-        background-color: #f3f3f3;
-      }
-    }
-  }
-  // border-radius: 4px;
-
+  border-top: 1px solid #2d2d2d;
   .footer {
     align-self: end;
   }
 }
 :deep(.n-input) {
   background-color: unset !important;
-}
-.dark {
-  .addition {
-    border-bottom: 1px solid #2d2d2d;
-  }
 }
 </style>
