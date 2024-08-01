@@ -63,8 +63,10 @@
         </n-tab-pane>
       </n-tabs>
     </div>
-    <div class="flex flex-col w-full mt-10  items-center">
-      <div class="video-box w-4/5 min-h-[300px] flex justify-center items-center">
+    <div class="flex flex-col w-full mt-10 items-center">
+      <div
+        class="video-box w-4/5 min-h-[300px] flex justify-center items-center"
+      >
         <div
           v-if="createVideoTaskId"
           class="video-progress-container w-full h-full flex flex-col justify-center items-center rounded-lg p-8"
@@ -108,14 +110,16 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue"
-import { createVideoKlingApi, getVideoKlingApi } from "@/api/index"
+import { ref, onMounted } from "vue"
+import { klingApi, viduApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import Panel from "@/components/panel/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
 import { useCountDown } from "@/hooks/useCountDown"
+import { klingAdapter, viduAdapter } from "@/utils/adapters"
+
 
 let activeName = ref("text")
 
@@ -157,26 +161,9 @@ const { progress, initCountDown, clearCountDown } = useCountDown()
 const createVideoTask = async () => {
   if (createVideoTaskId.value)
     return window.$message.warning("正在生成视频中。。")
-  let res = await createVideoKlingApi({
-    data: {
-      aspect_ratio: "16:9",
-      camera: {
-        horizontal: 0,
-        pan: 0,
-        roll: 0,
-        tilt: 0,
-        type: "empty",
-        vertical: 0,
-        zoom: 0,
-      },
-      cfg: 0.5,
-      duration: 5,
-      negative_prompt: "",
-      prompt: videoDesc.value,
-      tail_image_url: "",
-      url: "",
-    },
-  })
+
+  // let res = await klingApi.createVideoKling(klingAdapter().getReq(videoDesc.value))
+  let res = await viduApi.createVideoVidu(viduAdapter().getReq(videoDesc.value))
   createVideoTaskId.value = res.id
   // 倒计时
   initCountDown()
@@ -187,15 +174,13 @@ const createVideoTask = async () => {
 let videoUrl = ref("")
 const getVideoTask = async () => {
   if (!createVideoTaskId.value) return
-  let res = await getVideoKlingApi({
-    data: {
-      url: createVideoTaskId.value,
-    },
-  })
-  if (res?.data?.works[0]?.resource?.resource) {
+  // let res = await klingApi.getVideoKling(createVideoTaskId.value)
+  let res = await viduApi.getVideoVidu(createVideoTaskId.value)
+  const resource = viduAdapter().getResource(res)
+  if (resource) {
     window.$message.success("视频生成成功")
-    console.log("视频地址：", res.data.works[0].resource.resource)
-    videoUrl.value = res.data.works[0].resource.resource
+    console.log("视频地址：", resource)
+    videoUrl.value = resource
     clearInterval(intervalId.value)
     createVideoTaskId.value = null
     clearCountDown()

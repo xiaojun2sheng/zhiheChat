@@ -1,5 +1,6 @@
 import { request } from "@/utils"
 export * from './chat-stream'
+export * from './video'
 
 
 // 生成图片
@@ -10,21 +11,7 @@ export const createImgeApi = (config = {}) =>
     ...config,
   })
 
-// 创建可灵视频
-export const createVideoKlingApi = (config = {}) =>
-  request({
-    url: "/tasks/kling",
-    method: "post",
-    ...config,
-  })
 
-// 获取视频
-export const getVideoKlingApi = (config = {}) =>
-  request({
-    url: "/tasks/" + config.data.url,
-    method: "get",
-    ...config,
-  })
 
 
 // 聊天

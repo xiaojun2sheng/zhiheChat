@@ -9,6 +9,8 @@ export const useCountDown = () => {
   let step = 1
   let code
   const initCountDown = () => {
+    progress.value = 0
+    progressFlost = 0
     code = setInterval(() => {
       progressFlost += step
       progress.value = parseInt(progressFlost)
