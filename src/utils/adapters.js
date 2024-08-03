@@ -1,5 +1,7 @@
-const klingAdapter = () => {
-  const getReq = (prompt) => {
+import { klingApi, viduApi } from "@/api/index"
+
+const klingAdapter = {
+  getReq: (prompt) => {
     return {
       prompt,
       aspect_ratio: "16:9",
@@ -19,27 +21,37 @@ const klingAdapter = () => {
       tail_image_url: "",
       url: "",
     }
-  }
-
-  const getResource = (res) => {
+  },
+  getResource: (res) => {
+    return res?.data?.works[0]?.resource
+  },
+  getResourceUrl: (res) => {
     return res?.data?.works[0]?.resource?.resource
-  }
-  return { getReq, getResource }
+  },
+  service: klingApi,
 }
-const viduAdapter = () => {
-  const getReq = (prompt) => {
+const viduAdapter = {
+  getReq: (prompt) => {
     return {
       prompt,
       style: "general",
       aspect_ratio: "16:9",
       duration: 4,
     }
-  }
+  },
 
-  const getResource = (res) => {
+  getResource: (res) => {
+    return res?.creations[0]
+  },
+  getResourceUrl: (res) => {
     return res?.creations[0]?.uri
-  }
-  return { getReq, getResource }
+  },
+  service: viduApi,
 }
 
-export { klingAdapter, viduAdapter }
+const videoAdapters = {
+  kling: klingAdapter,
+  vidu: viduAdapter,
+}
+
+export { videoAdapters }

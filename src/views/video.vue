@@ -56,6 +56,14 @@
               type="primary"
               >生成视频</n-button
             >
+            <n-button
+              v-if="videoUrl"
+              class="prompt-btn__primary"
+              round
+              @click="upscaleVideoTask"
+              type="primary"
+              >视频优化</n-button
+            >
           </div>
         </n-tab-pane>
         <n-tab-pane name="image" tab="图片生成视频">
@@ -111,16 +119,16 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue"
-import { klingApi, viduApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import Panel from "@/components/panel/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
 import { useCountDown } from "@/hooks/useCountDown"
-import { klingAdapter, viduAdapter } from "@/utils/adapters"
+import { KLingAdapter, ViduAdapter } from "@/adapter"
 
-
+const adapter = new KLingAdapter()
+// const adapter = new ViduAdapter()
 let activeName = ref("text")
 
 let videoDesc = ref("")
@@ -162,9 +170,8 @@ const createVideoTask = async () => {
   if (createVideoTaskId.value)
     return window.$message.warning("正在生成视频中。。")
 
-  // let res = await klingApi.createVideoKling(klingAdapter().getReq(videoDesc.value))
-  let res = await viduApi.createVideoVidu(viduAdapter().getReq(videoDesc.value))
-  createVideoTaskId.value = res.id
+  let id = await adapter.createVideoTask(videoDesc.value)
+  createVideoTaskId.value = id
   // 倒计时
   initCountDown()
   intervalId.value = setInterval(getVideoTask, 3000)
@@ -174,13 +181,11 @@ const createVideoTask = async () => {
 let videoUrl = ref("")
 const getVideoTask = async () => {
   if (!createVideoTaskId.value) return
-  // let res = await klingApi.getVideoKling(createVideoTaskId.value)
-  let res = await viduApi.getVideoVidu(createVideoTaskId.value)
-  const resource = viduAdapter().getResource(res)
-  if (resource) {
+  let url = await adapter.getVideoUrl(createVideoTaskId.value)
+  if (url) {
     window.$message.success("视频生成成功")
-    console.log("视频地址：", resource)
-    videoUrl.value = resource
+    console.log("视频地址：", url)
+    videoUrl.value = url
     clearInterval(intervalId.value)
     createVideoTaskId.value = null
     clearCountDown()

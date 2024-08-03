@@ -16,8 +16,8 @@ const getVideoKling = (url) =>
   })
 
 const klingApi = {
-  createVideoKling,
-  getVideoKling,
+  createVideo: createVideoKling,
+  getVideo: getVideoKling,
 }
 
 // vidu
@@ -42,9 +42,9 @@ const videoViduUpscale = (data) =>
   })
 
 const viduApi = {
-  createVideoVidu,
-  getVideoVidu,
-  videoViduUpscale,
+  createVideo: createVideoVidu,
+  getVideo: getVideoVidu,
+  videoUpscale: videoViduUpscale,
 }
 
 export { klingApi, viduApi }
