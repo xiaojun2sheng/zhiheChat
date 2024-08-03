@@ -127,8 +127,8 @@ import { videoRecommendPrompt } from "@/utils"
 import { useCountDown } from "@/hooks/useCountDown"
 import { KLingAdapter, ViduAdapter } from "@/adapter"
 
-const adapter = new KLingAdapter()
-// const adapter = new ViduAdapter()
+// const adapter = new KLingAdapter()
+const adapter = new ViduAdapter()
 let activeName = ref("text")
 
 let videoDesc = ref("")
