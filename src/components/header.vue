@@ -2,9 +2,6 @@
 
 <template>
   <div class="header_box" hadow="always">
-    <div class="logo">
-      AI 百宝箱
-    </div>
     <el-menu
       class="menulist"
       mode="horizontal"
@@ -33,11 +30,11 @@ const router = useRouter()
 const route = useRoute()
 
 const menuList = [
-  { title: '视频', id: '1', url: '/video' },
+  // { title: '视频', id: '1', url: '/video' },
   // { title: '音乐', id: '2', url: '/music' },
-  { title: '图片', id: '3', url: '/image' },
-  { title: '问答', id: '4', url: '/chat' },
-  { title: '语音', id: '5', url: '/voice' },
+  // { title: '图片', id: '3', url: '/image' },
+  // { title: '问答', id: '4', url: '/chat' },
+  // { title: '语音', id: '5', url: '/voice' },
   { title: '提示词优化', id: '6', url: '/betterPrompt' },
 ]
 
