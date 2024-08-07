@@ -92,8 +92,9 @@ const contentHtml = computed(() => {
 const status = computed(() => props.item.status)
 
 const handlerAction = (type) => {
+  const val = props.item.userContent || props.item.content
   if (type == "copy") {
-    copy(content.value)
+    copy(val)
     $message.success("复制成功")
   } else {
     $message.success("感谢你的反馈")
