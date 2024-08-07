@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[260px] h-full">
+  <div class="w-[260px]">
     <img v-if="url" class="rounded-lg" :src="url" />
     <div
       v-else

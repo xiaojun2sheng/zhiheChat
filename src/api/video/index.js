@@ -1,9 +1,11 @@
 import { request } from "@/utils"
-
+console.log('import.meta.env.', import.meta.env)
+const isENV = import.meta.env.DEV
+const commonPrefix = isENV ? '/common' : ''
 // 创建可灵视频
 const createVideoKling = (data) =>
   request({
-    url: "/tasks/kling",
+    url: `${commonPrefix}/tasks/kling`,
     method: "post",
     data,
   })
@@ -11,7 +13,7 @@ const createVideoKling = (data) =>
 // 获取视频
 const getVideoKling = (url) =>
   request({
-    url: `/tasks/${url}`,
+    url: `${commonPrefix}/tasks/${url}`,
     method: "get",
   })
 
@@ -23,20 +25,20 @@ const klingApi = {
 // vidu
 const createVideoVidu = (data) =>
   request({
-    url: "/tasks/vidu",
+    url: `${commonPrefix}/tasks/vidu`,
     method: "post",
     data,
   })
 
 const getVideoVidu = (task_id) =>
   request({
-    url: `/tasks/${task_id}`,
+    url: `${commonPrefix}/tasks/${task_id}`,
     method: "get",
   })
 
 const videoViduUpscale = (data) =>
   request({
-    url: `/tasks/vidu-upscale`,
+    url: `${commonPrefix}/tasks/vidu-upscale`,
     method: "post",
     data,
   })

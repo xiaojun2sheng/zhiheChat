@@ -37,6 +37,18 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 8020,
+    proxy: {
+      "/commonapi": {
+        target: "https://api.chatfire.cn",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/commonapi/, ""),
+      },
+      "/imageapi": {
+        target: "https://api-flux.api4gpt.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/imageapi/, ""),
+      },
+    },
   },
   resolve: {
     alias: {

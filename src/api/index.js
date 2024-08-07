@@ -1,23 +1,23 @@
 import { request } from "@/utils"
-export * from './chat-stream'
-export * from './video'
-
+export * from "./chat-stream"
+export * from "./video"
+console.log("import.meta.env.", import.meta.env)
+const isENV = import.meta.env.DEV
+const commonPrefix = isENV ? "/commonapi" : "https://api.chatfire.cn"
+const imgPrefix = isENV ? "/imageapi" : "https://api-flux.api4gpt.com"
 
 // 生成图片
-export const createImgeApi = (config = {}) =>
+export const createImgeApi = (data) =>
   request({
-    url: "/v1/images/generations",
+    url: `${commonPrefix}/v1/images/generations`,
     method: "post",
-    ...config,
+    data,
   })
-
-
-
 
 // 聊天
 export const chatCompletionsApi = (config = {}) =>
   request({
-    url: "/v1/chat/completions",
+    url: `${commonPrefix}/v1/chat/completions`,
     method: "post",
     ...config,
   })
@@ -25,16 +25,15 @@ export const chatCompletionsApi = (config = {}) =>
 // 文字转语音
 export const textToVoice = (config = {}) =>
   request({
-    url: "/v1/audio/speech",
+    url: `${commonPrefix}/v1/audio/speech`,
     method: "post",
     ...config,
   })
 
 // 优化提示词
-// api.chatfire.cn/tools/prompter?Prompt=
 export const betterPromptApi = (prompt) => {
   return request({
-    url: "/tools/v1/prompter",
+    url: `${commonPrefix}/tools/v1/prompter`,
     method: "get",
     params: {
       Prompt: prompt,

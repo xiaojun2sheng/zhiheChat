@@ -11,17 +11,13 @@
             <template #content>
               <div class="prompt">
                 <n-input
-                  v-model:value="imageDesc"
+                  v-model:value="imageSetting.prompt"
                   class="textarea__inner"
                   rows="4"
                   autocomplete="off"
                   placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
                   type="textarea"
-                  :style="{
-                    '--n-border-hover': 'transparent',
-                    '--n-border-focus': 'transparent',
-                    '--n-box-shadow-focus': 'none',
-                  }"
+                  :style="inputStyle"
                 ></n-input>
               </div>
             </template>
@@ -31,9 +27,26 @@
                 <span
                   class="val mr-2 cursor-pointer"
                   v-for="item in imageRecommendPrompt"
-                  @click="imageDesc = item.desc"
+                  @click="imageSetting.prompt = item.desc"
                   >{{ item.label }}</span
                 >
+              </div>
+            </template>
+          </Panel>
+          <Panel icon="flat-color-icons:settings" title="参数设置">
+            <template #content>
+              <div>
+                <span>设置模型：</span>
+                <div class="prompt">
+                  <n-input
+                    v-model:value="imageSetting.model"
+                    class="textarea__inner"
+                    rows="4"
+                    autocomplete="off"
+                    placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
+                    :style="inputStyle"
+                  ></n-input>
+                </div>
               </div>
             </template>
           </Panel>
@@ -42,15 +55,15 @@
               class="prompt-btn__primary"
               round
               @click="betterPrompt"
-              :disabled="!imageDesc"
+              :disabled="!imageSetting.prompt"
               type="primary"
               >优化提示词</n-button
             >
             <n-button
               class="prompt-btn__primary"
               round
-              @click="createImage"
-              :disabled="!imageDesc"
+              @click="generateImage"
+              :disabled="!imageSetting.prompt"
               type="primary"
               >生成图片</n-button
             >
@@ -60,7 +73,7 @@
     </div>
     <div class="flex flex-col w-full mt-10 items-center">
       <div
-        class="image-box px-10 min-h-[300px] flex gap-2 justify-center items-center"
+        class="image-box px-10 min-h-[300px] flex gap-2 justify-start items-center flex-wrap"
       >
         <template v-if="imageUrls.length > 0">
           <ZImage
@@ -99,17 +112,17 @@
 </template>
 <script setup>
 import { ref } from "vue"
-import { createImgeApi } from "@/api/index"
 import { ElMessage } from "element-plus"
 import axios from "axios"
-import UploadImage from "@/components/uploadImage.vue"
 import ZImage from "@/components/zImage/index.vue"
 import Panel from "@/components/panel/index.vue"
 import { imageRecommendPrompt } from "@/utils"
+import { useImage } from "./useImage"
+
+const { inputStyle, loading, imageUrls, imageSetting, generateImage } =
+  useImage()
 
 let activeName = ref("text")
-
-let imageDesc = ref("")
 let batterImageDesc = ref("")
 // 优化提示词
 let dialogVisible = ref(false)
@@ -117,7 +130,9 @@ const betterPrompt = async () => {
   dialogVisible.value = true
   // https://openai.chatfire.cn/prompts?prompt=一直带有雄鹰翅膀的老虎，飞翔在大海上方
   axios
-    .get("https://openai.chatfire.cn/prompts?prompt=" + imageDesc.value)
+    .get(
+      "https://openai.chatfire.cn/prompts?prompt=" + imageSetting.value.prompt
+    )
     .then((res) => {
       batterImageDesc.value = res.data.result
     })
@@ -129,7 +144,7 @@ const betterPrompt = async () => {
 
 // 确认替换提示词
 const submit = () => {
-  imageDesc.value = batterImageDesc.value
+  imageSetting.value = batterImageDesc.value
   batterImageDesc.value = ""
   dialogVisible.value = false
 }
@@ -138,27 +153,6 @@ const cancelBetterPrompt = () => {
   batterImageDesc.value = ""
   dialogVisible.value = false
 }
-
-// 生成的图片
-let imageUrls = ref([])
-let createLoading = ref(false)
-const createImage = async () => {
-  createLoading.value = true
-  imageUrls.value = [{}]
-  let res = await createImgeApi({
-    data: {
-      model: "kolors",
-      prompt: imageDesc.value,
-      n: 1,
-      size: "1024x1024",
-    },
-  })
-  imageUrls.value = res.data || []
-  createLoading.value = false
-}
-// setTimeout(() => {
-//   imageUrls.value = [{}, {}, {}]
-// }, 2000)
 </script>
 
 <style scoped lang="scss">
