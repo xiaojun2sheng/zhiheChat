@@ -2,8 +2,10 @@
   <div class="msg-item">
     <div v-if="position == 'left'" :class="['msg-item__box', 'msg-item__left']">
       <div class="left_content">
-        <!-- <v-md-preview class="md_content" :text="content"></v-md-preview> -->
-        <p class="bg-[#2f2f2f] rounded p-2 min-h-[37px]">{{ content }}</p>
+        <div
+          class="bg-[#2f2f2f] rounded p-2 min-h-[37px]"
+          v-html="contentHtml"
+        ></div>
         <div v-if="status == 'loading'" class="loading">
           <NSpin :size="15"></NSpin>
         </div>
@@ -36,7 +38,7 @@
       v-if="position == 'right'"
       :class="['msg-item__box', 'msg-item__right']"
     >
-      <p class="bg-[#2f2f2f] rounded p-2">{{ content }}</p>
+      <div class="bg-[#2f2f2f] rounded p-2" v-html="contentHtml"></div>
       <!-- <img :src="userStore.avatar" /> -->
     </div>
   </div>
@@ -46,6 +48,30 @@
 import { computed } from "vue"
 import { useUserStore } from "@/stores"
 import { copy } from "@/utils"
+import markdownit from "markdown-it"
+import hljs from "highlight.js/lib/core"
+
+const md = markdownit({
+  html: false, // 在源码中启用 HTML 标签
+  linkify: true, // 将类似 URL 的文本自动转换为链接。
+  typographer: true, // 启用一些语言中立的替换 + 引号美化
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return (
+          '<pre><code class="hljs">' +
+          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+          "</code></pre>"
+        )
+      } catch (__) {}
+    }
+
+    return (
+      '<pre><code class="hljs">' + md.utils.escapeHtml(str) + "</code></pre>"
+    )
+  },
+})
+const result = md.render("# markdown-it rulezz!")
 
 const emit = defineEmits(["stop-stream", "on-refresh"])
 
@@ -59,10 +85,10 @@ const props = defineProps({
 })
 
 const userStore = useUserStore()
-const content = computed(() => {
-  return props.item.userContent || props.item.content
+const contentHtml = computed(() => {
+  const val = props.item.userContent || props.item.content
+  return md.render(val)
 })
-
 const status = computed(() => props.item.status)
 
 const handlerAction = (type) => {

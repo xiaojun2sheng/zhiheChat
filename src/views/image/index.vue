@@ -75,14 +75,16 @@
       <div
         class="image-box px-10 min-h-[300px] flex gap-2 justify-start items-center flex-wrap"
       >
-        <template v-if="imageUrls.length > 0">
-          <ZImage
-            v-for="item in imageUrls"
-            :key="item.url"
-            :url="item.url"
-          ></ZImage>
-        </template>
-        <n-empty v-else description="请生成图片" />
+        <n-image-group v-if="imageUrls.length > 0" show-toolbar-tooltip>
+          <n-image v-for="item in imageUrls" width="240" :src="item.url" />
+        </n-image-group>
+        <n-spin v-if="loading" :show="true">
+          <template #description> 生成中 </template>
+        </n-spin>
+        <n-empty
+          v-if="imageUrls.length == 0 && !loading"
+          description="请生成图片"
+        />
       </div>
       <Tips></Tips>
     </div>

@@ -19,7 +19,6 @@ export const useImage = (url) => {
   const imageUrls = ref([])
   const generateImage = async () => {
     loading.value = true
-    imageUrls.value = [{}]
     let res = await createImgeApi(imageSetting.value)
     imageUrls.value = res.data || []
     loading.value = false

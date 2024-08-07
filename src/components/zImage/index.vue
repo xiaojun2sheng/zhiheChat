@@ -3,7 +3,7 @@
     <img v-if="url" class="rounded-lg" :src="url" />
     <div
       v-else
-      class="rounded-lg loading-container w-full h-full flex justify-center items-center"
+      class="rounded-lg loading-container w-full h-full flex justify-center items-center min-h-[200px]"
     >
       <n-spin :show="!url">
         <template #description> 生成中 </template>
