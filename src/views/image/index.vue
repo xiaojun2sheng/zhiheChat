@@ -88,6 +88,23 @@
       </div>
       <Tips></Tips>
     </div>
+    <div v-if="historyImgs.length > 0">
+      <KeepAlive>
+        <HistorySide>
+          <template #content>
+            <div>
+              <n-image
+                v-for="item in historyImgs"
+                width="240"
+                :preview-disabled="true"
+                :src="item[0].url"
+                @click="selectHistory(item)"
+              />
+            </div>
+          </template>
+        </HistorySide>
+      </KeepAlive>
+    </div>
 
     <!-- 优化提示词 -->
     <el-dialog
@@ -116,13 +133,20 @@
 import { ref } from "vue"
 import { ElMessage } from "element-plus"
 import axios from "axios"
-import ZImage from "@/components/zImage/index.vue"
 import Panel from "@/components/panel/index.vue"
+import HistorySide from "@/components/history-side/index.vue"
 import { imageRecommendPrompt } from "@/utils"
 import { useImage } from "./useImage"
 
-const { inputStyle, loading, imageUrls, imageSetting, generateImage } =
-  useImage()
+const {
+  historyImgs,
+  inputStyle,
+  loading,
+  imageUrls,
+  imageSetting,
+  generateImage,
+  selectHistory,
+} = useImage()
 
 let activeName = ref("text")
 let batterImageDesc = ref("")
@@ -158,6 +182,8 @@ const cancelBetterPrompt = () => {
 </script>
 
 <style scoped lang="scss">
+.common_page {
+}
 .waring_desc {
   font-size: 12px;
   color: #f56c6c;

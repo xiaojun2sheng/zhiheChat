@@ -19,7 +19,7 @@ export const videoRecommendPrompt = [
 export const imageRecommendPrompt = [
   {
     label: "小男孩",
-    desc: "帅气小男孩，黑头发，微笑，正脸，全身照，完美光线，油画风格，细节清晰，16k",
+    desc: "帅气小男孩，黑头发，微笑，正脸，全身照，完美光线，油画风格，细节清晰",
   },
   {
     label: "神秘女巫",
@@ -27,11 +27,11 @@ export const imageRecommendPrompt = [
   },
   {
     label: "兔子",
-    desc: "可爱的小兔子，动漫3D风格，超写实油画，五官精致，透明感，光线追踪，景深，超级细节，8k",
+    desc: "可爱的小兔子，动漫3D风格，超写实油画，五官精致，透明感，光线追踪，景深，超级细节",
   },
   {
     label: "糖醋排骨",
-    desc: "糖醋排骨，吉卜力风格，笔触，最好的质量，超细节，8K画质",
+    desc: "糖醋排骨，吉卜力风格，笔触，最好的质量，超细节",
   },
 ]
 export const voiceRecommendPrompt = [
