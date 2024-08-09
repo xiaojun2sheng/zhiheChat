@@ -1,7 +1,9 @@
 <template>
-  <div class="h-full w-full p-2">
+  <div class="h-full w-full">
     <Header></Header>
-    <RouterView></RouterView>
+    <div class="p-2">
+      <RouterView></RouterView>
+    </div>
   </div>
 </template>
 <script setup>

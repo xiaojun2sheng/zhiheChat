@@ -5,7 +5,7 @@
     :class="{ 'is-active': active }"
     @click="selectChat"
   >
-    <span class="title text-overflow">{{ item.name }}</span>
+    <p class="title truncate">{{ item.name }}</p>
     <n-dropdown trigger="click" :options="options" @select="dropdownSelect">
       <SvgIcon :width="18" :height="18" hover icon="ri:more-fill"></SvgIcon>
     </n-dropdown>
@@ -37,6 +37,9 @@ const dropdownSelect = (key) => {
 <style lang="scss" scoped>
 .chat-item {
   box-sizing: border-box;
+  .title {
+    width: 80%;
+  }
   &:hover,
   &.is-active {
     background-color: #eff4fd;
