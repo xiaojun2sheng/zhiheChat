@@ -1,9 +1,10 @@
 import { useAppStore } from "@/stores"
 
 function getHeaders() {
+  const appStore = useAppStore()
   return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer sk-94piBrPZi2DriPw23142114aFeDc4c73Bd350aA64fBd6d0d`,
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${appStore.key}`
   }
 }
 

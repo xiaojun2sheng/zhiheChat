@@ -4,7 +4,7 @@
       <MsgItem
         :item="{
           role: 'system',
-          content: '您好，我是您的智能助理，快来提问试试吧！',
+          content: '您好，我是火宝，快来提问试试吧！',
         }"
         role="gpt"
         position="left"

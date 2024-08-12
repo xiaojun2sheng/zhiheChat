@@ -67,7 +67,53 @@
           </div>
         </n-tab-pane>
         <n-tab-pane name="image" tab="图片生成视频">
-          <Panel icon="flat-color-icons:idea" title="请期待"> </Panel>
+          <Panel icon="flat-color-icons:idea" title="请上传">
+            <template #content>
+              <div class="prompt">
+                <UploadFile>
+                  <n-upload-dragger>
+                    <div class="w-full flex justify-center mb-2">
+                      <SvgIcon
+                        class="mr-2"
+                        :width="25"
+                        :height="25"
+                        icon="ph:upload-bold"
+                      ></SvgIcon>
+                    </div>
+                    <n-text style="font-size: 16px">
+                      点击或者拖动文件到该区域来上传
+                    </n-text>
+                    <n-p depth="3" style="margin: 8px 0 0 0">
+                      请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
+                    </n-p>
+                  </n-upload-dragger>
+                </UploadFile>
+                <!-- <n-upload
+                  multiple
+                  directory-dnd
+                  action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+                  :max="5"
+                >
+                  <n-upload-dragger>
+                    <div class="w-full flex justify-center mb-2">
+                      <SvgIcon
+                        class="mr-2"
+                        :width="25"
+                        :height="25"
+                        icon="ph:upload-bold"
+                      ></SvgIcon>
+                    </div>
+                    <n-text style="font-size: 16px">
+                      点击或者拖动文件到该区域来上传
+                    </n-text>
+                    <n-p depth="3" style="margin: 8px 0 0 0">
+                      请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
+                    </n-p>
+                  </n-upload-dragger>
+                </n-upload> -->
+              </div>
+            </template>
+          </Panel>
         </n-tab-pane>
       </n-tabs>
     </div>
@@ -122,6 +168,7 @@ import { ref, onMounted } from "vue"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import Panel from "@/components/panel/index.vue"
+import UploadFile from "@/components/upload/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
 import { useCountDown } from "@/hooks/useCountDown"

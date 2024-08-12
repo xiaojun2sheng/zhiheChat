@@ -12,8 +12,8 @@ import betterPrompt from "@/views/betterPrompt.vue"
 
 // 定义路由
 const routes = [
+  { path: "/", redirect:'/chat' },
   { path: "/login", component: Login },
-  { path: "/", component: betterPrompt },
   { path: "/video", component: Video },
   { path: "/music", component: Music },
   { path: "/image", component: Image },

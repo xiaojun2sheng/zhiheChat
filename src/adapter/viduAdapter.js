@@ -8,9 +8,10 @@ class ViduAdapter extends Adapter {
     this.creationId = ""
   }
 
-  getReq(prompt) {
+  getReq(prompt, url = "") {
     return {
       prompt,
+      url,
       style: "general",
       aspect_ratio: "16:9",
       duration: 4,

@@ -6,6 +6,14 @@ const isENV = import.meta.env.DEV
 const commonPrefix = isENV ? "/commonapi" : "https://api.chatfire.cn"
 const imgPrefix = isENV ? "/imageapi" : "https://api-flux.api4gpt.com"
 
+// 文件上传
+export const uploadFile = (data) =>
+  request({
+    url: `${commonPrefix}/v1/files`,
+    method: "post",
+    data,
+  })
+  
 // 生成图片
 export const createImgeApi = (data) =>
   request({

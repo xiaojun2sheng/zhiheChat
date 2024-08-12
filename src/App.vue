@@ -3,9 +3,13 @@ import { NConfigProvider } from "naive-ui"
 import { zhCN, dateZhCN } from "naive-ui"
 import NaiveProvider from "@/components/common/NaiveProvider/index.vue"
 import { useTheme } from "@/hooks/useTheme"
-import Layout from "@/components/layout.vue"
+import Layout from "@/layout/index.vue"
+import { useAppStore } from "@/stores"
 
 const { theme, themeOverrides } = useTheme()
+const appStore = useAppStore()
+
+appStore.resolveSettings()
 </script>
 
 <template>

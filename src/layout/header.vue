@@ -1,6 +1,8 @@
 <template>
   <div class="header_box" hadow="always">
-    <div class="logo">AI 百宝箱</div>
+    <div class="logo flex justify-center items-center">
+      <img src="@/assets/logo.png" alt="" /><span>火宝 AI</span>
+    </div>
     <n-tabs
       v-model:value="tabName"
       type="line"
@@ -94,9 +96,11 @@ const switchTheme = () => {
   justify-content: space-between;
   height: 55px;
   .logo {
-    width: 100px;
     padding: 0 8px;
-    // color: #409eff;
+    width: 120px;
+    img {
+      width: 40px;
+    }
   }
   .menulist {
     width: calc(100% - 200px);

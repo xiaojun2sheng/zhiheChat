@@ -22,6 +22,12 @@ export const useChatStore = defineStore({
     },
   },
   actions: {
+    setSettings(data) {
+      this.apiKey = data.apiKey
+      this.baseUrl = data.baseUrl
+      this.customModels = data.models?.split(",") || []
+      localStorage.setItem("chatbot-api-settings", JSON.stringify(data))
+    },
     setLoading(loading) {
       this.loading = loading
     },

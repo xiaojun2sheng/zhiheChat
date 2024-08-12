@@ -6,7 +6,7 @@
 <script setup>
 
 import { ref } from 'vue'
-import Layout from '../components/layout.vue';
+import Layout from '@/layout/index.vue';
 
 </script>
 
