@@ -56,6 +56,7 @@ const ossUploadFile = async ({ file, onFinish }) => {
   emit("on-success", fileRsp)
 }
 
+
 </script>
 <style lang="scss" scoped>
 .send-box {

@@ -39,60 +39,15 @@
             </template>
           </Panel>
           <Panel icon="flat-color-icons:settings" title="参数设置"></Panel>
-          <div class="flex justify-end mt-2 gap-4">
-            <n-button
-              class="prompt-btn__primary"
-              round
-              @click="betterPrompt"
-              :disabled="!videoDesc"
-              type="primary"
-              >优化提示词</n-button
-            >
-            <n-button
-              class="prompt-btn__primary"
-              round
-              @click="createVideoTask"
-              :disabled="!videoDesc"
-              type="primary"
-              >生成视频</n-button
-            >
-            <n-button
-              v-if="videoUrl"
-              class="prompt-btn__primary"
-              round
-              @click="upscaleVideoTask"
-              type="primary"
-              >视频优化</n-button
-            >
-          </div>
         </n-tab-pane>
         <n-tab-pane name="image" tab="图片生成视频">
           <Panel icon="flat-color-icons:idea" title="请上传">
             <template #content>
               <div class="prompt">
-                <UploadFile>
-                  <n-upload-dragger>
-                    <div class="w-full flex justify-center mb-2">
-                      <SvgIcon
-                        class="mr-2"
-                        :width="25"
-                        :height="25"
-                        icon="ph:upload-bold"
-                      ></SvgIcon>
-                    </div>
-                    <n-text style="font-size: 16px">
-                      点击或者拖动文件到该区域来上传
-                    </n-text>
-                    <n-p depth="3" style="margin: 8px 0 0 0">
-                      请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
-                    </n-p>
-                  </n-upload-dragger>
-                </UploadFile>
-                <!-- <n-upload
-                  multiple
-                  directory-dnd
-                  action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
-                  :max="5"
+                <UploadFile
+                  v-if="!uploadImage.url"
+                  @on-uploading="onUploading"
+                  @on-success="onUploadSuccess"
                 >
                   <n-upload-dragger>
                     <div class="w-full flex justify-center mb-2">
@@ -110,12 +65,57 @@
                       请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
                     </n-p>
                   </n-upload-dragger>
-                </n-upload> -->
+                </UploadFile>
+                <div
+                  v-else
+                  class="image-preview flex items-center justify-around"
+                >
+                  <n-image
+                    :width="160"
+                    :height="160"
+                    object-fit="fill"
+                    :src="uploadImage.url"
+                  ></n-image>
+                  <span class="ml-2">{{ uploadImage.filename }}</span>
+                  <SvgIcon
+                    class="mr-2"
+                    :width="25"
+                    :height="25"
+                    icon="mdi:delete-outline"
+                    @click="uploadImage = {}"
+                  ></SvgIcon>
+                </div>
               </div>
             </template>
           </Panel>
         </n-tab-pane>
       </n-tabs>
+      <div class="flex justify-end mt-2 gap-4">
+        <n-button
+          class="prompt-btn__primary"
+          round
+          @click="betterPrompt"
+          :disabled="!videoDesc"
+          type="primary"
+          >优化提示词</n-button
+        >
+        <n-button
+          class="prompt-btn__primary"
+          round
+          @click="createVideoTask"
+          :disabled="!videoDesc && !uploadImage.url"
+          type="primary"
+          >生成视频</n-button
+        >
+        <n-button
+          v-if="videoUrl"
+          class="prompt-btn__primary"
+          round
+          @click="upscaleVideoTask"
+          type="primary"
+          >视频优化</n-button
+        >
+      </div>
     </div>
     <div class="flex flex-col w-full mt-10 items-center">
       <div
@@ -172,10 +172,9 @@ import UploadFile from "@/components/upload/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
 import { useCountDown } from "@/hooks/useCountDown"
-import { KLingAdapter, ViduAdapter } from "@/adapter"
+import { useVideo } from "./useVideo"
 
-// const adapter = new KLingAdapter()
-const adapter = new ViduAdapter()
+const { adapter, uploadImage, onUploading, onUploadSuccess } = useVideo()
 let activeName = ref("text")
 
 let videoDesc = ref("")
@@ -217,7 +216,7 @@ const createVideoTask = async () => {
   if (createVideoTaskId.value)
     return window.$message.warning("正在生成视频中。。")
 
-  let id = await adapter.createVideoTask(videoDesc.value)
+  let id = await adapter.value.createVideoTask(videoDesc.value, uploadImage.value.url)
   createVideoTaskId.value = id
   // 倒计时
   initCountDown()
@@ -228,7 +227,7 @@ const createVideoTask = async () => {
 let videoUrl = ref("")
 const getVideoTask = async () => {
   if (!createVideoTaskId.value) return
-  let url = await adapter.getVideoUrl(createVideoTaskId.value)
+  let url = await adapter.value.getVideoUrl(createVideoTaskId.value)
   if (url) {
     window.$message.success("视频生成成功")
     console.log("视频地址：", url)

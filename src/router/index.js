@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router"
 // 引入你的组件
 import Home from "../views/home.vue"
 import Login from "@/views/login.vue"
-import Video from "@/views/video.vue"
+import Video from "@/views/video/index.vue"
 import Music from "@/views/music.vue"
 import Image from "@/views/image/index.vue"
 import Chat from "@/views/chat/index.vue"

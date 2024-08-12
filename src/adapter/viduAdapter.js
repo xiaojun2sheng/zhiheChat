@@ -9,21 +9,22 @@ class ViduAdapter extends Adapter {
   }
 
   getReq(prompt, url = "") {
-    return {
+    const req = {
       prompt,
       url,
       style: "general",
       aspect_ratio: "16:9",
       duration: 4,
     }
+    return req
   }
 
   getResource(res) {
     return res?.creations[0]
   }
 
-  async createVideoTask(value) {
-    const res = await this.service.createVideo(this.getReq(value))
+  async createVideoTask(value, url) {
+    const res = await this.service.createVideo(this.getReq(value, url))
     return res.id
   }
   async getVideoUrl(id) {
