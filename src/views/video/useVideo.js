@@ -60,6 +60,7 @@ export const useVideo = (url) => {
     const res = await viduApi.getVideo(taskId.value)
     const creation = res?.creations[0]
     if (creation) {
+      debugger
       taskId.value = creation.task_id
       creationId.value = creation.id
       videoUrl.value = creation.uri
@@ -67,6 +68,7 @@ export const useVideo = (url) => {
       window.$message.success("视频生成成功")
       clearInterval(intervalId.value)
       taskId.value = null
+      generating.value = false
       clearCountDown()
     }
   }
