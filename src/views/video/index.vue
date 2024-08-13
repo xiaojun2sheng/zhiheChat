@@ -1,28 +1,19 @@
 <template>
   <div class="common_page flex gap-2">
     <div class="w-[400px] shrink-0">
-      <n-tabs
-        type="line"
-        v-model:value="activeName"
-        animated
-        @update:value="jumpPage"
-      >
+      <n-tabs type="line" v-model:value="activeName" animated>
         <n-tab-pane name="text" tab="文字生成视频">
           <Panel icon="flat-color-icons:idea" title="创意描述">
             <template #content>
               <div class="prompt">
                 <n-input
-                  v-model:value="videoDesc"
+                  v-model:value="videoPrompt"
                   class="textarea__inner"
                   rows="4"
                   autocomplete="off"
                   placeholder="请输入您要生成视频的描述，可以描述主题，场景，风格等等"
                   type="textarea"
-                  :style="{
-                    '--n-border-hover': 'transparent',
-                    '--n-border-focus': 'transparent',
-                    '--n-box-shadow-focus': 'none',
-                  }"
+                  :style="inputStyle"
                 ></n-input>
               </div>
             </template>
@@ -32,7 +23,7 @@
                 <span
                   class="val mr-2 cursor-pointer"
                   v-for="item in videoRecommendPrompt"
-                  @click="videoDesc = item.desc"
+                  @click="videoPrompt = item.desc"
                   >{{ item.label }}</span
                 >
               </div>
@@ -41,42 +32,45 @@
           <Panel icon="flat-color-icons:settings" title="参数设置"></Panel>
         </n-tab-pane>
         <n-tab-pane name="image" tab="图片生成视频">
-          <Panel icon="flat-color-icons:idea" title="请上传">
+          <Panel icon="flat-color-icons:idea" title="图片创意描述">
             <template #content>
-              <div class="prompt">
-                <UploadFile
-                  v-if="!uploadImage.url"
-                  @on-uploading="onUploading"
-                  @on-success="onUploadSuccess"
-                >
-                  <n-upload-dragger>
-                    <div class="w-full flex justify-center mb-2">
-                      <SvgIcon
-                        class="mr-2"
-                        :width="25"
-                        :height="25"
-                        icon="ph:upload-bold"
-                      ></SvgIcon>
-                    </div>
-                    <n-text style="font-size: 16px">
-                      点击或者拖动文件到该区域来上传
-                    </n-text>
-                    <n-p depth="3" style="margin: 8px 0 0 0">
-                      请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
-                    </n-p>
-                  </n-upload-dragger>
-                </UploadFile>
+              <div class="base-image">
+                <NSpin :show="loading">
+                  <UploadFile
+                    v-if="!uploadImage.url"
+                    @on-uploading="onUploading"
+                    @on-success="onUploadSuccess"
+                  >
+                    <n-upload-dragger>
+                      <div class="w-full flex justify-center mb-2">
+                        <SvgIcon
+                          class="mr-2"
+                          :width="25"
+                          :height="25"
+                          icon="ph:upload-bold"
+                        ></SvgIcon>
+                      </div>
+                      <n-text style="font-size: 16px">
+                        点击或者拖动文件到该区域来上传
+                      </n-text>
+                      <n-p depth="3" style="margin: 8px 0 0 0">
+                        请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
+                      </n-p>
+                    </n-upload-dragger>
+                  </UploadFile>
+                </NSpin>
                 <div
-                  v-else
-                  class="image-preview flex items-center justify-around"
+                  v-if="uploadImage.url"
+                  class="image-preview flex items-center justify-between rounded-md"
                 >
                   <n-image
+                    class="rounded-md"
                     :width="160"
                     :height="160"
-                    object-fit="fill"
+                    object-fit="cover"
                     :src="uploadImage.url"
                   ></n-image>
-                  <span class="ml-2">{{ uploadImage.filename }}</span>
+                  <span class="m-2">{{ uploadImage.filename }}</span>
                   <SvgIcon
                     class="mr-2"
                     :width="25"
@@ -84,6 +78,18 @@
                     icon="mdi:delete-outline"
                     @click="uploadImage = {}"
                   ></SvgIcon>
+                </div>
+                <p class="label my-2">图片创意描述：</p>
+                <div class="prompt">
+                  <n-input
+                    v-model:value="videoPrompt"
+                    class="textarea__inner"
+                    rows="4"
+                    autocomplete="off"
+                    placeholder="请输入您要生成视频的描述，可以描述主题，场景，风格等等"
+                    type="textarea"
+                    :style="inputStyle"
+                  ></n-input>
                 </div>
               </div>
             </template>
@@ -95,7 +101,7 @@
           class="prompt-btn__primary"
           round
           @click="betterPrompt"
-          :disabled="!videoDesc"
+          :disabled="!videoPrompt"
           type="primary"
           >优化提示词</n-button
         >
@@ -103,12 +109,11 @@
           class="prompt-btn__primary"
           round
           @click="createVideoTask"
-          :disabled="!videoDesc && !uploadImage.url"
+          :disabled="!videoPrompt && !uploadImage.url"
           type="primary"
           >生成视频</n-button
         >
         <n-button
-          v-if="videoUrl"
           class="prompt-btn__primary"
           round
           @click="upscaleVideoTask"
@@ -122,7 +127,7 @@
         class="video-box w-4/5 min-h-[300px] flex justify-center items-center"
       >
         <div
-          v-if="createVideoTaskId"
+          v-if="generating"
           class="video-progress-container w-full h-full flex flex-col justify-center items-center rounded-lg p-8"
         >
           <n-progress
@@ -171,13 +176,24 @@ import Panel from "@/components/panel/index.vue"
 import UploadFile from "@/components/upload/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
-import { useCountDown } from "@/hooks/useCountDown"
 import { useVideo } from "./useVideo"
 
-const { adapter, uploadImage, onUploading, onUploadSuccess } = useVideo()
-let activeName = ref("text")
+const {
+  videoPrompt,
+  activeName,
+  loading,
+  inputStyle,
+  uploadImage,
+  generating,
+  progress,
+  videoUrl,
+  createVideoTask,
+  getVideoUrl,
+  upscaleVideoTask,
+  onUploading,
+  onUploadSuccess,
+} = useVideo()
 
-let videoDesc = ref("")
 let batterVideoDesc = ref("")
 // 优化提示词
 let dialogVisible = ref(false)
@@ -206,42 +222,17 @@ const cancelBetterPrompt = () => {
   batterVideoDesc.value = ""
   dialogVisible.value = false
 }
-
-let createVideoTaskId = ref("")
-// 轮训任务
-let intervalId = ref(null)
-
-const { progress, initCountDown, clearCountDown } = useCountDown()
-const createVideoTask = async () => {
-  if (createVideoTaskId.value)
-    return window.$message.warning("正在生成视频中。。")
-
-  let id = await adapter.value.createVideoTask(videoDesc.value, uploadImage.value.url)
-  createVideoTaskId.value = id
-  // 倒计时
-  initCountDown()
-  intervalId.value = setInterval(getVideoTask, 3000)
-}
-
-// 生成的视频
-let videoUrl = ref("")
-const getVideoTask = async () => {
-  if (!createVideoTaskId.value) return
-  let url = await adapter.value.getVideoUrl(createVideoTaskId.value)
-  if (url) {
-    window.$message.success("视频生成成功")
-    console.log("视频地址：", url)
-    videoUrl.value = url
-    clearInterval(intervalId.value)
-    createVideoTaskId.value = null
-    clearCountDown()
-  } else {
-    // window.$message.error("视频生成失败")
-  }
-}
 </script>
 
 <style scoped lang="scss">
+.image-preview {
+  overflow: hidden;
+  background: linear-gradient(264.35deg, #22403eb3 2.09%, #283d46b3 94.63%);
+  box-shadow: -2px 4px 4px #0000001f;
+  .n-image {
+    height: 160px;
+  }
+}
 .video-progress-container {
   background-color: #191d21dd;
   color: #c5c7d5;

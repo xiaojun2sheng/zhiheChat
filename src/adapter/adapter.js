@@ -16,6 +16,10 @@ class Adapter {
     // 这里应该是从res中提取资源URL的逻辑
     throw new Error("createVideoTask 方法必须被实现")
   }
+  upscaleVideoTask(value){
+    // 这里应该是从res中提取资源URL的逻辑
+    throw new Error("createVideoTask 方法必须被实现")
+  }
 
   getVideoUrl(id) {
     // 这里应该是从res中提取资源URL的逻辑

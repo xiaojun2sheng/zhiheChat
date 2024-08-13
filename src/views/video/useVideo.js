@@ -1,38 +1,96 @@
 import { ref, onMounted } from "vue"
-import { createImgeApi } from "@/api/index"
+import { viduApi } from "@/api/index"
+import { useCountDown } from "@/hooks/useCountDown"
 
-import { KLingAdapter, ViduAdapter } from "@/adapter"
 export const useVideo = (url) => {
-  // const adapter = new KLingAdapter()
-  const adapter = ref(new ViduAdapter())
-
-  const uploadImage = ref({
-    filename: "WechatIMG417.jpg",
-    url: "https://uploads.cf.vidu.studio/tmp/vidu/2369821374817716/24/0812/232301-5k5L8TGcXOD2XS5q?Expires=1723508581&Signature=IuUiM-VGIptAWevL8LICm-r8GI0h-RBROS4JsOFgVqcdcARbMEFt8zK8RPf8ItFxcbR2tivDHS6LH6Sh3G2Vtcj5d3TJHs8cNje~bUmgIyh5OMoL81-8ogZWsAboGeLxkqgtsmapVgsPCs7Z0cmEOfhctyuSs2tT06eh80yuYeShtWVVIFySuntz6HhenvUU4uloUaxNo3PoNJRqG54tB55RsQLGxBcriqf23mtkabZQFHij2L9UMPGx8v-nlmGtrz5nHeN~PM9Hnlq38yEAto~KBWsVtYSqTggfuVmiMO1G1JuLj33ACWz5yWaPNPejZwtrbV-q8Y7bLdvukkACYA__&Key-Pair-Id=KNW0SL0E7LV4E",
+  const { progress, initCountDown, clearCountDown } = useCountDown()
+  const activeName = ref("text")
+  const videoPrompt = ref("")
+  const inputStyle = ref({
+    "--n-border-hover": "transparent",
+    "--n-border-focus": "transparent",
+    "--n-box-shadow-focus": "none",
   })
-  const onUploading = (loading) => {
+
+  const uploadImage = ref({})
+  const loading = ref(false)
+  const onUploading = (data) => {
+    loading.value = data
     console.log("onUploading loading", loading)
   }
   const onUploadSuccess = (data) => {
-    //   {
-    //     "id": "2386627486944977",
-    //     "bytes": 270233,
-    //     "created_at": 1723504979,
-    //     "filename": "WechatIMG417.jpg",
-    //     "object": "file",
-    //     "purpose": "vidu",
-    //     "status": "uploaded",
-    //     "status_details": null,
-    //     "url": "https://uploads.cf.vidu.studio/tmp/vidu/2369821374817716/24/0812/232301-5k5L8TGcXOD2XS5q?Expires=1723508581&Signature=IuUiM-VGIptAWevL8LICm-r8GI0h-RBROS4JsOFgVqcdcARbMEFt8zK8RPf8ItFxcbR2tivDHS6LH6Sh3G2Vtcj5d3TJHs8cNje~bUmgIyh5OMoL81-8ogZWsAboGeLxkqgtsmapVgsPCs7Z0cmEOfhctyuSs2tT06eh80yuYeShtWVVIFySuntz6HhenvUU4uloUaxNo3PoNJRqG54tB55RsQLGxBcriqf23mtkabZQFHij2L9UMPGx8v-nlmGtrz5nHeN~PM9Hnlq38yEAto~KBWsVtYSqTggfuVmiMO1G1JuLj33ACWz5yWaPNPejZwtrbV-q8Y7bLdvukkACYA__&Key-Pair-Id=KNW0SL0E7LV4E",
-    //     "data": null
-    // }
     uploadImage.value = data
     console.log("onUploadSuccess res", res)
   }
 
+  const intervalId = ref("")
+  const taskId = ref("")
+  const creationId = ref("")
+  const generating = ref(false)
+  const createVideoTask = async () => {
+    if (generating.value) return window.$message.warning("正在生成视频中。。")
+    if (activeName.value != "text" && !uploadImage.value.url)
+      return window.$message.warning("请上传图片")
+    if (!videoPrompt.value) return window.$message.warning("请输入创意")
+
+    videoUrl.value = ""
+    // tab1 不需要传图
+    const uploadImageUrl =
+      activeName.value == "text" ? "" : uploadImage.value.url
+
+    const req = {
+      prompt: videoPrompt.value,
+      url: uploadImageUrl,
+      style: "general",
+      aspect_ratio: "16:9",
+      duration: 4,
+    }
+    generating.value = true
+    const res = await viduApi.createVideo(req)
+    taskId.value = res.id
+
+    // 倒计时
+    initCountDown()
+    intervalId.value = setInterval(getVideoUrl, 3000)
+  }
+
+  let videoUrl = ref("")
+  const getVideoUrl = async () => {
+    if (!generating.value && taskId.value) return
+    const res = await viduApi.getVideo(taskId.value)
+    const creation = res?.creations[0]
+    if (creation) {
+      taskId.value = creation.task_id
+      creationId.value = creation.id
+      videoUrl.value = creation.uri
+
+      window.$message.success("视频生成成功")
+      clearInterval(intervalId.value)
+      taskId.value = null
+      clearCountDown()
+    }
+  }
+
+  const upscaleVideoTask = async () => {
+    const res = await viduApi.videoUpscale({
+      task_id: taskId.value + "",
+      creation_id: creationId.value + "",
+    })
+    console.log("upscaleVideoTask res", res)
+  }
+
   return {
-    adapter,
+    videoPrompt,
+    activeName,
+    loading,
+    videoUrl,
+    inputStyle,
     uploadImage,
+    generating,
+    progress,
+    createVideoTask,
+    getVideoUrl,
+    upscaleVideoTask,
     onUploading,
     onUploadSuccess,
   }

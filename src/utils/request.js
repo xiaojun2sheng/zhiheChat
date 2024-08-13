@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useAppStore } from "@/stores"
 
 const process = import.meta.env
 if (process.MODE === "development") {
@@ -15,10 +16,10 @@ const instance = axios.create({
 })
 
 // 请求拦截器
-let token = "sk-94piBrPZi2DriPw23142114aFeDc4c73Bd350aA64fBd6d0d"
 instance.interceptors.request.use(
   (config) => {
-    config.headers["Authorization"] = `Bearer ${token}`
+    const appStore = useAppStore()
+    config.headers["Authorization"] = `Bearer ${appStore.key}`
     // 可以在这里添加请求头等信息
     return config
   },
