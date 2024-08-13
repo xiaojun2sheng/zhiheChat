@@ -1,7 +1,7 @@
 import { request } from "@/utils"
 console.log('import.meta.env.', import.meta.env)
 const isENV = import.meta.env.DEV
-const commonPrefix = isENV ? '/common' : ''
+const commonPrefix = isENV ? "/commonapi" : "https://api.chatfire.cn"
 // 创建可灵视频
 const createVideoKling = (data) =>
   request({
