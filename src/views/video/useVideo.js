@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { viduApi } from "@/api/index"
 import { useCountDown } from "@/hooks/useCountDown"
 
@@ -24,16 +24,15 @@ export const useVideo = (url) => {
   }
 
   const intervalId = ref("")
-  const taskId = ref("")
-  const creationId = ref("")
   const generating = ref(false)
   const createVideoTask = async () => {
     if (generating.value) return window.$message.warning("正在生成视频中。。")
     if (activeName.value != "text" && !uploadImage.value.url)
       return window.$message.warning("请上传图片")
-    if (!videoPrompt.value) return window.$message.warning("请输入创意")
+    if (activeName.value == "text" && !videoPrompt.value)
+      return window.$message.warning("请输入创意")
 
-    videoUrl.value = ""
+    videoInfo.value = undefined
     // tab1 不需要传图
     const uploadImageUrl =
       activeName.value == "text" ? "" : uploadImage.value.url
@@ -46,28 +45,32 @@ export const useVideo = (url) => {
       duration: 4,
     }
     generating.value = true
-    const res = await viduApi.createVideo(req)
-    taskId.value = res.id
+    const res = await viduApi.createVideo(req).catch((err) => {
+      generating.value = false
+    })
+    if (!res.id) return
+    videoInfo.value = { taskId: res.id }
 
     // 倒计时
     initCountDown()
-    intervalId.value = setInterval(getVideoUrl, 3000)
+    intervalId.value = setInterval(getVideoInfo, 3000)
   }
 
-  let videoUrl = ref("")
-  const getVideoUrl = async () => {
-    if (!generating.value && taskId.value) return
-    const res = await viduApi.getVideo(taskId.value)
+  let videoInfo = ref()
+  const getVideoInfo = async () => {
+    if (!generating.value && videoInfo.value.taskId) return
+    const res = await viduApi.getVideo(videoInfo.value.taskId)
+    if (!generating.value) return
     const creation = res?.creations[0]
     if (creation) {
-      debugger
-      taskId.value = creation.task_id
-      creationId.value = creation.id
-      videoUrl.value = creation.uri
+      creation.taskId = creation.task_id
+      creation.creationId = creation.id
+      videoInfo.value = creation
+
+      addHistory(creation)
 
       window.$message.success("视频生成成功")
       clearInterval(intervalId.value)
-      taskId.value = null
       generating.value = false
       clearCountDown()
     }
@@ -75,24 +78,56 @@ export const useVideo = (url) => {
 
   const upscaleVideoTask = async () => {
     const res = await viduApi.videoUpscale({
-      task_id: taskId.value + "",
-      creation_id: creationId.value + "",
+      task_id: videoInfo.value.taskId + "",
+      creation_id: videoInfo.value.creationId + "",
     })
+    videoInfo.value = { taskId: res.id }
     console.log("upscaleVideoTask res", res)
+    // 倒计时
+    initCountDown()
+    generating.value = true
+    intervalId.value = setInterval(getVideoInfo, 3000)
   }
 
+  const addHistory = async (video) => {
+    const json = localStorage.getItem("chatbot-video-historys") || "{}"
+    let historys = JSON.parse(json)
+    historys[Date.now()] = video
+    localStorage.setItem("chatbot-video-historys", JSON.stringify(historys))
+  }
+  const historyVideos = ref([])
+  const initHistory = async () => {
+    const json = localStorage.getItem("chatbot-video-historys") || "{}"
+    const t = JSON.parse(json)
+    historyVideos.value = Object.values(t)
+  }
+
+  const selectHistory = (data) => {
+    videoInfo.value = data
+  }
+
+  onMounted(() => {
+    initHistory()
+  })
+
+  const videoUrl = computed(() => {
+    return videoInfo.value?.uri || ""
+  })
   return {
+    videoUrl,
     videoPrompt,
     activeName,
     loading,
-    videoUrl,
+    videoInfo,
+    historyVideos,
     inputStyle,
     uploadImage,
     generating,
     progress,
     createVideoTask,
-    getVideoUrl,
+    getVideoInfo,
     upscaleVideoTask,
+    selectHistory,
     onUploading,
     onUploadSuccess,
   }

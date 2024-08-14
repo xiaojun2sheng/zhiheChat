@@ -114,6 +114,7 @@
           >生成视频</n-button
         >
         <n-button
+          v-if="videoInfo?.grade == 'draft'"
           class="prompt-btn__primary"
           round
           @click="upscaleVideoTask"
@@ -138,12 +139,33 @@
           />
           <span class="text-sm mt-3">生成中，预计需要 2 - 5 分钟，请稍候~</span>
         </div>
-        <video v-else-if="videoUrl" width="100%" height="300px" controls>
-          <source :src="videoUrl" type="video/mp4" />
-        </video>
+        <video
+          v-else-if="videoInfo?.uri"
+          width="100%"
+          height="300px"
+          :src="videoInfo?.uri"
+          controls
+        ></video>
         <n-empty v-else description="快去生成你的创意吧" />
       </div>
       <Tips></Tips>
+    </div>
+    <div v-if="historyVideos.length > 0">
+      <KeepAlive>
+        <HistorySide>
+          <template #content>
+            <div>
+              <n-image
+                v-for="item in historyVideos"
+                width="240"
+                :preview-disabled="true"
+                :src="item.cover_uri"
+                @click="selectHistory(item)"
+              />
+            </div>
+          </template>
+        </HistorySide>
+      </KeepAlive>
     </div>
     <!-- 优化提示词 -->
     <el-dialog
@@ -179,6 +201,7 @@ import { videoRecommendPrompt } from "@/utils"
 import { useVideo } from "./useVideo"
 
 const {
+  videoUrl,
   videoPrompt,
   activeName,
   loading,
@@ -186,9 +209,10 @@ const {
   uploadImage,
   generating,
   progress,
-  videoUrl,
+  videoInfo,
+  historyVideos,
+  selectHistory,
   createVideoTask,
-  getVideoUrl,
   upscaleVideoTask,
   onUploading,
   onUploadSuccess,

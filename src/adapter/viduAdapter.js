@@ -39,7 +39,6 @@ class ViduAdapter extends Adapter {
     return url
   }
   async upscaleVideoTask() {
-    debugger
     await this.service.videoUpscale({
       task_id: '2387604066483419',
       creation_id: '2387604895872796',
