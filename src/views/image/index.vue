@@ -1,12 +1,8 @@
 <template>
   <div class="common_page flex gap-2">
     <div class="w-[400px] shrink-0">
-      <n-tabs
-        type="line"
-        v-model:value="activeName"
-        animated
-        @update:value="jumpPage"
-        ><n-tab-pane name="text" tab="文字生成图片">
+      <n-tabs type="line" v-model:value="activeName" animated>
+        <n-tab-pane name="text" tab="文字生成图片">
           <Panel icon="flat-color-icons:idea" title="创意描述">
             <template #content>
               <div class="prompt">
@@ -50,26 +46,38 @@
               </div>
             </template>
           </Panel>
-          <div class="flex justify-end mt-2 gap-4">
-            <n-button
-              class="prompt-btn__primary"
-              round
-              @click="betterPrompt"
-              :disabled="!imageSetting.prompt"
-              type="primary"
-              >优化提示词</n-button
-            >
-            <n-button
-              class="prompt-btn__primary"
-              round
-              @click="generateImage"
-              :disabled="!imageSetting.prompt"
-              type="primary"
-              >生成图片</n-button
-            >
-          </div>
-        </n-tab-pane></n-tabs
-      >
+        </n-tab-pane>
+        <n-tab-pane name="face" tab="AI 换脸">
+          <Panel icon="flat-color-icons:settings" title="上传图片">
+            <template #content>
+              <div>
+                <UploadImage
+                  class="mb-2"
+                  @on-success="sourceImageSuccess"
+                ></UploadImage>
+                <UploadImage @on-success="targetImageSuccess"></UploadImage>
+              </div>
+            </template>
+          </Panel>
+        </n-tab-pane>
+      </n-tabs>
+      <div class="flex justify-end mt-2 gap-4">
+        <n-button
+          class="prompt-btn__primary"
+          round
+          @click="betterPrompt"
+          :disabled="!imageSetting.prompt"
+          type="primary"
+          >优化提示词</n-button
+        >
+        <n-button
+          class="prompt-btn__primary"
+          round
+          @click="generateImage"
+          type="primary"
+          >生成图片</n-button
+        >
+      </div>
     </div>
     <div class="flex flex-col w-full mt-10 items-center">
       <div
@@ -93,13 +101,26 @@
         <HistorySide>
           <template #content>
             <div>
-              <n-image
-                v-for="item in historyImgs"
-                width="240"
-                :preview-disabled="true"
-                :src="item[0].url"
-                @click="selectHistory(item)"
-              />
+              <div
+                class="relative cursor-pointer image-history"
+                v-for="(item, index) in historyImgs"
+                :key="index"
+              >
+                <n-image
+                  width="240"
+                  :preview-disabled="true"
+                  :src="item[0].url"
+                  @click="selectHistory(item)"
+                />
+                <SvgIcon
+                  class="absolute top-0 right-0"
+                  :width="20"
+                  :height="20"
+                  hover
+                  icon="ion:close"
+                  @click="deleteHistory(index)"
+                ></SvgIcon>
+              </div>
             </div>
           </template>
         </HistorySide>
@@ -134,21 +155,26 @@ import { ref } from "vue"
 import { ElMessage } from "element-plus"
 import axios from "axios"
 import Panel from "@/components/panel/index.vue"
+import UploadImage from "@/components/upload-image/index.vue"
 import HistorySide from "@/components/history-side/index.vue"
 import { imageRecommendPrompt } from "@/utils"
 import { useImage } from "./useImage"
 
 const {
+  activeName,
   historyImgs,
   inputStyle,
   loading,
   imageUrls,
   imageSetting,
+  targetImageSuccess,
+  sourceImageSuccess,
   generateImage,
+  deleteHistory,
   selectHistory,
 } = useImage()
 
-let activeName = ref("text")
+
 let batterImageDesc = ref("")
 // 优化提示词
 let dialogVisible = ref(false)
@@ -195,5 +221,15 @@ const cancelBetterPrompt = () => {
 }
 .image_item {
   width: 40%;
+}
+.image-history {
+  .svg-icon {
+    display: none;
+  }
+  &:hover {
+    .svg-icon {
+      display: block;
+    }
+  }
 }
 </style>

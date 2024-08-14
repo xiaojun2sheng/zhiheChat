@@ -50,7 +50,7 @@ export const useVideo = (url) => {
     })
     if (!res.id) return
     videoInfo.value = { taskId: res.id }
-
+    localStorage.setItem("chatbot-video-generating-id", res.id)
     // 倒计时
     initCountDown()
     intervalId.value = setInterval(getVideoInfo, 3000)
@@ -59,6 +59,7 @@ export const useVideo = (url) => {
   let videoInfo = ref()
   const getVideoInfo = async () => {
     if (!generating.value && videoInfo.value.taskId) return
+
     const res = await viduApi.getVideo(videoInfo.value.taskId)
     if (!generating.value) return
     const creation = res?.creations[0]
@@ -66,11 +67,15 @@ export const useVideo = (url) => {
       creation.taskId = creation.task_id
       creation.creationId = creation.id
       videoInfo.value = creation
-
-      addHistory(creation)
-
+      
+      addHistory({
+        videoPrompt: videoPrompt.value,
+        uploadImage: uploadImage.value,
+        ...creation,
+      })
       window.$message.success("视频生成成功")
       clearInterval(intervalId.value)
+      localStorage.setItem("chatbot-video-generating-id", "")
       generating.value = false
       clearCountDown()
     }
@@ -82,6 +87,7 @@ export const useVideo = (url) => {
       creation_id: videoInfo.value.creationId + "",
     })
     videoInfo.value = { taskId: res.id }
+    localStorage.setItem("chatbot-video-generating-id", res.id)
     console.log("upscaleVideoTask res", res)
     // 倒计时
     initCountDown()
@@ -90,24 +96,43 @@ export const useVideo = (url) => {
   }
 
   const addHistory = async (video) => {
-    const json = localStorage.getItem("chatbot-video-historys") || "{}"
+    const json = localStorage.getItem("chatbot-video-history") || "[]"
     let historys = JSON.parse(json)
-    historys[Date.now()] = video
-    localStorage.setItem("chatbot-video-historys", JSON.stringify(historys))
+    historys.push(video)
+    localStorage.setItem("chatbot-video-history", JSON.stringify(historys))
   }
   const historyVideos = ref([])
   const initHistory = async () => {
-    const json = localStorage.getItem("chatbot-video-historys") || "{}"
+    const json = localStorage.getItem("chatbot-video-history") || "[]"
     const t = JSON.parse(json)
-    historyVideos.value = Object.values(t)
+    historyVideos.value = t
   }
 
   const selectHistory = (data) => {
     videoInfo.value = data
+    videoPrompt.value = data.videoPrompt
+    uploadImage.value = data.uploadImage
   }
-
+  const deleteHistory = (index) => {
+    historyVideos.value.splice(index, 1)
+    localStorage.setItem(
+      "chatbot-image-history",
+      JSON.stringify(historyVideos.value)
+    )
+  }
   onMounted(() => {
     initHistory()
+    const videoGeneratingId = localStorage.getItem(
+      "chatbot-video-generating-id"
+    )
+    if (videoGeneratingId) {
+      window.$message.warning("发现未完成视频生成，正在继续生成")
+      videoInfo.value = { taskId: videoGeneratingId }
+      // 倒计时
+      initCountDown()
+      generating.value = true
+      intervalId.value = setInterval(getVideoInfo, 3000)
+    }
   })
 
   const videoUrl = computed(() => {
@@ -128,6 +153,7 @@ export const useVideo = (url) => {
     getVideoInfo,
     upscaleVideoTask,
     selectHistory,
+    deleteHistory,
     onUploading,
     onUploadSuccess,
   }

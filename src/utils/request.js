@@ -43,7 +43,8 @@ instance.interceptors.response.use(
     // }
   },
   (error) => {
-    window.$message.error("系统异常")
+    const msg = error.response.data?.error?.message || "系统异常"
+    window.$message.error(msg)
     return Promise.reject(error)
   }
 )

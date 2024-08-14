@@ -1,6 +1,7 @@
 import { request } from "@/utils"
 export * from "./chat-stream"
 export * from "./video"
+export * from "./image"
 console.log("import.meta.env.", import.meta.env)
 const isENV = import.meta.env.DEV
 const commonPrefix = isENV ? "/commonapi" : "https://api.chatfire.cn"
@@ -13,21 +14,12 @@ export const uploadFile = (data) =>
     method: "post",
     data,
   })
-  
-// 生成图片
-export const createImgeApi = (data) =>
-  request({
-    url: `${commonPrefix}/v1/images/generations`,
-    method: "post",
-    data,
-  })
 
-// 聊天
-export const chatCompletionsApi = (config = {}) =>
+// 任务获取
+export const getTaskById = (id) =>
   request({
-    url: `${commonPrefix}/v1/chat/completions`,
-    method: "post",
-    ...config,
+    url: `${commonPrefix}/tasks/${id}`,
+    method: "get",
   })
 
 // 文字转语音
