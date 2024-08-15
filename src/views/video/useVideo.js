@@ -60,14 +60,19 @@ export const useVideo = (url) => {
   const getVideoInfo = async () => {
     if (!generating.value && videoInfo.value.taskId) return
 
-    const res = await viduApi.getVideo(videoInfo.value.taskId)
+    const res = await viduApi.getVideo(videoInfo.value.taskId).catch((err) => {
+      generating.value = false
+      localStorage.setItem("chatbot-video-generating-id", "")
+      clearInterval(intervalId.value)
+    })
+    console.log("getVideoInfo res", res)
     if (!generating.value) return
     const creation = res?.creations[0]
     if (creation) {
       creation.taskId = creation.task_id
       creation.creationId = creation.id
       videoInfo.value = creation
-      
+
       addHistory({
         videoPrompt: videoPrompt.value,
         uploadImage: uploadImage.value,

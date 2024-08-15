@@ -35,6 +35,7 @@
       icon="mingcute:user-4-fill"
     ></SvgIcon> -->
     <UserCenter></UserCenter>
+    <!-- <LoginPopup ref="loginRef"></LoginPopup> -->
   </div>
 </template>
 
@@ -42,11 +43,13 @@
 import { onMounted, ref, computed } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import UserCenter from "./userCenter.vue"
+import LoginPopup from "@/components/login-popup/index.vue"
 import { useAppStore } from "@/stores"
 
 const appStore = useAppStore()
 const router = useRouter()
 const route = useRoute()
+const loginRef = ref()
 
 const menuList = [
   { title: "视频", id: "1", url: "/video" },
@@ -73,6 +76,7 @@ onMounted(() => {
   setTimeout(() => {
     getMenuActice()
   }, 1000)
+  // loginRef.value.show()
 })
 const getMenuActice = () => {
   let menuItem = menuList.find((item) => {

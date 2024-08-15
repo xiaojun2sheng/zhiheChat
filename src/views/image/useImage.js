@@ -89,16 +89,19 @@ export const useImage = (url) => {
     getTaskInterval(id)
   }
 
-  let code
+  const intervalCode = ref("")
   const getTaskInterval = async (id) => {
-    code = setInterval(async () => {
-      const res = await getTaskById(id)
+    intervalCode.value = setInterval(async () => {
+      const res = await getTaskById(id).catch(() => {
+        clearInterval(intervalCode.value)
+        localStorage.setItem("chatbot-image-generating-id", "")
+      })
       if (res?.imageUrl) {
         loading.value = false
         imageUrls.value = [{ url: res.imageUrl }]
 
         addHistory(imageUrls.value)
-        clearInterval(code)
+        clearInterval(intervalCode.value)
         localStorage.setItem("chatbot-image-generating-id", "")
       }
     }, 3000)
