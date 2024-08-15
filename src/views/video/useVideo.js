@@ -16,11 +16,9 @@ export const useVideo = (url) => {
   const loading = ref(false)
   const onUploading = (data) => {
     loading.value = data
-    console.log("onUploading loading", loading)
   }
   const onUploadSuccess = (data) => {
     uploadImage.value = data
-    console.log("onUploadSuccess res", res)
   }
 
   const intervalId = ref("")
