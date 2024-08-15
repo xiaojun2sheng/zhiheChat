@@ -5,10 +5,12 @@ const commonPrefix = isENV ? "/commonapi" : "https://api.chatfire.cn"
 // 生成图片
 export const generateImageTask = (data) =>
   request({
-    url: `${commonPrefix}/v1/images/generations`,
+    // url: `${commonPrefix}/v1/images/generations`,
+    url: `/box/chat/image`,
     method: "post",
     data,
   })
+
 // 换脸
 export const generateFaceswap = (data) =>
   request({

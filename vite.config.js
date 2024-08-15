@@ -50,6 +50,7 @@ export default defineConfig({
       },
       "/box": {
         target: "https://agi.chatfire.cn",
+        changeOrigin: true,
       },
     },
   },

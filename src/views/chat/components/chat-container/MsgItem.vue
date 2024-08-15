@@ -55,23 +55,11 @@ const md = markdownit({
   html: false, // 在源码中启用 HTML 标签
   linkify: true, // 将类似 URL 的文本自动转换为链接。
   typographer: true, // 启用一些语言中立的替换 + 引号美化
-  highlight: function (str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return (
-          '<pre><code class="hljs">' +
-          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
-          "</code></pre>"
-        )
-      } catch (__) {}
-    }
-
-    return (
-      '<pre><code class="hljs">' + md.utils.escapeHtml(str) + "</code></pre>"
-    )
+  highlight: function (str) {
+    debugger
+    return hljs.highlightAuto(str).value
   },
 })
-const result = md.render("# markdown-it rulezz!")
 
 const emit = defineEmits(["stop-stream", "on-refresh"])
 

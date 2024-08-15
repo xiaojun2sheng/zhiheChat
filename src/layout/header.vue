@@ -27,15 +27,16 @@
       "
       @click="switchTheme"
     ></SvgIcon> -->
-    <!-- <SvgIcon
-      class="mr-2"
+    <UserCenter></UserCenter>
+    <SvgIcon
+      class="ml-2"
       :width="35"
       :height="35"
       hover
       icon="mingcute:user-4-fill"
-    ></SvgIcon> -->
-    <UserCenter></UserCenter>
-    <!-- <LoginPopup ref="loginRef"></LoginPopup> -->
+    ></SvgIcon>
+
+    <LoginPopup ref="loginRef"></LoginPopup>
   </div>
 </template>
 
@@ -76,7 +77,7 @@ onMounted(() => {
   setTimeout(() => {
     getMenuActice()
   }, 1000)
-  // loginRef.value.show()
+  loginRef.value.show()
 })
 const getMenuActice = () => {
   let menuItem = menuList.find((item) => {

@@ -11,6 +11,7 @@ export const useSend = () => {
     running.value = true
     return chat2gpt(data, { signal: controller.signal })
       .then(async (res) => {
+        debugger
         if (res) {
           await readerStream(res)
         } else {

@@ -18,8 +18,8 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    const appStore = useAppStore()
-    config.headers["Authorization"] = `Bearer ${appStore.key}`
+    const token = localStorage.getItem("chatbot-token")
+    config.headers["Authorization"] = `Bearer ${token}`
     // 可以在这里添加请求头等信息
     return config
   },
@@ -33,14 +33,13 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (res) => {
     // 对响应数据做处理，例如只返回data部分
-    return res.data
-    // let { data, code, msg } = res.data
-    // return data || res.data
-    // if (code === 0 || code === 200) {
-    //   return data
-    // } else {
-    //   return Promise.reject(res.data)
-    // }
+    let { data, code, msg } = res.data
+    if (code === 500) {
+      window.$message.error(msg)
+      return Promise.reject(res.data)
+    } else {
+      return res.data
+    }
   },
   (error) => {
     const msg = error.response.data?.error?.message || "系统异常"

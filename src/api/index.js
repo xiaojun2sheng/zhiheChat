@@ -26,7 +26,8 @@ export const getTaskById = (id) =>
 // 文字转语音
 export const textToVoice = (config = {}) =>
   request({
-    url: `${commonPrefix}/v1/audio/speech`,
+    url: `/box/chat/speech`,
+    // url: `${commonPrefix}/v1/audio/speech`,
     method: "post",
     ...config,
   })
