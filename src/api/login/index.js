@@ -31,6 +31,6 @@ export const login = (data) =>
 export const logout = (data) =>
   request({
     url: `/box/auth/logout`,
-    method: "post",
+    method: "delete",
     data,
   })

@@ -5,17 +5,26 @@
     preset="dialog"
     title="登录"
     :show-icon="false"
+    :mask-closable="false"
     style="width: 95%; max-width: 640px"
   >
     <div class="max-w-[100%] sm:max-w-[800px] py-12">
-      <NForm class="px-4 sm:px-12" label-width="80px" label-placement="left">
-        <n-form-item label="用户名">
+      <NForm
+        ref="formRef"
+        class="px-4 sm:px-12"
+        :model="loginInfo"
+        :rules="rules"
+        label-width="80px"
+        label-placement="left"
+        :show-require-mark="false"
+      >
+        <n-form-item label="用户名" path="username">
           <NInput
             v-model:value="loginInfo.username"
             placeholder="请输入用户名"
           ></NInput>
         </n-form-item>
-        <n-form-item label="密码">
+        <n-form-item label="密码" path="password">
           <NInput
             v-model:value="loginInfo.password"
             type="password"
@@ -23,7 +32,7 @@
             placeholder="请输入密码"
           ></NInput>
         </n-form-item>
-        <n-form-item v-if="!isLogin" label="确认密码">
+        <n-form-item v-if="!isLogin" label="确认密码" path="confirmPassword">
           <NInput
             v-model:value="loginInfo.confirmPassword"
             type="password"
@@ -31,7 +40,7 @@
             placeholder="请输入密码"
           ></NInput>
         </n-form-item>
-        <n-form-item label="验证码">
+        <n-form-item label="验证码" path="code">
           <div class="flex h-[40px] w-full">
             <NInput
               v-model:value="loginInfo.code"
@@ -58,19 +67,21 @@
 </template>
 
 <script setup>
-import { useLogin } from "./useLogin"
+import { useInit } from "./useInit"
 
 const {
   btnText,
   isLogin,
   visible,
   codeImg,
+  rules,
   loginInfo,
+  formRef,
   refreshCode,
   show,
   close,
   submit,
-} = useLogin()
+} = useInit()
 const emit = defineEmits(["submit"])
 
 defineExpose({

@@ -34,11 +34,21 @@ instance.interceptors.response.use(
   (res) => {
     // 对响应数据做处理，例如只返回data部分
     let { data, code, msg } = res.data
-    if (code === 500) {
+    let streamData
+    // 流的异常响应也是流，唔要单独处理
+    if (res.config.responseType === "stream") {
+      streamData = JSON.parse(res.data)
+    }
+    if (code === 200) {
+      return res.data?.data || res.data
+    } else {
+      code = code || streamData?.code
+      msg = msg || streamData.msg
+      if (code === 401) {
+        localStorage.removeItem("chatbot-token")
+      }
       window.$message.error(msg)
       return Promise.reject(res.data)
-    } else {
-      return res.data
     }
   },
   (error) => {

@@ -14,7 +14,8 @@ export const generateImageTask = (data) =>
 // 换脸
 export const generateFaceswap = (data) =>
   request({
-    url: `${commonPrefix}/tasks/faceswap`,
+    // url: `${commonPrefix}/tasks/faceswap`,
+    url: `box/chat/faceSwap`,
     method: "post",
     data,
   })

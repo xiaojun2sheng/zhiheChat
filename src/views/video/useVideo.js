@@ -1,5 +1,5 @@
 import { ref, onMounted, computed } from "vue"
-import { viduApi } from "@/api/index"
+import { viduApi, getTaskById } from "@/api/index"
 import { useCountDown } from "@/hooks/useCountDown"
 
 export const useVideo = (url) => {
@@ -58,7 +58,7 @@ export const useVideo = (url) => {
   const getVideoInfo = async () => {
     if (!generating.value && videoInfo.value.taskId) return
 
-    const res = await viduApi.getVideo(videoInfo.value.taskId).catch((err) => {
+    const res = await getTaskById(videoInfo.value.taskId).catch((err) => {
       generating.value = false
       localStorage.setItem("chatbot-video-generating-id", "")
       clearInterval(intervalId.value)

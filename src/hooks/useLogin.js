@@ -1,22 +1,43 @@
-// import { login } from "@/api/user"
-import { useUserStore } from "@/store/user"
+import { login, logout, register } from "@/api/login"
+import { useUserStore } from "@/stores/userStore"
 
 export const useLogin = () => {
   const userStore = useUserStore()
-  
-  const login = () => {
-    // login().then((res) => {
-    //   console.log(res)
-    // })
+
+  const toLogin = async (data) => {
+    const { code, uuid } = data
+    if (!code || !uuid) {
+      window.$message.warning("请填写验证码")
+      return Promise.reject()
+    }
+    const res = await login()
+    localStorage.setItem("chatbot-token", res?.data?.access_token)
+    userStore.setLogin(true)
+    return data
   }
-  const logout = () => {
-    // logout().then((res) => {
-    //   console.log(res)
-    // })
+
+  const toRegister = async (data) => {
+    const { code, uuid, password, confirmPassword } = data
+    if (!code || !uuid) {
+      window.$message.warning("请填写验证码")
+      return Promise.reject()
+    }
+    if (password !== confirmPassword) {
+      window.$message.warning("两次密码不一致")
+      return Promise.reject()
+    }
+    return register(data)
+  }
+
+  const toLogout = async () => {
+    await logout()
+    userStore.setLogin(false)
+    localStorage.setItem("chatbot-token", "")
   }
 
   return {
-    login,
-    logout,
+    toLogin,
+    toRegister,
+    toLogout,
   }
 }

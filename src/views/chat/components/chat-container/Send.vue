@@ -38,7 +38,13 @@ const appStore = useAppStore()
 const chatStore = useChatStore()
 const { running, content, send, handleStop } = useSend(list)
 
-const emit = defineEmits(["submit", "change", "on-before", "on-end"])
+const emit = defineEmits([
+  "submit",
+  "change",
+  "on-before",
+  "on-end",
+  "on-error",
+])
 const sendContent = ref("")
 
 // kimi 才支持文件解析
@@ -120,7 +126,7 @@ const submit = async (e) => {
     messages: list,
     stream: true,
   }
-  await send(req)
+  const res = await send(req)
   emit("on-end", sendContent.value)
 }
 // 设置输入框

@@ -56,7 +56,6 @@ const md = markdownit({
   linkify: true, // 将类似 URL 的文本自动转换为链接。
   typographer: true, // 启用一些语言中立的替换 + 引号美化
   highlight: function (str) {
-    debugger
     return hljs.highlightAuto(str).value
   },
 })

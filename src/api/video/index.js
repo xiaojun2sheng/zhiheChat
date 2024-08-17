@@ -1,11 +1,12 @@
 import { request } from "@/utils"
-console.log('import.meta.env.', import.meta.env)
+console.log("import.meta.env.", import.meta.env)
 const isENV = import.meta.env.DEV
 const commonPrefix = isENV ? "/commonapi" : "https://api.chatfire.cn"
 // 创建可灵视频
 const createVideoKling = (data) =>
   request({
-    url: `${commonPrefix}/tasks/kling`,
+    // url: `${commonPrefix}/tasks/kling`,
+    url: `/box/chat/kling`,
     method: "post",
     data,
   })
@@ -25,20 +26,23 @@ const klingApi = {
 // vidu
 const createVideoVidu = (data) =>
   request({
-    url: `${commonPrefix}/tasks/vidu`,
+    // url: `${commonPrefix}/tasks/vidu`,
+    url: `/box/chat/vidu`,
     method: "post",
     data,
   })
 
 const getVideoVidu = (task_id) =>
   request({
-    url: `${commonPrefix}/tasks/${task_id}`,
+    // url: `${commonPrefix}/tasks/${task_id}`,
+    url: `/box/chat/task/${task_id}`,
     method: "get",
   })
 
 const videoViduUpscale = (data) =>
   request({
-    url: `${commonPrefix}/tasks/vidu-upscale`,
+    // url: `${commonPrefix}/tasks/vidu-upscale`,
+    url: `/box/chat/viduUpscale`,
     method: "post",
     data,
   })

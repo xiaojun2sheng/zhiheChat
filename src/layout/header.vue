@@ -28,13 +28,24 @@
       @click="switchTheme"
     ></SvgIcon> -->
     <UserCenter></UserCenter>
-    <SvgIcon
+    <n-dropdown v-if="userStore.isLogin" trigger="hover" :options="options" @select="handleSelect">
+      <SvgIcon
+        
+        class="ml-2"
+        :width="35"
+        :height="35"
+        hover
+        icon="mingcute:user-4-fill"
+      ></SvgIcon>
+    </n-dropdown>
+    <n-button
+      v-if="!userStore.isLogin"
       class="ml-2"
-      :width="35"
-      :height="35"
-      hover
-      icon="mingcute:user-4-fill"
-    ></SvgIcon>
+      text
+      type="primary"
+      @click="loginRef?.show"
+      >去登录</n-button
+    >
 
     <LoginPopup ref="loginRef"></LoginPopup>
   </div>
@@ -45,12 +56,16 @@ import { onMounted, ref, computed } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import UserCenter from "./userCenter.vue"
 import LoginPopup from "@/components/login-popup/index.vue"
-import { useAppStore } from "@/stores"
+import { useAppStore, useUserStore } from "@/stores"
+import { useLogin } from "@/hooks/useLogin"
 
 const appStore = useAppStore()
+const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 const loginRef = ref()
+
+const { toLogout } = useLogin()
 
 const menuList = [
   { title: "视频", id: "1", url: "/video" },
@@ -77,7 +92,7 @@ onMounted(() => {
   setTimeout(() => {
     getMenuActice()
   }, 1000)
-  loginRef.value.show()
+  // loginRef.value.show()
 })
 const getMenuActice = () => {
   let menuItem = menuList.find((item) => {
@@ -90,6 +105,19 @@ const getMenuActice = () => {
 const switchTheme = () => {
   if (appStore.theme == "light") appStore.theme = "dark"
   else appStore.theme = "light"
+}
+
+const options = ref([
+  {
+    label: "退出登录",
+    key: "logout",
+  },
+])
+const handleSelect = async (key) => {
+  if (key == "logout") {
+    await toLogout()
+    window.$message.success("退出登录成功")
+  }
 }
 </script>
 

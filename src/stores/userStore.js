@@ -4,10 +4,14 @@ export const useUserStore = defineStore({
   id: "user",
   state: () => {
     return {
-        
+      isLogin: !!localStorage.getItem("chatbot-token"),
       user: {},
     }
   },
   getters: {},
-  actions: {},
+  actions: {
+    setLogin(isLogin) {
+      this.isLogin = isLogin
+    },
+  },
 })

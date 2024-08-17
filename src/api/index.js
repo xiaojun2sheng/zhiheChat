@@ -19,7 +19,7 @@ export const uploadFile = (data) =>
 // 任务获取
 export const getTaskById = (id) =>
   request({
-    url: `${commonPrefix}/tasks/${id}`,
+    url: `/box/chat/task/${id}`,
     method: "get",
   })
 

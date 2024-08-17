@@ -1,29 +1,36 @@
-import { ref } from 'vue'
-import { chat2gpt } from '@/api'
+import { ref } from "vue"
+import { chat2gpt } from "@/api"
 
 export const useSend = () => {
   const running = ref(false)
-  const content = ref('')
+  const content = ref("")
   let controller = new AbortController()
   const send = async (data) => {
     // 发送之前进行套餐校验
     controller = new AbortController()
     running.value = true
-    return chat2gpt(data, { signal: controller.signal })
-      .then(async (res) => {
-        debugger
-        if (res) {
-          await readerStream(res)
+    return chat2gpt({
+      data,
+      onDownloadProgress: (event) => {
+        const chunk = event.event.target.responseText
+        if (chunk.includes("{") && chunk.includes("}")) {
+          content.value = "系统异常"
         } else {
-          throw Error(res)
+          content.value += chunk
         }
+      },
+      signal: controller.signal,
+    })
+      .then(async (res) => {
+        console.log("输出结束")
+        return Promise.resolve(res)
       })
       .catch((err) => {
         window.$messages.error(err)
       })
       .finally(() => {
         running.value = false
-        content.value = ''
+        content.value = ""
       })
   }
 
@@ -35,17 +42,17 @@ export const useSend = () => {
         while (true) {
           const { value, done } = await reader.read()
           let decodeVal = new TextDecoder().decode(value)
-          console.log('decodeVal', decodeVal);
+          console.log("decodeVal", decodeVal)
           // TODO 异常直接终止
           if (done) break
           content.value += getVal(decodeVal)
         }
         resolve()
       } catch (error) {
-        if (error.name === 'AbortError') {
+        if (error.name === "AbortError") {
           resolve()
         } else {
-          console.log(error);
+          console.log(error)
           reject(error)
         }
       }
@@ -62,16 +69,16 @@ export const useSend = () => {
     content,
     running,
     send,
-    handleStop
+    handleStop,
   }
 }
 
 function getVal(val) {
-  let content = ''
+  let content = ""
   try {
-    const list = val.split('data: ')
+    const list = val.split("data: ")
     list.forEach((item) => {
-      if (item) content += (JSON.parse(item).choices[0].delta.content || '')
+      if (item) content += JSON.parse(item).choices[0].delta.content || ""
     })
   } catch (error) {
   } finally {

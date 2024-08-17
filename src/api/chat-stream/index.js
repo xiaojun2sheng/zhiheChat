@@ -4,8 +4,8 @@ function getHeaders() {
   return {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
-    'no-cors': true,
-    mode: 'no-cors',
+    "no-cors": true,
+    mode: "no-cors",
   }
 }
 
@@ -21,13 +21,15 @@ function getHeaders() {
 //   })
 // }
 
-export const chat2gpt = (data) =>
+export const chat2gpt = ({ data, onDownloadProgress, signal }) =>
   request({
     url: `/box/chat/ask`,
     method: "post",
     headers: {
-      'Accept': 'text/event-stream',
-      responseType: 'stream',
+      Accept: "text/event-stream",
     },
+    signal,
+    responseType: "stream",
+    onDownloadProgress,
     data,
   })

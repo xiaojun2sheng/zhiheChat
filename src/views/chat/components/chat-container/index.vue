@@ -35,6 +35,7 @@
         @change="msgChange"
         @on-before="beforeSend"
         @on-end="endSend"
+        @on-error="onError"
       ></Send>
     </div>
   </div>
@@ -66,6 +67,9 @@ const selectPrompt = (val) => {
 const beforeSend = (val) => {
   chatStore.addMessage(val)
   positionDomViewBottom()
+}
+const onError = () => {
+  chatStore.updateLastMessage("", "success")
 }
 const endSend = () => {
   chatStore.updateLastMessage("", "success")
