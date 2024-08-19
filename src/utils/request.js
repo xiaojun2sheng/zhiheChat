@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useAppStore } from "@/stores"
+import { useUserStore } from "@/stores"
 
 const process = import.meta.env
 if (process.MODE === "development") {
@@ -19,7 +19,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("chatbot-token")
-    config.headers["Authorization"] = `Bearer ${token}`
+    token && (config.headers["Authorization"] = `Bearer ${token}`)
     // 可以在这里添加请求头等信息
     return config
   },
@@ -36,15 +36,21 @@ instance.interceptors.response.use(
     let { data, code, msg } = res.data
     let streamData
     // 流的异常响应也是流，唔要单独处理
-    if (res.config.responseType === "stream") {
-      streamData = JSON.parse(res.data)
+    try {
+      if (res.config.responseType === "stream") {
+        streamData = JSON.parse(res.data)
+      }
+    } catch (error) {
+      if (res.config.responseType === "stream") code = 200
     }
     if (code === 200) {
       return res.data?.data || res.data
     } else {
       code = code || streamData?.code
-      msg = msg || streamData.msg
+      msg = msg || streamData?.msg
       if (code === 401) {
+        const userStore = useUserStore()
+        userStore.setLogin(false)
         localStorage.removeItem("chatbot-token")
       }
       window.$message.error(msg)

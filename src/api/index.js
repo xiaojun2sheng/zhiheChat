@@ -11,7 +11,8 @@ const imgPrefix = isENV ? "/imageapi" : "https://api-flux.api4gpt.com"
 // 文件上传
 export const uploadFile = (data) =>
   request({
-    url: `${commonPrefix}/v1/files`,
+    // url: `${commonPrefix}/v1/files`,
+    url: `/box/chat/file`,
     method: "post",
     data,
   })

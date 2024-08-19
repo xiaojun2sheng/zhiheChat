@@ -1,14 +1,19 @@
 <template>
-    <div class="h-full w-full p-2">
-      <Header></Header>
+  <div class="h-full w-full p-2">
+    <Header></Header>
+    <div class="main">
       <RouterView></RouterView>
     </div>
-  </template>
-  <script setup>
-  import Header from "./header.vue"
-  
-  defineProps({})
-  </script>
-  
-  <style scoped></style>
-  
+  </div>
+</template>
+<script setup>
+import Header from "./header.vue"
+
+defineProps({})
+</script>
+
+<style lang="scss" scoped>
+.main {
+  height: calc(100% - 60px);
+}
+</style>

@@ -1,5 +1,6 @@
 import { ref } from "vue"
 import { chat2gpt } from "@/api"
+import { set } from "@vueuse/core/index.cjs"
 
 export const useSend = () => {
   const running = ref(false)
@@ -13,6 +14,7 @@ export const useSend = () => {
       data,
       onDownloadProgress: (event) => {
         const chunk = event.event.target.responseText
+        console.log("输出中", chunk)
         if (chunk.includes("{") && chunk.includes("}")) {
           content.value = "系统异常"
         } else {
@@ -22,8 +24,10 @@ export const useSend = () => {
       signal: controller.signal,
     })
       .then(async (res) => {
-        console.log("输出结束")
-        return Promise.resolve(res)
+        // setTimeout(() => {
+        //   console.log("输出结束")
+        //   return Promise.resolve(res)
+        // }, 1000)
       })
       .catch((err) => {
         window.$messages.error(err)

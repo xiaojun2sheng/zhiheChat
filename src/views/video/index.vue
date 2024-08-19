@@ -35,50 +35,13 @@
           <Panel icon="flat-color-icons:idea" title="图片创意描述">
             <template #content>
               <div class="base-image">
-                <NSpin :show="loading">
-                  <UploadFile
-                    v-if="!uploadImage.url"
-                    @on-uploading="onUploading"
-                    @on-success="onUploadSuccess"
-                  >
-                    <n-upload-dragger>
-                      <div class="w-full flex justify-center mb-2">
-                        <SvgIcon
-                          class="mr-2"
-                          :width="25"
-                          :height="25"
-                          icon="ph:upload-bold"
-                        ></SvgIcon>
-                      </div>
-                      <n-text style="font-size: 16px">
-                        点击或者拖动文件到该区域来上传
-                      </n-text>
-                      <n-p depth="3" style="margin: 8px 0 0 0">
-                        请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
-                      </n-p>
-                    </n-upload-dragger>
-                  </UploadFile>
-                </NSpin>
-                <div
-                  v-if="uploadImage.url"
-                  class="image-preview flex items-center justify-between rounded-md"
-                >
-                  <n-image
-                    class="rounded-md"
-                    :width="160"
-                    :height="160"
-                    object-fit="cover"
-                    :src="uploadImage.url"
-                  ></n-image>
-                  <span class="m-2">{{ uploadImage.filename }}</span>
-                  <SvgIcon
-                    class="mr-2"
-                    :width="25"
-                    :height="25"
-                    icon="mdi:delete-outline"
-                    @click="uploadImage = {}"
-                  ></SvgIcon>
-                </div>
+                <UploadImage
+                  class="mb-2"
+                  type="vidu"
+                  placeholder="请上传视频图片"
+                  @on-uploading="onUploading"
+                  @on-success="onUploadSuccess"
+                ></UploadImage>
                 <p class="label my-2">图片创意描述：</p>
                 <div class="prompt">
                   <n-input
@@ -97,14 +60,14 @@
         </n-tab-pane>
       </n-tabs>
       <div class="flex justify-end mt-2 gap-4">
-        <n-button
+        <!-- <n-button
           class="prompt-btn__primary"
           round
           @click="betterPrompt"
           :disabled="!videoPrompt"
           type="primary"
           >优化提示词</n-button
-        >
+        > -->
         <n-button
           class="prompt-btn__primary"
           round
@@ -123,7 +86,7 @@
         >
       </div>
     </div>
-    <div class="flex flex-col w-full mt-10 items-center">
+    <div class="flex flex-col w-full h-full items-center justify-between pt-10">
       <div
         class="video-box w-4/5 min-h-[300px] flex justify-center items-center"
       >
@@ -141,6 +104,7 @@
         </div>
         <video
           v-else-if="videoInfo?.uri"
+          class="rounded-md h-full"
           width="100%"
           height="300px"
           :src="videoInfo?.uri"
@@ -196,6 +160,7 @@ import { ElMessage } from "element-plus"
 import axios from "axios"
 import Panel from "@/components/panel/index.vue"
 import UploadFile from "@/components/upload/index.vue"
+import UploadImage from "@/components/upload-image/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
 import { useVideo } from "./useVideo"

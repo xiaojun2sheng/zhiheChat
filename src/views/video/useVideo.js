@@ -18,6 +18,7 @@ export const useVideo = (url) => {
     loading.value = data
   }
   const onUploadSuccess = (data) => {
+    debugger
     uploadImage.value = data
   }
 

@@ -12,12 +12,12 @@
     style="width: 95%; max-width: 640px"
   >
     <NForm label-width="120px" label-placement="left">
-      <n-form-item label="API Key">
+      <!-- <n-form-item label="API Key">
         <NInput
           v-model:value="setting.apiKey"
           placeholder="请输入key，或者联系我们获取"
         ></NInput>
-      </n-form-item>
+      </n-form-item> -->
       <n-form-item label="模型选择">
         <NSelect
           v-model:value="setting.currentModel"

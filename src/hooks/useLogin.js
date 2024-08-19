@@ -10,8 +10,8 @@ export const useLogin = () => {
       window.$message.warning("请填写验证码")
       return Promise.reject()
     }
-    const res = await login()
-    localStorage.setItem("chatbot-token", res?.data?.access_token)
+    const res = await login(data)
+    localStorage.setItem("chatbot-token", res.access_token)
     userStore.setLogin(true)
     return data
   }

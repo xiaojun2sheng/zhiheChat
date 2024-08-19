@@ -11,7 +11,12 @@
 
 <script setup>
 import { uploadFile } from "@/api"
-
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'oss',
+  },
+})
 const emit = defineEmits(["on-uploading", "on-success"])
 
 // 校验
@@ -48,15 +53,19 @@ const ossUploadFile = async ({ file, onFinish }) => {
   let formData = new FormData()
   formData.append("file", fileData)
   // 写死 file-extract-kimi
-  formData.append("purpose", "vidu")
+  formData.append("purpose", props.type)
   let fileRsp = await uploadFile(formData).finally(() => {
     emit("on-uploading", false)
     onFinish()
   })
+  try {
+    const filesJson = localStorage.getItem("chatbot-files") || "[]"
+    const files = JSON.parse(filesJson)
+    files.push(fileRsp)
+    localStorage.setItem("chatbot-files", JSON.stringify(files))
+  } catch (error) {}
   emit("on-success", fileRsp)
 }
-
-
 </script>
 <style lang="scss" scoped>
 .send-box {

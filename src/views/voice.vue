@@ -111,6 +111,7 @@ onMounted(() => {
   voiceSounds.value = voiceSoundOptions.map((t) => {
     return { label: t, checked: false }
   })
+  voiceSounds.value[3].checked = true
 })
 
 const voiceSoundSelect = (label) => {

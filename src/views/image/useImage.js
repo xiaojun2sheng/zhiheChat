@@ -92,6 +92,7 @@ export const useImage = (url) => {
   const intervalCode = ref("")
   const getTaskInterval = async (id) => {
     intervalCode.value = setInterval(async () => {
+      if (loading.value) return
       const res = await getTaskById(id).catch(() => {
         clearInterval(intervalCode.value)
         localStorage.setItem("chatbot-image-generating-id", "")

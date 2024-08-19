@@ -1,4 +1,4 @@
-import { ref, reactive, onMounted, computed } from "vue"
+import { ref, watch, onMounted, computed } from "vue"
 import { useAppStore } from "@/stores"
 import { generateCode } from "@/api"
 import { useLogin } from "@/hooks/useLogin"
@@ -10,6 +10,21 @@ export const useInit = () => {
 
   const btnText = computed(() => (isLogin.value ? "登录" : "注册"))
   const loginInfo = ref({})
+
+  // 验证码
+  const codeImg = ref("")
+  const refreshCode = async () => {
+    const { uuid, img } = await generateCode()
+    codeImg.value = "data:image/png;base64," + img
+    loginInfo.value.uuid = uuid
+  }
+
+  watch(
+    () => visible.value,
+    () => refreshCode(),
+    { immediate: true }
+  )
+
   const show = () => {
     loginInfo.value = {
       username: "",
@@ -19,7 +34,6 @@ export const useInit = () => {
       uuid: "",
     }
     visible.value = true
-    refreshCode()
   }
 
   const rules = {
@@ -69,26 +83,29 @@ export const useInit = () => {
     } else {
       await register()
     }
-    close()
   }
   const login = async () => {
     await toLogin(loginInfo.value)
-    window.$message.success("登录成功")
+      .then(() => {
+        window.$message.success("登录成功")
+        close()
+      })
+      .catch(() => {
+        refreshCode()
+      })
   }
   const register = async () => {
-    await toRegister(loginInfo.value)
-    window.$message.success("注册成功")
+    toRegister(loginInfo.value)
+      .then(() => {
+        window.$message.success("注册成功")
+        close()
+      })
+      .catch(() => refreshCode())
   }
 
-  // 验证码
-  const codeImg = ref("")
-  const refreshCode = async () => {
-    const { uuid, img } = await generateCode()
-    codeImg.value = "data:image/png;base64," + img
-    loginInfo.value.uuid = uuid
-  }
-
-  onMounted(() => {})
+  onMounted(() => {
+    !localStorage.getItem("chatbot-token") && (visible.value = true)
+  })
   return {
     isLogin,
     rules,

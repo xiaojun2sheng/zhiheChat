@@ -5,7 +5,7 @@ export const useAppStore = defineStore({
     return {
       theme: "auto",
       baseUrl: "",
-      apiKey: "sk-94piBrPZi2DriPw23142114aFeDc4c73Bd350aA64fBd6d0d",
+      apiKey: "",
       presetChatModels: [
         { value: "glm-3-turbo", label: "glm-3-turbo" },
         { value: "glm-4-air", label: "glm-4-air" },

@@ -5,7 +5,10 @@ export const useUserStore = defineStore({
   state: () => {
     return {
       isLogin: !!localStorage.getItem("chatbot-token"),
-      user: {},
+      account: {
+        token: 0,
+      }, // 账户信息
+      user: {}, // 用户信息
     }
   },
   getters: {},

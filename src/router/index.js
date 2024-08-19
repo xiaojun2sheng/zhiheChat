@@ -8,6 +8,8 @@ import Music from "@/views/music.vue"
 import Image from "@/views/image/index.vue"
 import Chat from "@/views/chat/index.vue"
 import Voice from "@/views/voice.vue"
+import Payment from "@/views/payment/index.vue"
+import RobotMarket from "@/views/robot-market/index.vue"
 import betterPrompt from "@/views/betterPrompt.vue"
 
 // 定义路由
@@ -19,6 +21,8 @@ const routes = [
   { path: "/image", component: Image },
   { path: "/chat/:id?", name: "chat", component: Chat },
   { path: "/voice", component: Voice },
+  { path: "/payment", component: Payment },
+  { path: "/robot-market", component: RobotMarket },
   { path: "/betterPrompt", component: betterPrompt },
 ]
 

@@ -53,23 +53,26 @@
               <div>
                 <UploadImage
                   class="mb-2"
+                  type="oss"
+                  placeholder="请上传原始图片"
                   @on-success="sourceImageSuccess"
                 ></UploadImage>
-                <UploadImage @on-success="targetImageSuccess"></UploadImage>
+                <UploadImage type="oss"
+                placeholder="请上传被替换的图片" @on-success="targetImageSuccess"></UploadImage>
               </div>
             </template>
           </Panel>
         </n-tab-pane>
       </n-tabs>
       <div class="flex justify-end mt-2 gap-4">
-        <n-button
+        <!-- <n-button
           class="prompt-btn__primary"
           round
           @click="betterPrompt"
           :disabled="!imageSetting.prompt"
           type="primary"
           >优化提示词</n-button
-        >
+        > -->
         <n-button
           class="prompt-btn__primary"
           round
@@ -79,12 +82,17 @@
         >
       </div>
     </div>
-    <div class="flex flex-col w-full mt-10 items-center">
+    <div class="flex flex-col w-full h-full items-center justify-between pt-10">
       <div
-        class="image-box px-10 min-h-[300px] flex gap-2 justify-start items-center flex-wrap"
+        class="image-box px-10 min-h-[300px] flex gap-2 justify-start items-center flex-wrap overflow-auto"
       >
         <n-image-group v-if="imageUrls.length > 0" show-toolbar-tooltip>
-          <n-image v-for="item in imageUrls" width="240" :src="item.url" />
+          <n-image
+            v-for="item in imageUrls"
+            class="rounded-md"
+            width="240"
+            :src="item.url"
+          />
         </n-image-group>
         <n-spin v-if="loading" :show="true">
           <template #description> 生成中 </template>
@@ -173,7 +181,6 @@ const {
   deleteHistory,
   selectHistory,
 } = useImage()
-
 
 let batterImageDesc = ref("")
 // 优化提示词

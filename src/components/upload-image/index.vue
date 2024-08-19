@@ -3,6 +3,8 @@
     <NSpin :show="loading">
       <UploadFile
         v-if="!uploadImage.url"
+        :type="type"
+        :placeholder="placeholder"
         @on-uploading="onUploading"
         @on-success="onUploadSuccess"
       >
@@ -16,7 +18,7 @@
             ></SvgIcon>
           </div>
           <n-text style="font-size: 16px">
-            点击或者拖动文件到该区域来上传
+            {{ placeholder }}
           </n-text>
           <n-p depth="3" style="margin: 8px 0 0 0">
             请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
@@ -52,6 +54,16 @@ import { ref, reactive, watch, onMounted } from "vue"
 import { useUpload } from "./useUpload"
 import UploadFile from "@/components/upload/index.vue"
 
+const props = defineProps({
+  type: {
+    type: String,
+    default: "oss",
+  },
+  placeholder: {
+    type: String,
+    default: "请上传图片",
+  },
+})
 const emit = defineEmits(["on-change", "on-success"])
 
 const { loading, uploadImage, onUploading, onUploadSuccess } = useUpload(emit)
