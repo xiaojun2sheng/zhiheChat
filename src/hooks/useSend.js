@@ -10,6 +10,7 @@ export const useSend = () => {
     // 发送之前进行套餐校验
     controller = new AbortController()
     running.value = true
+    content.value = ""
     return chat2gpt({
       data,
       onDownloadProgress: (event) => {
@@ -18,8 +19,9 @@ export const useSend = () => {
         if (chunk.includes("{") && chunk.includes("}")) {
           content.value = "系统异常"
         } else {
-          content.value += chunk
         }
+        content.value = chunk
+        console.log("输出中 content.value", content.value)
       },
       signal: controller.signal,
     })
@@ -33,8 +35,10 @@ export const useSend = () => {
         window.$messages.error(err)
       })
       .finally(() => {
-        running.value = false
-        content.value = ""
+        setTimeout(() => {
+          running.value = false
+        }, 1000)
+        // content.value = ""
       })
   }
 
