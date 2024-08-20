@@ -3,40 +3,96 @@
     v-model:show="visible"
     :auto-focus="false"
     preset="dialog"
-    title="文件列表"
+    title="参考图 / 垫图"
     :show-icon="false"
     positive-text="确认"
     negative-text="取消"
     @positive-click="submit"
     @on-negative-click="visible = false"
-    style="width: 95%; max-width: 640px"
+    style="width: 700px"
   >
-    <div class="container">
-      <div class="list max-h-[400px] overflow-auto">
-        <div
-          v-for="item in fileList"
-          class="p-2 mb-2 h-10 border border-gray-700 rounded-md flex cursor-pointer"
-          :class="item.selected ? 'bg-gray-900' : ''"
-          @click="selectFile(item)"
+    <div class="container w-full">
+      <n-tabs class="min-h-[220px] max-h-[500px]" type="segment" animated>
+        <n-tab-pane
+          class="w-full"
+          name="upload"
+          tab="上传"
+          display-directive="show"
         >
-          <n-image :src="item.url"></n-image>
-          <span class="ml-2 text-slate-500 truncate">{{ item.filename }}</span>
-        </div>
-      </div>
+          <NSpin :show="loading">
+            <UploadFile
+              class="w-full"
+              :type="type"
+              @on-uploading="onUploading"
+              @on-success="onUploadSuccess"
+            >
+              <n-upload-dragger>
+                <div class="w-full flex justify-center mb-2">
+                  <SvgIcon
+                    class="mr-2"
+                    :width="25"
+                    :height="25"
+                    icon="ph:upload-bold"
+                  ></SvgIcon>
+                </div>
+                <n-text style="font-size: 16px"> 请上传图片 </n-text>
+                <n-p depth="3" style="margin: 8px 0 0 0">
+                  请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
+                </n-p>
+              </n-upload-dragger>
+            </UploadFile>
+          </NSpin>
+        </n-tab-pane>
+        <n-tab-pane
+          class="h-full"
+          name="history"
+          tab="历史图片"
+          display-directive="show"
+        >
+          <History @on-selected="selectFile"></History>
+        </n-tab-pane>
+      </n-tabs>
       <div class="actions"></div>
     </div>
   </NModal>
 </template>
 
 <script setup>
+import History from "./History.vue"
+import UploadFile from "@/components/upload/index.vue"
 import { useFile } from "./useFile"
 
-const emit = defineEmits(["on-selected"])
-const { visible, fileList, show, close, selectFile, submit } = useFile(emit)
+const emit = defineEmits(["submit"])
+const props = defineProps({
+  type: {
+    type: String,
+    default: "oss",
+  },
+  placeholder: {
+    type: String,
+    default: "请选择图片",
+  },
+})
+const {
+  visible,
+  loading,
+  onUploading,
+  onUploadSuccess,
+  show,
+  close,
+  selectFile,
+  submit,
+} = useFile(emit)
 
 defineExpose({
   show,
   close,
 })
 </script>
-<style scoped></style>
+<style lang="scss" scoped>
+:deep(.n-upload) {
+  .n-upload-trigger {
+    width: 100%;
+  }
+}
+</style>

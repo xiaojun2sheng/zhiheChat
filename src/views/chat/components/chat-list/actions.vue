@@ -36,13 +36,6 @@ const openSetting = () => {
   systemPopupRef.value.show()
 }
 
-onMounted(() => {
-  if (!appStore.key) {
-    $message.warning("先配置key再使用哦~")
-    openSetting()
-  }
-})
-
 </script>
 <style lang="scss" scoped>
 .actions {

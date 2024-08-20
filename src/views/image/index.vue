@@ -2,7 +2,7 @@
   <div class="common_page flex gap-2">
     <div class="w-[400px] shrink-0">
       <n-tabs type="line" v-model:value="activeName" animated>
-        <n-tab-pane name="text" tab="文字生成图片">
+        <n-tab-pane name="text" tab="生成图片">
           <Panel icon="flat-color-icons:idea" title="创意描述">
             <template #content>
               <div class="prompt">
@@ -29,6 +29,18 @@
               </div>
             </template>
           </Panel>
+          <!-- <Panel icon="flat-color-icons:settings" title="上传图片">
+            <template #content>
+              <div>
+                <UploadImage
+                  class="mb-2"
+                  type="kling"
+                  placeholder="参考图"
+                  @on-success="sourceImageSuccess"
+                ></UploadImage>
+              </div>
+            </template>
+          </Panel> -->
           <Panel icon="flat-color-icons:settings" title="参数设置">
             <template #content>
               <div>

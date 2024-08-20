@@ -40,7 +40,7 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .chat-list {
-  height: calc(100% - 100px);
+  height: calc(100% - 60px);
   overflow: auto;
 }
 </style>

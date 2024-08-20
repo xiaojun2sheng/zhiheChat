@@ -1,21 +1,27 @@
 import { ref, onMounted } from "vue"
 export const useFile = (emit) => {
   const visible = ref(false)
-  const fileList = ref([])
-  const initFileList = () => {
-    fileList.value = JSON.parse(localStorage.getItem("chatbot-files") || "[]")
-  }
+
+  const uploadFile = ref()
   const selectFile = (file) => {
-    fileList.value.forEach((item) => {
-      item.selected = false
-    })
-    file.selected = true
+    uploadFile.value = file
   }
-  onMounted(initFileList)
 
   const submit = () => {
-    const t = fileList.value.find((item) => item.selected)
-    if (t) emit("on-selected", t)
+    if (uploadFile.value) {
+      emit("submit", uploadFile.value)
+      close()
+    }
+  }
+
+  const loading = ref(false)
+  const onUploading = (data) => {
+    loading.value = data
+  }
+  const onUploadSuccess = (data) => {
+    uploadFile.value = data
+    emit("submit", uploadFile.value)
+    close()
   }
   const show = () => {
     visible.value = true
@@ -23,6 +29,15 @@ export const useFile = (emit) => {
   const close = () => {
     visible.value = false
   }
-  
-  return { visible, fileList, show, close, selectFile, submit }
+
+  return {
+    visible,
+    show,
+    close,
+    selectFile,
+    submit,
+    loading,
+    onUploading,
+    onUploadSuccess,
+  }
 }

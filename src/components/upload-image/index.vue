@@ -1,59 +1,36 @@
 <template>
-  <div class="relative flex w-full">
-    <NSpin :show="loading">
-      <UploadFile
+  <div class="relative w-full h-[160px]">
+    <div class="file-box w-full h-full rounded-md">
+      <div
         v-if="!uploadImage.url"
-        :type="type"
-        :placeholder="placeholder"
-        @on-uploading="onUploading"
-        @on-success="onUploadSuccess"
+        class="w-full h-full flex flex-col justify-center items-center cursor-pointer"
+        @click="openFileMgmt"
       >
-        <n-upload-dragger>
-          <div class="w-full flex justify-center mb-2">
-            <SvgIcon
-              class="mr-2"
-              :width="25"
-              :height="25"
-              icon="ph:upload-bold"
-            ></SvgIcon>
-          </div>
-          <n-text style="font-size: 16px">
-            {{ placeholder }}
-          </n-text>
-          <n-p depth="3" style="margin: 8px 0 0 0">
-            请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
-          </n-p>
-        </n-upload-dragger>
-      </UploadFile>
-    </NSpin>
-    <div
-      v-if="uploadImage.url"
-      class="image-preview flex items-center justify-between rounded-md"
-    >
-      <n-image
-        class="rounded-md"
-        :width="160"
-        :height="160"
-        object-fit="cover"
-        :src="uploadImage.url"
-      ></n-image>
-      <p class="m-2 w-[40%] truncate">{{ uploadImage.filename }}</p>
-      <SvgIcon
-        class="mr-2"
-        :width="25"
-        :height="25"
-        icon="mdi:delete-outline"
-        @click="uploadImage = {}"
-      ></SvgIcon>
+        <SvgIcon :width="50" :height="50" icon="iconoir:plus"></SvgIcon>
+        <p>{{ placeholder }}</p>
+      </div>
+      <div
+        v-if="uploadImage.url"
+        class="image-preview flex items-center justify-between rounded-md"
+      >
+        <n-image
+          class="rounded-md"
+          :width="160"
+          :height="160"
+          object-fit="cover"
+          :src="uploadImage.url"
+        ></n-image>
+        <p class="m-2 w-[40%] truncate">{{ uploadImage.filename }}</p>
+        <SvgIcon
+          class="mr-2"
+          :width="25"
+          :height="25"
+          icon="mdi:delete-outline"
+          @click="uploadImage = {}"
+        ></SvgIcon>
+      </div>
     </div>
-    <div v-if="!uploadImage.url" class="ml-2" @click="openFileMgmt">
-      <SvgIcon
-        :width="25"
-        :height="25"
-        icon="catppuccin:folder-images-open"
-      ></SvgIcon>
-    </div>
-    <FilePopup ref="filePopupRef" @on-selected="onSelected"></FilePopup>
+    <FilePopup ref="filePopupRef" :type="type" @submit="onSelected"></FilePopup>
   </div>
 </template>
 
@@ -70,20 +47,12 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: "请上传图片",
+    default: "请选择图片",
   },
 })
 const emit = defineEmits(["on-change", "on-success"])
 
-const {
-  loading,
-  uploadImage,
-  filePopupRef,
-  onSelected,
-  openFileMgmt,
-  onUploading,
-  onUploadSuccess,
-} = useUpload(emit)
+const { uploadImage, filePopupRef, onSelected, openFileMgmt } = useUpload(emit)
 
 defineExpose({})
 </script>
@@ -96,5 +65,8 @@ defineExpose({})
   .n-image {
     height: 160px;
   }
+}
+.file-box {
+  background: #0d1116;
 }
 </style>
