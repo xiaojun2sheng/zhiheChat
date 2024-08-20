@@ -53,12 +53,15 @@
               <div>
                 <UploadImage
                   class="mb-2"
-                  type="oss"
+                  type="vidu"
                   placeholder="请上传原始图片"
                   @on-success="sourceImageSuccess"
                 ></UploadImage>
-                <UploadImage type="oss"
-                placeholder="请上传被替换的图片" @on-success="targetImageSuccess"></UploadImage>
+                <UploadImage
+                  type="vidu"
+                  placeholder="请上传被替换的图片"
+                  @on-success="targetImageSuccess"
+                ></UploadImage>
               </div>
             </template>
           </Panel>

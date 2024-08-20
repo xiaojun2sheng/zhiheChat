@@ -70,7 +70,7 @@
         </n-tab-pane>
       </n-tabs>
     </div>
-    <div class="flex flex-col w-full mt-10 items-center">
+    <div class="flex flex-col w-full h-full items-center justify-between pt-10">
       <n-spin :show="loading">
         <div
           class="image-box px-10 min-h-[300px] flex gap-2 justify-center items-center"

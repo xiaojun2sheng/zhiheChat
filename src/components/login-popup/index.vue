@@ -3,7 +3,7 @@
     v-model:show="visible"
     :auto-focus="false"
     preset="dialog"
-    title="登录"
+    :title="isLogin ? '登录' : '注册'"
     :show-icon="false"
     :mask-closable="false"
     style="width: 95%; max-width: 640px"
@@ -56,10 +56,10 @@
         </n-form-item>
       </NForm>
       <div class="flex justify-end pr-12 gap-4">
-        <n-button @click="visible = false">取消</n-button>
-        <n-button @click="isLogin = !isLogin">
+        <n-button text @click="isLogin = !isLogin">
           {{ isLogin ? "去注册" : "去登录" }}
         </n-button>
+        <n-button @click="visible = false">取消</n-button>
         <n-button type="primary" @click="submit"> {{ btnText }} </n-button>
       </div>
     </div>

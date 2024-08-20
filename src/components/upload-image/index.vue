@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative flex w-full">
     <NSpin :show="loading">
       <UploadFile
         v-if="!uploadImage.url"
@@ -46,6 +46,14 @@
         @click="uploadImage = {}"
       ></SvgIcon>
     </div>
+    <div v-if="!uploadImage.url" class="ml-2" @click="openFileMgmt">
+      <SvgIcon
+        :width="25"
+        :height="25"
+        icon="catppuccin:folder-images-open"
+      ></SvgIcon>
+    </div>
+    <FilePopup ref="filePopupRef" @on-selected="onSelected"></FilePopup>
   </div>
 </template>
 
@@ -53,6 +61,7 @@
 import { ref, reactive, watch, onMounted } from "vue"
 import { useUpload } from "./useUpload"
 import UploadFile from "@/components/upload/index.vue"
+import FilePopup from "@/components/file-popup/index.vue"
 
 const props = defineProps({
   type: {
@@ -66,12 +75,21 @@ const props = defineProps({
 })
 const emit = defineEmits(["on-change", "on-success"])
 
-const { loading, uploadImage, onUploading, onUploadSuccess } = useUpload(emit)
+const {
+  loading,
+  uploadImage,
+  filePopupRef,
+  onSelected,
+  openFileMgmt,
+  onUploading,
+  onUploadSuccess,
+} = useUpload(emit)
 
 defineExpose({})
 </script>
 <style lang="scss" scoped>
 .image-preview {
+  width: 100%;
   overflow: hidden;
   background: linear-gradient(264.35deg, #22403eb3 2.09%, #283d46b3 94.63%);
   box-shadow: -2px 4px 4px #0000001f;

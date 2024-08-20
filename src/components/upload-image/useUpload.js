@@ -6,6 +6,9 @@ export const useUpload = (emit) => {
   const onUploading = (data) => {
     loading.value = data
   }
+  const onSelected = (data) => {
+    uploadImage.value = data
+  }
   const onUploadSuccess = (data) => {
     uploadImage.value = data
     emit("on-success", uploadImage.value)
@@ -14,11 +17,18 @@ export const useUpload = (emit) => {
   const onChange = (data) => {
     uploadImage.value = data
   }
+  const filePopupRef = ref()
+  const openFileMgmt = () => {
+    filePopupRef.value.show()
+  }
 
   return {
     emit,
     loading,
     uploadImage,
+    filePopupRef,
+    onSelected,
+    openFileMgmt,
     onChange,
     onUploading,
     onUploadSuccess,
