@@ -8,6 +8,7 @@ export const useUpload = (emit) => {
   }
   const onSelected = (data) => {
     uploadImage.value = data
+    emit('on-success', uploadImage.value)
   }
   const onUploadSuccess = (data) => {
     uploadImage.value = data
