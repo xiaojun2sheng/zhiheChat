@@ -25,7 +25,11 @@
     "pinia": "^2.0.34",
     "scp2": "^0.5.0",
     "vue": "^3.4.31",
-    "vue-router": "^4.4.0"
+    "vue-router": "^4.4.0",
+    "@kangc/v-md-editor": "2.3.18",
+    "js-image-compressor": "^2.0.0",
+    "v-code-diff": "^1.12.1",
+    "vue-json-pretty": "^2.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",

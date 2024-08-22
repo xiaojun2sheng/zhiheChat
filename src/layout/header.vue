@@ -74,6 +74,7 @@ const menuList = [
   { title: "问答", id: "4", url: "/chat" },
   { title: "语音", id: "5", url: "/voice" },
   { title: "提示词工厂", id: "6", url: "/robot-market" },
+  { title: "工具箱", id: "7", url: "/tools" },
   // { title: "提示词优化", id: "6", url: "/betterPrompt" },
   // { title: "账户", id: "7", url: "/payment" },
 ]
