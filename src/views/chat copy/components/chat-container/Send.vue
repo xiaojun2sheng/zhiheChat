@@ -1,8 +1,5 @@
 <template>
   <div class="send-box flex flex-col">
-    <div class="tools">
-      <Tag></Tag>
-    </div>
     <NInput
       type="textarea"
       :style="{
@@ -35,7 +32,6 @@ import { ref, watch, computed } from "vue"
 import { useSend } from "@/hooks/useSend"
 import { useChatStore, useAppStore } from "@/stores"
 import { isPhone } from "@/utils"
-import Tag from "./Tag.vue"
 
 const list = ref([])
 const appStore = useAppStore()
@@ -147,25 +143,10 @@ defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
 </script>
 <style lang="scss" scoped>
 .send-box {
-  // box-sizing: border-box;
-  // height: 170px;
-  // padding-bottom: 10px;
-  // border-top: 1px solid #2d2d2d;
-
-  position: relative;
-  border: 1px solid #595965;
-  overflow: hidden;
-  border-radius: 16px;
-  box-shadow: none;
-  background-color: #3a3a44;
-
-  .tools {
-    display: flex;
-    gap: 10px;
-    padding: 12px 16px 4px 12px;
-    display: flex;
-    align-items: center;
-  }
+  box-sizing: border-box;
+  height: 150px;
+  padding-bottom: 10px;
+  border-top: 1px solid #2d2d2d;
   .footer {
     align-self: end;
   }

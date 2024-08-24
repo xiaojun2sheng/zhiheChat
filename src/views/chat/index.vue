@@ -1,24 +1,32 @@
 <template>
-  <NLayout class="h-full" has-sider>
-    <NLayoutSider
-      :collapsed-width="0"
-      :width="240"
-      collapse-mode="transform"
-      :show-collapsed-content="false"
-      show-trigger="arrow-circle"
-      bordered
-      class="px-3 box-content bg-[#0A0F18]"
-    >
-      <ChatList></ChatList>
-    </NLayoutSider>
-    <NLayoutContent class="px-3 box-content bg-[#0A0F18]">
-      <Chat></Chat>
-    </NLayoutContent>
-  </NLayout>
+  <div class="chat h-full w-full flex">
+    <Nav></Nav>
+    <div class="main h-full w-full">
+      <Header v-if="!chatStore.isHistory"></Header>
+      <div class="chat-content flex-1 w-full">
+        <ChatContainer v-if="!chatStore.isHistory"></ChatContainer>
+        <History v-else></History>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
-import Chat from "./components/chat-container/index.vue"
-import ChatList from "./components/chat-list/index.vue"
-import Side from "./components/side/index.vue"
+import Nav from "./layout/Nav.vue"
+import Header from "./layout/Header.vue"
+import ChatContainer from "./components/chat-container/index.vue"
+import History from "./components/history/index.vue"
+import { useChatStore } from "@/stores"
+
+const chatStore = useChatStore()
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.chat {
+  // background-color: #292932;
+  .chat-content {
+    transition: all 0.2s ease;
+    margin: 0 auto;
+    height: calc(100% - 50px);
+    max-width: 792px;
+  }
+}
+</style>

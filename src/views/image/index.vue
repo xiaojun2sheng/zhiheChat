@@ -29,7 +29,7 @@
               </div>
             </template>
           </Panel>
-          <!-- <Panel icon="flat-color-icons:settings" title="上传图片">
+          <Panel icon="flat-color-icons:settings" title="上传图片">
             <template #content>
               <div>
                 <UploadImage
@@ -40,7 +40,7 @@
                 ></UploadImage>
               </div>
             </template>
-          </Panel> -->
+          </Panel>
           <Panel icon="flat-color-icons:settings" title="参数设置">
             <template #content>
               <div>

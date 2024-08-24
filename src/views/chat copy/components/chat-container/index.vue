@@ -1,6 +1,6 @@
 <template>
-  <div class="chat_container px-4">
-    <div class="body _message_list pt-10">
+  <div class="chat_container">
+    <div class="body _message_list">
       <MsgItem
         :item="{
           role: 'system',
@@ -98,7 +98,11 @@ onUnmounted(() => {
   flex-direction: column;
   height: 100%;
 
+  .header {
+    height: 60px;
+  }
   .body {
+    margin: 10px 0;
     flex: 1;
     overflow: auto;
   }

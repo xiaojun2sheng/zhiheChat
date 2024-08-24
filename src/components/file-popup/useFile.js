@@ -8,13 +8,17 @@ export const useFile = (emit) => {
   }
 
   const submit = () => {
+    if (loading.value) {
+      $message.warning("上传中，请稍后")
+      return
+    }
     if (uploadFile.value) {
       emit("submit", uploadFile.value)
       close()
     }
   }
 
-  const loading = ref(false)
+  const loading = ref(true)
   const onUploading = (data) => {
     loading.value = data
   }
@@ -27,6 +31,10 @@ export const useFile = (emit) => {
     visible.value = true
   }
   const close = () => {
+    if (loading.value) {
+      $message.warning("上传中，请稍后")
+      return
+    }
     visible.value = false
   }
 

@@ -5,10 +5,9 @@
     preset="dialog"
     title="参考图 / 垫图"
     :show-icon="false"
-    positive-text="确认"
-    negative-text="取消"
-    @positive-click="submit"
-    @on-negative-click="visible = false"
+    :closable="false"
+    :mask-closable="false"
+    :close-on-esc="false"
     style="width: 700px"
   >
     <div class="container w-full">
@@ -52,7 +51,10 @@
           <History @on-selected="selectFile"></History>
         </n-tab-pane>
       </n-tabs>
-      <div class="actions"></div>
+      <div class="actions w-full flex justify-end gap-2">
+        <n-button @click="close"> 取消 </n-button>
+        <n-button type="primary" @click="submit"> 确定 </n-button>
+      </div>
     </div>
   </NModal>
 </template>

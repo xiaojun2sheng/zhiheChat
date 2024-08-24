@@ -3,13 +3,13 @@
     <div v-if="position == 'left'" :class="['msg-item__box', 'msg-item__left']">
       <div class="left_content">
         <div
-          class="bg-[#2f2f2f] content"
+          class="bg-[#2f2f2f] rounded p-2 min-h-[37px]"
           v-html="contentHtml"
         ></div>
         <div v-if="status == 'loading'" class="loading">
           <NSpin :size="15"></NSpin>
         </div>
-        <div class="flex gap-2 mt-2">
+        <div class="flex gap-2 mt-1">
           <SvgIcon
             :width="15"
             :height="15"
@@ -38,7 +38,7 @@
       v-if="position == 'right'"
       :class="['msg-item__box', 'msg-item__right']"
     >
-      <div class="content" v-html="contentHtml"></div>
+      <div class="bg-[#2f2f2f] rounded p-2" v-html="contentHtml"></div>
       <!-- <img :src="userStore.avatar" /> -->
     </div>
   </div>
@@ -117,19 +117,18 @@ const handlerAction = (type) => {
     font-size: 14px;
     max-width: 70%;
     .content {
-      padding: 10px 16px;
-      border-radius: 10px;
+      white-space: pre-wrap;
+      display: inline-block;
+      padding: 16px 20px;
+      border-radius: 4px;
+      color: #333333;
       word-break: break-all;
-      min-height: 37px;
     }
     &.msg-item__left {
       align-self: flex-start;
-      z-index: -1;
     }
     &.msg-item__right {
       align-self: flex-end;
-      border-radius: 10px;
-      background-color: #28499D;
       .content {
       }
     }

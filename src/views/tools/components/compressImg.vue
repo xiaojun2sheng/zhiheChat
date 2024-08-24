@@ -64,7 +64,6 @@ let imgInfo = ref({
 	height: 0,
 })
 const handleChange = async info => {
-	debugger
 	imgBlob.value = new Blob([info.file.originFileObj], { type: 'image/jpeg' });
 	uploadImg.value = URL.createObjectURL(imgBlob.value)
 	let img = new Image()

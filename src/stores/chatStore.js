@@ -11,6 +11,7 @@ export const useChatStore = defineStore({
       chatList: [], // 当前问答列表
       messageList: [], // 当前聊天信息
       chatInfo: {}, // 当前聊天信息
+      isHistory: false, // 是否是历史记录
       sendOptions: {
         model: "qwen-turbo",
       }, // 发送的配置信息
@@ -22,6 +23,9 @@ export const useChatStore = defineStore({
     },
   },
   actions: {
+    setHistory(isHistory) {
+      this.isHistory = isHistory
+    },
     setSettings(data) {
       this.apiKey = data.apiKey
       this.baseUrl = data.baseUrl
@@ -38,13 +42,13 @@ export const useChatStore = defineStore({
       const chatListJson = localStorage.getItem("chatbot-chat-list") || "[]"
       const list = JSON.parse(chatListJson)
       this.chatList = list
-      if (this.chatList.length == 0) this.createChat()
-      let t = this.chatList[0]
-      if (route.params.id) {
-        t = this.chatList.find((i) => i.id == route.params.id)
-      }
-      router.replace(`/chat/${t.id}`)
-      this.setChat(t)
+      // if (this.chatList.length == 0) this.createChat()
+      // let t = this.chatList[0]
+      // if (route.params.id) {
+      //   t = this.chatList.find((i) => i.id == route.params.id)
+      // }
+      // router.replace(`/chat/${t.id}`)
+      // this.setChat(t)
     },
     createChat() {
       const item = {
