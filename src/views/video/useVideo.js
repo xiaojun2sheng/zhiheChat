@@ -1,11 +1,24 @@
 import { ref, onMounted, computed } from "vue"
-import { viduApi, getTaskById } from "@/api/index"
+import { viduApi, klingApi, getTaskById } from "@/api/index"
 import { useCountDown } from "@/hooks/useCountDown"
 
 export const useVideo = (url) => {
   const { progress, initCountDown, clearCountDown } = useCountDown()
   const activeName = ref("text")
   const videoPrompt = ref("")
+  const videoSetting = ref({
+    model: "kling",
+  })
+  const modelOptions = ref([
+    {
+      label: "可灵",
+      value: "kling",
+    },
+    {
+      label: "vidu",
+      value: "vidu",
+    },
+  ])
   const inputStyle = ref({
     "--n-border-hover": "transparent",
     "--n-border-focus": "transparent",
@@ -35,17 +48,13 @@ export const useVideo = (url) => {
     const uploadImageUrl =
       activeName.value == "text" ? "" : uploadImage.value.url
 
-    const req = {
-      prompt: videoPrompt.value,
-      url: uploadImageUrl,
-      style: "general",
-      aspect_ratio: "16:9",
-      duration: 4,
-    }
+    const req = getVideoReq(videoSetting.value.model, uploadImageUrl)
     generating.value = true
-    const res = await viduApi.createVideo(req).catch((err) => {
-      generating.value = false
-    })
+    const res = await (videoSetting.value.model == "vidu" ? viduApi : klingApi)
+      .createVideo(req)
+      .catch((err) => {
+        generating.value = false
+      })
     if (!res.id) return
     videoInfo.value = { taskId: res.id }
     localStorage.setItem("chatbot-video-generating-id", res.id)
@@ -65,11 +74,20 @@ export const useVideo = (url) => {
     })
     console.log("getVideoInfo res", res)
     if (!generating.value) return
-    const creation = res?.creations[0]
+    const creation =
+      videoSetting.model === "vidu"
+        ? res?.creations[0]
+        : res?.data?.works[0]?.resource?.resource
     if (creation) {
-      creation.taskId = creation.task_id
-      creation.creationId = creation.id
-      videoInfo.value = creation
+      if (creation.task_id) {
+        creation.taskId = creation.task_id
+        creation.creationId = creation.id
+        videoInfo.value = creation
+      } else {
+        videoInfo.value = {
+          uri: creation,
+        }
+      }
 
       addHistory({
         videoPrompt: videoPrompt.value,
@@ -141,6 +159,36 @@ export const useVideo = (url) => {
   const videoUrl = computed(() => {
     return videoInfo.value?.uri || ""
   })
+  function getVideoReq(type, uploadImageUrl) {
+    const viduReq = {
+      prompt: videoPrompt.value,
+      url: uploadImageUrl,
+      style: "general",
+      aspect_ratio: "16:9",
+      duration: 4,
+    }
+    const klingReq = {
+      prompt: videoPrompt.value,
+      url: uploadImageUrl,
+      aspect_ratio: "16:9",
+      camera: {
+        horizontal: 0,
+        pan: 0,
+        roll: 0,
+        tilt: 0,
+        type: "empty",
+        vertical: 0,
+        zoom: 0,
+      },
+      cfg: 0.5,
+      duration: 5,
+      negative_prompt: "",
+      tail_image_url: "",
+      url: "",
+    }
+    return type == "kling" ? klingReq : viduReq
+  }
+
   return {
     videoUrl,
     videoPrompt,
@@ -152,6 +200,8 @@ export const useVideo = (url) => {
     uploadImage,
     generating,
     progress,
+    videoSetting,
+    modelOptions,
     createVideoTask,
     getVideoInfo,
     upscaleVideoTask,

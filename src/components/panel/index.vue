@@ -27,7 +27,7 @@ const props = defineProps({
     rgb(23, 27, 33),
     rgb(25, 36, 44) 90.18%
   );
-  border: 1px solid rgb(30, 49, 57);
+  // border: 1px solid rgb(30, 49, 57);
   border-radius: 16px;
   padding: 10px;
   height: max-content;

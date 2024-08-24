@@ -29,7 +29,19 @@
               </div>
             </template>
           </Panel>
-          <Panel icon="flat-color-icons:settings" title="参数设置"></Panel>
+          <Panel icon="flat-color-icons:settings" title="参数设置">
+            <template #content>
+              <div>
+                <span>设置模型：</span>
+                <div class="prompt">
+                  <n-select
+                    v-model:value="videoSetting.model"
+                    :options="modelOptions"
+                  />
+                </div>
+              </div>
+            </template>
+          </Panel>
         </n-tab-pane>
         <n-tab-pane name="image" tab="图片生成视频">
           <Panel icon="flat-color-icons:idea" title="图片创意描述">
@@ -170,6 +182,8 @@ const {
   videoPrompt,
   activeName,
   loading,
+  videoSetting,
+  modelOptions,
   inputStyle,
   uploadImage,
   generating,
@@ -225,5 +239,10 @@ const cancelBetterPrompt = () => {
 .video-progress-container {
   background-color: #191d21dd;
   color: #c5c7d5;
+}
+:deep(.n-select) {
+  .n-base-selection {
+    border-radius: 10px !important;
+  }
 }
 </style>
