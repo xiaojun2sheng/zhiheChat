@@ -1,7 +1,7 @@
 <template>
   <div class="header_box" hadow="always">
     <div class="logo flex justify-center items-center">
-      <img src="@/assets/logo.png" alt="" /><span>火宝 AI</span>
+      <img src="@/assets/logo.png" alt="" />
     </div>
     <n-tabs
       v-model:value="tabName"
@@ -130,10 +130,10 @@ const handleSelect = async (key) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 55px;
+  // height: 55px;
   .logo {
     padding: 0 8px;
-    width: 120px;
+    // width: 120px;
     img {
       width: 40px;
     }
