@@ -30,11 +30,11 @@
         停止接收
       </n-button>
     </div>
-    <div v-else class="homepage py-20 flex flex-col justify-center items-center">
-      <img
-        src="@/assets/logo.png"
-        alt=""
-      />
+    <div
+      v-else
+      class="homepage py-20 flex flex-col justify-center items-center"
+    >
+      <img src="@/assets/logo.png" alt="" />
     </div>
     <div class="footer">
       <Send
@@ -73,6 +73,9 @@ const selectPrompt = (val) => {
 }
 
 const beforeSend = (val) => {
+  // 首页问答需要先新增
+  const { id } = route.params
+  !id && chatStore.createChat()
   chatStore.addMessage(val)
   positionDomViewBottom()
 }
@@ -84,6 +87,7 @@ const endSend = () => {
 }
 
 const msgChange = (val) => {
+  debugger
   chatStore.updateLastMessage(val)
   positionDomViewBottom()
 }

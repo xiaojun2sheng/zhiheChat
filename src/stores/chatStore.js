@@ -101,6 +101,7 @@ export const useChatStore = defineStore({
       this.messageList = map[id]?.filter((t) => t.content) || []
     },
     addMessage(val) {
+      debugger
       if (this.messageList.length == 0) {
         this.updateChatItem({
           name: val,

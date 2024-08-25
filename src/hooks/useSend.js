@@ -17,7 +17,15 @@ export const useSend = () => {
         const chunk = event.event.target.responseText
         console.log("输出中", chunk)
         if (chunk.includes("{") && chunk.includes("}")) {
-          content.value = "系统异常"
+          try {
+            const { msg } = JSON.parse(chunk)
+            content.value = msg
+          } catch (e) {
+            console.log("流异常", e)
+            content.value = "系统异常"
+          } finally {
+            return
+          }
         } else {
         }
         content.value = chunk

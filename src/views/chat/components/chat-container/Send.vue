@@ -106,8 +106,7 @@ const upload = (file) => {
 // 消息发送 ctrl + enter 换行
 const submit = async (e) => {
   if (running.value || !sendContent.value) return
-  // 首页问答需要先新增
-  chatStore.createChat()
+ 
   emit("on-before", sendContent.value)
   setTimeout(() => {
     setContent("")
@@ -129,8 +128,9 @@ const submit = async (e) => {
     messages: list,
     stream: true,
   }
-  const res = await send(req)
-  emit("on-end", sendContent.value)
+  await send(req).finally(() => {
+    emit("on-end", sendContent.value)
+  })
 }
 // 设置输入框
 const setContent = (val) => {

@@ -73,6 +73,7 @@ const props = defineProps({
 
 const userStore = useUserStore()
 const contentHtml = computed(() => {
+  debugger
   const val = props.item.userContent || props.item.content
   return md.render(val)
 })
@@ -121,6 +122,7 @@ const handlerAction = (type) => {
       border-radius: 10px;
       word-break: break-all;
       min-height: 37px;
+      min-width: 60px;
     }
     &.msg-item__left {
       align-self: flex-start;
