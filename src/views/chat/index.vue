@@ -3,7 +3,7 @@
     <Nav></Nav>
     <div class="main h-full w-full">
       <Header v-if="!chatStore.isHistory"></Header>
-      <div class="chat-content flex-1 w-full">
+      <div class="chat-content flex-1 w-full h-full">
         <ChatContainer v-if="!chatStore.isHistory"></ChatContainer>
         <History v-else></History>
       </div>
@@ -29,7 +29,7 @@ onMounted(() => {
   .chat-content {
     transition: all 0.2s ease;
     margin: 0 auto;
-    height: calc(100% - 50px);
+    // height: calc(100% - 50px);
     max-width: 792px;
   }
 }

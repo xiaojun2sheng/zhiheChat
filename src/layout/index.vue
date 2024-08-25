@@ -14,6 +14,6 @@ defineProps({})
 
 <style lang="scss" scoped>
 .main {
-  height: calc(100% - 60px);
+  height: calc(100% - 35px);
 }
 </style>

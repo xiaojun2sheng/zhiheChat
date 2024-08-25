@@ -1,5 +1,5 @@
 <template>
-  <div class="history px-4 h-full overflow-auto">
+  <div class="history px-4 h-full flex flex-col">
     <div
       class="close w-[35px] h-[35px] absolute top-[80px] left-[20px] flex justify-center items-center rounded-md cursor-pointer"
       @click="chatStore.setHistory(false)"
@@ -12,7 +12,7 @@
       ></SvgIcon>
     </div>
     <p class="title text-4xl font-bold text-center my-4">历史会话</p>
-    <div class="search h-[60px] mb-4">
+    <div class="search h-[60px] mb-4 flex-shrink-0">
       <n-input
         class="h-full rounded-2xl"
         v-model:value="filter"
@@ -27,7 +27,7 @@
         </template>
       </n-input>
     </div>
-    <div class="chat-list w-full">
+    <div class="chat-list w-full h-full overflow-auto">
       <template v-if="chatStore.chatList.length > 0">
         <ChatItem
           v-for="item in filterList"

@@ -19,15 +19,29 @@
     ></NInput>
     <div class="footer w-full">
       <div></div>
-      <div class="py-2">
-        <SvgIcon
-          :width="20"
-          :height="20"
-          hover
-          :icon="running ? 'eos-icons:three-dots-loading' : 'ion:send'"
-          :disabled="running"
-          @click="submit"
-        ></SvgIcon>
+      <div class="py-2 flex gap-2">
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <div class="item" @click="upload">
+              <SvgIcon
+                :width="20"
+                :height="20"
+                icon="iconamoon:attachment"
+              ></SvgIcon>
+            </div>
+          </template>
+          支持上传文件（每个 10 MB）接受 pdf、doc、xlsx、ppt、txt、图片等
+        </n-tooltip>
+
+        <div class="item submit">
+          <SvgIcon
+            :width="20"
+            :height="20"
+            :icon="running ? 'eos-icons:three-dots-loading' : 'iconamoon:send'"
+            :disabled="running"
+            @click="submit"
+          ></SvgIcon>
+        </div>
       </div>
     </div>
   </div>
@@ -67,11 +81,7 @@ const fileId = computed(() => {
   }
 })
 
-const placeholder = computed(() =>
-  isPhone
-    ? "传递的你的想法"
-    : "传递的你的想法（ctrl + enter 换行，enter发送消息）"
-)
+const placeholder = computed(() => "传递的你的想法")
 
 const sendOptions = ref({
   model: "kimi-all",
@@ -87,17 +97,14 @@ watch(
 )
 
 // 上传成功更新文件列表，插入chat对象
-const uploadSuccess = (file) => {
-  chatStore.addFile(file)
-  chatStore.updateChatItem({ file })
+const upload = (file) => {
+  $message.success("开发中，请期待。。。")
+  // chatStore.addFile(file)
+  // chatStore.updateChatItem({ file })
 }
 
 // 消息发送 ctrl + enter 换行
 const submit = async (e) => {
-  if (e && e.ctrlKey && e.key === "Enter") {
-    sendContent.value += "\n"
-    return
-  }
   if (running.value || !sendContent.value) return
   // 首页问答需要先新增
   chatStore.createChat()
@@ -158,6 +165,23 @@ defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .item {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+      &.submit {
+        background-color: #5280fd;
+        &:hover {
+          background-color: #5280fd99;
+        }
+      }
+    }
   }
 }
 :deep(.n-input) {
