@@ -60,7 +60,7 @@ export const useVideo = (url) => {
     localStorage.setItem("chatbot-video-generating-id", res.id)
     // 倒计时
     initCountDown()
-    intervalId.value = setInterval(getVideoInfo, 3000)
+    intervalId.value = setInterval(getVideoInfo, 10000)
   }
 
   let videoInfo = ref()
@@ -190,7 +190,6 @@ export const useVideo = (url) => {
       duration: 5,
       negative_prompt: "",
       tail_image_url: "",
-      url: "",
     }
     return type == "kling" ? klingReq : viduReq
   }

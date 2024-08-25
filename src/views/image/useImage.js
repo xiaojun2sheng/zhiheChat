@@ -105,7 +105,7 @@ export const useImage = (url) => {
         clearInterval(intervalCode.value)
         localStorage.setItem("chatbot-image-generating-id", "")
       }
-    }, 3000)
+    }, 10000)
   }
   onMounted(() => {
     initHistory()

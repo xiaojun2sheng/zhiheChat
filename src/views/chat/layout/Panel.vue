@@ -7,7 +7,7 @@
   >
     <div class="container">
       <span class="flex justify-between p-4">
-        <span class="text-lg">工作台</span>
+        <span class="text-lg">智能体工作台</span>
         <SvgIcon
           :width="25"
           :height="25"
@@ -15,6 +15,9 @@
           @click="open = false"
         ></SvgIcon>
       </span>
+      <div class="p-4">
+        <h2>敬请期待</h2>
+      </div>
     </div>
   </div>
 </template>

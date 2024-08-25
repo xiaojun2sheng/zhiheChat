@@ -7,11 +7,12 @@ export const useAppStore = defineStore({
       baseUrl: "",
       apiKey: "",
       presetChatModels: [
-        { value: "glm-3-turbo", label: "glm-3-turbo" },
-        { value: "glm-4-air", label: "glm-4-air" },
-        { value: "glm-4", label: "glm-4" },
-        { value: "glm-4-flash", label: "glm-4-flash" },
-        { value: "glm-4-9b-chat", label: "glm-4-9b-chat" },
+        { key: "glm-3-turbo", label: "glm-3-turbo" },
+        { key: "glm-4-air", label: "glm-4-air" },
+        { key: "glm-4", label: "glm-4" },
+        { key: "glm-4-flash", label: "glm-4-flash" },
+        { key: "glm-4-9b-chat", label: "glm-4-9b-chat" },
+        ,
       ], // 内置模型
       currentChatModel: "glm-3-turbo",
       customModels: [], // 自定义模型
@@ -34,6 +35,9 @@ export const useAppStore = defineStore({
     },
   },
   actions: {
+    setCurrentChatModel(date) {
+      this.currentChatModel = date
+    },
     resolveSettings() {
       const json = localStorage.getItem("chatbot-api-settings") || "{}"
       const jsonObj = JSON.parse(json)
@@ -48,17 +52,17 @@ export const useAppStore = defineStore({
       this.apiKey = key
       localStorage.setItem("chatbot-api-key", key)
     },
-    setCustomModels(modelsStr = "") {
-      if (Array.isArray(modelsStr)) {
-        this.customModels = modelsStr
-      } else {
-        this.customModels = modelsStr.split(",") || []
-      }
-      localStorage.setItem(
-        "chatbot-custom-models",
-        JSON.stringify(this.customModels)
-      )
-    },
+    // setCustomModels(modelsStr = "") {
+    //   if (Array.isArray(modelsStr)) {
+    //     this.customModels = modelsStr
+    //   } else {
+    //     this.customModels = modelsStr.split(",") || []
+    //   }
+    //   localStorage.setItem(
+    //     "chatbot-custom-models",
+    //     JSON.stringify(this.customModels)
+    //   )
+    // },
     setSiderCollapsed(t) {
       this.collapsed = t
     },

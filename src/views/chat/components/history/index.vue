@@ -1,5 +1,5 @@
 <template>
-  <div class="history px-4">
+  <div class="history px-4 h-full overflow-auto">
     <div
       class="close w-[35px] h-[35px] absolute top-[80px] left-[20px] flex justify-center items-center rounded-md cursor-pointer"
       @click="chatStore.setHistory(false)"

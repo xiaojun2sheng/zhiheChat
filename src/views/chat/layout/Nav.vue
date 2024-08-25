@@ -5,7 +5,12 @@
     >
       <!-- 功能区域 -->
       <div class="items tools-items">
-        <n-dropdown trigger="hover" placement="right" :options="options">
+        <n-dropdown
+          @select="handleSelect"
+          trigger="hover"
+          placement="right"
+          :options="appStore.presetChatModels"
+        >
           <div class="item">
             <SvgIcon :width="25" :height="25" icon="ph:open-ai-logo"></SvgIcon>
           </div>
@@ -25,7 +30,7 @@
             icon="lets-icons:chat-search-fill"
           ></SvgIcon>
         </div>
-        <div class="item">
+        <div class="item" @click="toMarket">
           <SvgIcon
             :width="25"
             :height="25"
@@ -48,24 +53,27 @@
 </template>
 <script setup>
 import { ref } from "vue"
-import { useChatStore } from "@/stores"
+import { useChatStore, useAppStore } from "@/stores"
+import { useRouter } from "vue-router"
 
+const router = useRouter()
+
+const appStore = useAppStore()
 const chatStore = useChatStore()
 const isClose = ref(false)
 const close = () => {
   isClose.value = !isClose.value
 }
-const options = ref([
-  { key: "glm-3-turbo", label: "glm-3-turbo" },
-  { key: "glm-4-air", label: "glm-4-air" },
-  { key: "glm-4", label: "glm-4" },
-  { key: "glm-4-flash", label: "glm-4-flash" },
-  { key: "glm-4-9b-chat", label: "glm-4-9b-chat" },
-])
+const handleSelect = (key) => {
+  appStore.setCurrentChatModel(key)
+}
 
 const newChat = () => {
   chatStore.createChat()
   chatStore.setHistory(false)
+}
+const toMarket = () => {
+  router.push("/robot-market")
 }
 </script>
 <style lang="scss">

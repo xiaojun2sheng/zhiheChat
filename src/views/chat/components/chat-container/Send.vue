@@ -86,7 +86,6 @@ watch(
   }
 )
 
-
 // 上传成功更新文件列表，插入chat对象
 const uploadSuccess = (file) => {
   chatStore.addFile(file)
@@ -119,7 +118,7 @@ const submit = async (e) => {
     })
   }
   const req = {
-    ...chatStore.sendOptions,
+    model: appStore.currentChatModel,
     messages: list,
     stream: true,
   }

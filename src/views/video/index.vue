@@ -49,7 +49,7 @@
               <div class="base-image">
                 <UploadImage
                   class="mb-2"
-                  type="vidu"
+                  :type="videoSetting.model"
                   placeholder="请上传视频图片"
                   @on-uploading="onUploading"
                   @on-success="onUploadSuccess"
