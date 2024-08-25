@@ -111,7 +111,7 @@ onUnmounted(() => {
     overflow: auto;
   }
   .footer {
-    // height: 75px;
+    height: 160px;
   }
 }
 </style>

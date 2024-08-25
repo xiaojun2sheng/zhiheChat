@@ -2,14 +2,14 @@
   <div class="msg-item">
     <div v-if="position == 'left'" :class="['msg-item__box', 'msg-item__left']">
       <div class="left_content">
-        <div
-          class="bg-[#2f2f2f] content"
-          v-html="contentHtml"
-        ></div>
+        <div class="flex gap-2">
+          <img src="@/assets/logo.png" />
+          <div class="bg-[#2f2f2f] content" v-html="contentHtml"></div>
+        </div>
         <div v-if="status == 'loading'" class="loading">
           <NSpin :size="15"></NSpin>
         </div>
-        <div class="flex gap-2 mt-2">
+        <div class="flex gap-2 mt-2 ml-10">
           <SvgIcon
             :width="15"
             :height="15"
@@ -129,7 +129,7 @@ const handlerAction = (type) => {
     &.msg-item__right {
       align-self: flex-end;
       border-radius: 10px;
-      background-color: #28499D;
+      background-color: #28499d;
       .content {
       }
     }
