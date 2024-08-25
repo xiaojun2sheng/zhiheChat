@@ -15,21 +15,32 @@
             <SvgIcon :width="25" :height="25" icon="ph:open-ai-logo"></SvgIcon>
           </div>
         </n-dropdown>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <div class="item" @click="newChat">
+              <SvgIcon
+                :width="25"
+                :height="25"
+                icon="lets-icons:chat-plus-fill"
+              ></SvgIcon>
+            </div>
+          </template>
+          <span>新建会话</span>
+        </n-tooltip>
 
-        <div class="item" @click="newChat">
-          <SvgIcon
-            :width="25"
-            :height="25"
-            icon="lets-icons:chat-plus-fill"
-          ></SvgIcon>
-        </div>
-        <div class="item" @click="chatStore.setHistory(true)">
-          <SvgIcon
-            :width="25"
-            :height="25"
-            icon="lets-icons:chat-search-fill"
-          ></SvgIcon>
-        </div>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <div class="item" @click="chatStore.setHistory(true)">
+              <SvgIcon
+                :width="25"
+                :height="25"
+                icon="lets-icons:chat-search-fill"
+              ></SvgIcon>
+            </div>
+          </template>
+          历史会话
+        </n-tooltip>
+
         <div class="item" @click="toMarket">
           <SvgIcon
             :width="25"

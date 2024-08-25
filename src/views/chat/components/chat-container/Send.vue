@@ -27,18 +27,19 @@
                 :width="20"
                 :height="20"
                 icon="iconamoon:attachment"
+                color="#fff"
               ></SvgIcon>
             </div>
           </template>
           支持上传文件（每个 10 MB）接受 pdf、doc、xlsx、ppt、txt、图片等
         </n-tooltip>
-
         <div class="item submit">
           <SvgIcon
             :width="20"
             :height="20"
             :icon="running ? 'eos-icons:three-dots-loading' : 'iconamoon:send'"
             :disabled="running"
+            color="#fff"
             @click="submit"
           ></SvgIcon>
         </div>
@@ -106,7 +107,7 @@ const upload = (file) => {
 // 消息发送 ctrl + enter 换行
 const submit = async (e) => {
   if (running.value || !sendContent.value) return
- 
+
   emit("on-before", sendContent.value)
   setTimeout(() => {
     setContent("")
