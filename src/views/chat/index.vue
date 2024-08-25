@@ -16,8 +16,12 @@ import Header from "./layout/Header.vue"
 import ChatContainer from "./components/chat-container/index.vue"
 import History from "./components/history/index.vue"
 import { useChatStore } from "@/stores"
+import { onMounted } from "vue"
 
 const chatStore = useChatStore()
+onMounted(() => {
+  chatStore.initChat()
+})
 </script>
 <style lang="scss" scoped>
 .chat {

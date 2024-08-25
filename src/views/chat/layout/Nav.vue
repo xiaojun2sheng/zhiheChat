@@ -5,17 +5,13 @@
     >
       <!-- 功能区域 -->
       <div class="items tools-items">
-        <n-dropdown
-          trigger="hover"
-          placement="right"
-          :options="options"
-        >
+        <n-dropdown trigger="hover" placement="right" :options="options">
           <div class="item">
             <SvgIcon :width="25" :height="25" icon="ph:open-ai-logo"></SvgIcon>
           </div>
         </n-dropdown>
 
-        <div class="item" @click="chatStore.setHistory(false)">
+        <div class="item" @click="newChat">
           <SvgIcon
             :width="25"
             :height="25"
@@ -64,8 +60,13 @@ const options = ref([
   { key: "glm-4-air", label: "glm-4-air" },
   { key: "glm-4", label: "glm-4" },
   { key: "glm-4-flash", label: "glm-4-flash" },
-  { key: "glm-4-9b-chat", label: "glm-4-9b-chat" }]
-)
+  { key: "glm-4-9b-chat", label: "glm-4-9b-chat" },
+])
+
+const newChat = () => {
+  chatStore.createChat()
+  chatStore.setHistory(false)
+}
 </script>
 <style lang="scss">
 .nav {

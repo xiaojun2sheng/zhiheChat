@@ -1,6 +1,9 @@
 <template>
   <div class="chat_container px-4">
-    <div class="body _message_list pt-10">
+    <div
+      v-if="chatStore.messageList?.length > 0"
+      class="body _message_list pt-10"
+    >
       <MsgItem
         :item="{
           role: 'system',
@@ -19,7 +22,7 @@
       <!-- v-if="sendRef?.running" -->
       <n-button
         v-if="sendRef?.running"
-        class="ml40"
+        class="mb-4"
         size="small"
         round
         @click="sendRef?.handleStop"
@@ -27,7 +30,12 @@
         停止接收
       </n-button>
     </div>
-
+    <div v-else class="homepage py-20 flex flex-col justify-center items-center">
+      <img
+        src="@/assets/logo.png"
+        alt=""
+      />
+    </div>
     <div class="footer">
       <Send
         class="w-full"

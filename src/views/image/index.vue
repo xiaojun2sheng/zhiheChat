@@ -1,6 +1,6 @@
 <template>
   <div class="common_page flex gap-2">
-    <div class="w-[400px] shrink-0">
+    <div class="w-[400px] shrink-0 overflow-auto">
       <n-tabs type="line" v-model:value="activeName" animated>
         <n-tab-pane name="text" tab="生成图片">
           <Panel icon="flat-color-icons:idea" title="创意描述">

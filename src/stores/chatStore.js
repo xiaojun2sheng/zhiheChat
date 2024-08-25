@@ -60,6 +60,9 @@ export const useChatStore = defineStore({
       }
       this.chatList.push(item)
       localStorage.setItem("chatbot-chat-list", JSON.stringify(this.chatList))
+      this.setChat(item)
+      this.initMessage(item.id)
+      return item
     },
     updateChatItem(data) {
       const t = this.chatList.find((item) => item.id === this.chat.id)
@@ -77,7 +80,7 @@ export const useChatStore = defineStore({
       $message.success("操作成功")
     },
     setChat(data) {
-      this.chatId = data.id
+      this.chatId = data?.id
       this.chatInfo = convertChat(data) || {}
       function convertChat(data = {}) {
         return {

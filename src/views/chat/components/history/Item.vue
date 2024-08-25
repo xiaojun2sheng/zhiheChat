@@ -32,7 +32,7 @@ const selectChat = async () => {
   router.push({ name: "chat", params: { id: props.item.id } })
   chatStore.setHistory(false)
   chatStore.initMessage(props.item.id)
-  positionDomViewBottom()
+//   positionDomViewBottom()
 }
 
 const options = ref([{ label: "删除", key: "delete" }])

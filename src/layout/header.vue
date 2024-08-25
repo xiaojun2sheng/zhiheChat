@@ -28,9 +28,13 @@
       @click="switchTheme"
     ></SvgIcon> -->
     <UserCenter></UserCenter>
-    <n-dropdown v-if="userStore.isLogin" trigger="hover" :options="options" @select="handleSelect">
+    <n-dropdown
+      v-if="userStore.isLogin"
+      trigger="hover"
+      :options="options"
+      @select="handleSelect"
+    >
       <SvgIcon
-        
         class="ml-2"
         :width="35"
         :height="35"
@@ -140,6 +144,11 @@ const handleSelect = async (key) => {
   }
   .menulist {
     width: calc(100% - 200px);
+  }
+}
+:deep(.n-tabs) {
+  .n-tabs-nav-scroll-content {
+    border-bottom: none !important;
   }
 }
 </style>

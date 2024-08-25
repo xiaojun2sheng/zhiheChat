@@ -1,8 +1,8 @@
 <template>
   <div class="send-box flex flex-col">
-    <div class="tools">
+    <!-- <div class="tools">
       <Tag></Tag>
-    </div>
+    </div> -->
     <NInput
       type="textarea"
       :style="{
@@ -17,15 +17,18 @@
       :placeholder="placeholder"
       @keydown.enter="submit"
     ></NInput>
-    <div class="footer">
-      <SvgIcon
-        :width="20"
-        :height="20"
-        hover
-        :icon="running ? 'eos-icons:three-dots-loading' : 'ion:send'"
-        :disabled="running"
-        @click="submit"
-      ></SvgIcon>
+    <div class="footer w-full">
+      <div></div>
+      <div class="py-2">
+        <SvgIcon
+          :width="20"
+          :height="20"
+          hover
+          :icon="running ? 'eos-icons:three-dots-loading' : 'ion:send'"
+          :disabled="running"
+          @click="submit"
+        ></SvgIcon>
+      </div>
     </div>
   </div>
 </template>
@@ -82,19 +85,7 @@ watch(
     if (running.value) emit("change", val)
   }
 )
-// 监听消息配置
-// watch(
-//   () => sendOptions.value,
-//   (data) => {
-//     chatStore.setSendOptions(data)
-//   },
-//   { immediate: true, deep: true }
-// )
 
-// 模型切换
-const modelSelect = (val) => {
-  sendOptions.value.model = val
-}
 
 // 上传成功更新文件列表，插入chat对象
 const uploadSuccess = (file) => {
@@ -109,6 +100,8 @@ const submit = async (e) => {
     return
   }
   if (running.value || !sendContent.value) return
+  // 首页问答需要先新增
+  chatStore.createChat()
   emit("on-before", sendContent.value)
   setTimeout(() => {
     setContent("")
@@ -147,11 +140,6 @@ defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
 </script>
 <style lang="scss" scoped>
 .send-box {
-  // box-sizing: border-box;
-  // height: 170px;
-  // padding-bottom: 10px;
-  // border-top: 1px solid #2d2d2d;
-
   position: relative;
   border: 1px solid #595965;
   overflow: hidden;
@@ -167,7 +155,10 @@ defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
     align-items: center;
   }
   .footer {
-    align-self: end;
+    padding: 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 :deep(.n-input) {

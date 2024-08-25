@@ -18,7 +18,7 @@ export const useFile = (emit) => {
     }
   }
 
-  const loading = ref(true)
+  const loading = ref(false)
   const onUploading = (data) => {
     loading.value = data
   }

@@ -49,9 +49,7 @@ import { useChatStore } from "@/stores"
 import ChatItem from "./Item.vue"
 
 const chatStore = useChatStore()
-onMounted(() => {
-  chatStore.initChat()
-})
+onMounted(() => {})
 
 const filter = ref("")
 const filterList = computed(() => {

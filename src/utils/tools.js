@@ -1,6 +1,7 @@
-export const positionDomViewBottom = (className = '_message_list') => {
+export const positionDomViewBottom = (className = "_message_list") => {
   setTimeout(() => {
     let container = document.getElementsByClassName(className)[0]
+    if (!container) return
     container.scrollTop = container.scrollHeight
   })
 }

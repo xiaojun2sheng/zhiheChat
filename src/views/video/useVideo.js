@@ -79,20 +79,26 @@ export const useVideo = (url) => {
         ? res?.creations[0]
         : res?.data?.works[0]?.resource?.resource
     if (creation) {
-      if (creation.task_id) {
+      if (videoSetting.model === "vidu") {
+        const creation = res?.creations[0]
         creation.taskId = creation.task_id
         creation.creationId = creation.id
         videoInfo.value = creation
-      } else {
-        videoInfo.value = {
-          uri: creation,
-        }
+      }
+      if (videoSetting.model === "kling") {
+        const videoUrl = res?.data?.works[0]?.resource?.resource
+        const coverUrl = res?.data?.works[0]?.cover?.resource
+        videoUrl &&
+          (videoInfo.value = {
+            uri: videoUrl,
+            cover_uri: coverUrl,
+          })
       }
 
       addHistory({
         videoPrompt: videoPrompt.value,
         uploadImage: uploadImage.value,
-        ...creation,
+        uri: videoInfo.value.uri,
       })
       window.$message.success("视频生成成功")
       clearInterval(intervalId.value)

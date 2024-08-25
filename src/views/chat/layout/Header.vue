@@ -2,7 +2,7 @@
   <div class="header flex justify-between items-center">
     <span></span>
     <div class="flex gap-4">
-      <span>{{ chatStore.chatInfo?.title }} </span>
+      <span>{{ chatStore.chatInfo?.title?.substring(0, 20) }} </span>
     </div>
     <div class="" @click="showPanel">
       <SvgIcon
@@ -37,6 +37,7 @@ const showPanel = () => {
   left: 0;
   min-width: 375px;
   z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   .mask {
     pointer-events: none;
     position: absolute;
@@ -46,7 +47,7 @@ const showPanel = () => {
     z-index: 100;
     background: linear-gradient(
       180deg,
-      #0A0F18 0%,
+      #0a0f18 0%,
       rgba(243, 245, 249, 0) 100%
     );
   }
