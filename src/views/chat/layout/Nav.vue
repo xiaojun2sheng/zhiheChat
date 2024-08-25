@@ -69,7 +69,7 @@ const handleSelect = (key) => {
 }
 
 const newChat = () => {
-  chatStore.createChat()
+  router.push("/chat")
   chatStore.setHistory(false)
 }
 const toMarket = () => {
