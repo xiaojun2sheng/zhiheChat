@@ -6,7 +6,7 @@
       和 火宝 聊天时，随时@fire+，召唤你的私人助理
     </div>
     <div class="flex flex-wrap gap-2">
-      <Item v-for="item in 10"></Item>
+      <Item></Item>
     </div>
   </div>
 </template>

@@ -66,7 +66,7 @@ export const useChatStore = defineStore({
       localStorage.setItem("chatbot-chat-list", JSON.stringify(this.chatList))
       this.setChat(item)
       this.initMessage(item.id)
-      return item
+      return item.id
     },
     updateChatItem(data) {
       const t = this.chatList.find((item) => item.id === this.chat.id)
@@ -105,7 +105,6 @@ export const useChatStore = defineStore({
       this.messageList = map[id]?.filter((t) => t.content) || []
     },
     addMessage(val) {
-      debugger
       if (this.messageList.length == 0) {
         this.updateChatItem({
           name: val,

@@ -16,7 +16,9 @@
 }
 
 .content {
-  p {
+  display: flex;
+  flex-direction: column;
+  * {
     white-space: break-spaces;
   }
   pre {

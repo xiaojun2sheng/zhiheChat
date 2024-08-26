@@ -1,5 +1,5 @@
 <template>
-  <div class="header flex justify-between items-center">
+  <div class="header flex justify-between items-center shrink-0">
     <span></span>
     <div class="flex gap-4">
       <span>{{ chatStore.chatInfo?.title?.substring(0, 20) }} </span>

@@ -1,7 +1,7 @@
 <template>
   <div class="chat h-full w-full flex">
     <Nav></Nav>
-    <div class="main h-full w-full">
+    <div class="main h-full w-full flex flex-col">
       <Header v-if="chatStore.navType === '1'"></Header>
       <div class="chat-content flex-1 w-full h-full">
         <ChatContainer v-if="chatStore.navType === '1'"></ChatContainer>
@@ -31,7 +31,8 @@ onMounted(() => {
   .chat-content {
     transition: all 0.2s ease;
     margin: 0 auto;
-    // height: calc(100% - 50px);
+    height: calc(100% - 46px);
+    padding-bottom: 10px;
     max-width: 792px;
   }
 }

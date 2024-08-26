@@ -51,13 +51,14 @@
 
 <script setup>
 import { ref, watchEffect, onMounted, onUnmounted } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { NButton } from "naive-ui"
 import Send from "./Send.vue"
 import MsgItem from "./MsgItem.vue"
 import { positionDomViewBottom } from "@/utils"
 import { useChatStore } from "@/stores"
 
+const router = useRouter()
 const route = useRoute()
 const chatStore = useChatStore()
 
@@ -72,10 +73,14 @@ const selectPrompt = (val) => {
   sendRef.value.setContent(val)
 }
 
-const beforeSend = (val) => {
+let newId = ""
+const beforeSend = async (val) => {
   // 首页问答需要先新增
-  const { id } = route.params
-  !id && chatStore.createChat()
+  let { id } = route.params
+  if (!id) {
+    id = chatStore.createChat()
+    newId = id
+  }
   chatStore.addMessage(val)
   positionDomViewBottom()
 }
@@ -84,10 +89,10 @@ const onError = () => {
 }
 const endSend = () => {
   chatStore.updateLastMessage("", "success")
+  newId && router.push({ name: "chat", params: { id: newId } })
 }
 
 const msgChange = (val) => {
-  debugger
   chatStore.updateLastMessage(val)
   positionDomViewBottom()
 }
@@ -115,7 +120,7 @@ onUnmounted(() => {
     overflow: auto;
   }
   .footer {
-    height: 160px;
+    max-height: 145px;
   }
 }
 </style>

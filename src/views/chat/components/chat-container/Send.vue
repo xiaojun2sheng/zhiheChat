@@ -11,13 +11,13 @@
       }"
       v-model:value="sendContent"
       maxlength="500"
-      :autosize="{ minRows: 2, maxRows: 2 }"
+      :autosize="{ minRows: 2, maxRows: 4 }"
       :placeholder="placeholder"
       @keydown.enter="submit"
     ></NInput>
-    <div class="footer w-full">
+    <div class="footer w-full px-3 pb-2">
       <div></div>
-      <div class="py-2 flex gap-2">
+      <div class=" flex gap-2">
         <n-tooltip trigger="hover">
           <template #trigger>
             <div class="item" @click="upload">
@@ -155,7 +155,6 @@ defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
   background-color: #3a3a44;
 
   .footer {
-    padding: 0 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
