@@ -89,7 +89,10 @@ const onError = () => {
 }
 const endSend = () => {
   chatStore.updateLastMessage("", "success")
-  newId && router.push({ name: "chat", params: { id: newId } })
+  if (newId) {
+    router.push({ name: "chat", params: { id: newId } })
+    newId = undefined
+  }
 }
 
 const msgChange = (val) => {
