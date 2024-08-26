@@ -30,7 +30,7 @@
 
         <n-tooltip trigger="hover">
           <template #trigger>
-            <div class="item" @click="chatStore.setHistory(true)">
+            <div class="item" @click="chatStore.setNavType('2')">
               <SvgIcon
                 :width="25"
                 :height="25"
@@ -81,10 +81,11 @@ const handleSelect = (key) => {
 
 const newChat = () => {
   router.push("/chat")
-  chatStore.setHistory(false)
+  chatStore.setNavType('1')
 }
 const toMarket = () => {
-  router.push("/robot-market")
+  chatStore.setNavType('3')
+  // router.push("/robot-market")
 }
 </script>
 <style lang="scss">

@@ -2,10 +2,11 @@
   <div class="chat h-full w-full flex">
     <Nav></Nav>
     <div class="main h-full w-full">
-      <Header v-if="!chatStore.isHistory"></Header>
+      <Header v-if="chatStore.navType === '1'"></Header>
       <div class="chat-content flex-1 w-full h-full">
-        <ChatContainer v-if="!chatStore.isHistory"></ChatContainer>
-        <History v-else></History>
+        <ChatContainer v-if="chatStore.navType === '1'"></ChatContainer>
+        <History v-if="chatStore.navType === '2'"></History>
+        <Agents v-if="chatStore.navType === '3'"></Agents>
       </div>
     </div>
   </div>
@@ -15,6 +16,7 @@ import Nav from "./layout/Nav.vue"
 import Header from "./layout/Header.vue"
 import ChatContainer from "./components/chat-container/index.vue"
 import History from "./components/history/index.vue"
+import Agents from "./components/agents/index.vue"
 import { useChatStore } from "@/stores"
 import { onMounted } from "vue"
 

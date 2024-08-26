@@ -14,3 +14,14 @@
   //   overflow-y: scroll;
   // }
 }
+
+.content {
+  p {
+    white-space: break-spaces;
+  }
+  pre {
+    code {
+      white-space: break-spaces;
+    }
+  }
+}

@@ -12,6 +12,7 @@ export const useChatStore = defineStore({
       messageList: [], // 当前聊天信息
       chatInfo: {}, // 当前聊天信息
       isHistory: false, // 是否是历史记录
+      navType: "1", // 1 chat 2 histort 3 agents
       sendOptions: {
         model: "qwen-turbo",
       }, // 发送的配置信息
@@ -23,6 +24,9 @@ export const useChatStore = defineStore({
     },
   },
   actions: {
+    setNavType(type) {
+      this.navType = type
+    },
     setHistory(isHistory) {
       this.isHistory = isHistory
     },

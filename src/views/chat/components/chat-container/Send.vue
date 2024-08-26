@@ -1,8 +1,6 @@
 <template>
   <div class="send-box flex flex-col">
-    <!-- <div class="tools">
-      <Tag></Tag>
-    </div> -->
+    <Plugins></Plugins>
     <NInput
       type="textarea"
       :style="{
@@ -13,7 +11,7 @@
       }"
       v-model:value="sendContent"
       maxlength="500"
-      :autosize="{ minRows: 2, maxRows: 4 }"
+      :autosize="{ minRows: 2, maxRows: 2 }"
       :placeholder="placeholder"
       @keydown.enter="submit"
     ></NInput>
@@ -53,7 +51,7 @@ import { ref, watch, computed } from "vue"
 import { useSend } from "@/hooks/useSend"
 import { useChatStore, useAppStore } from "@/stores"
 import { isPhone } from "@/utils"
-import Tag from "./Tag.vue"
+import Plugins from "./Plugins.vue"
 
 const list = ref([])
 const appStore = useAppStore()
@@ -73,6 +71,7 @@ const sendContent = ref("")
 const showUpload = computed(
   () => chatStore.tabIndex == 1 && sendOptions.value.model.includes("kimi")
 )
+
 const showFile = computed(() => showUpload.value && chatStore.chat.file)
 const fileId = computed(() => {
   if (chatStore.tabIndex == 2) {
@@ -106,6 +105,7 @@ const upload = (file) => {
 
 // 消息发送 ctrl + enter 换行
 const submit = async (e) => {
+  if (e.shiftKey) return
   if (running.value || !sendContent.value) return
 
   emit("on-before", sendContent.value)
@@ -154,13 +154,6 @@ defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
   box-shadow: none;
   background-color: #3a3a44;
 
-  .tools {
-    display: flex;
-    gap: 10px;
-    padding: 12px 16px 4px 12px;
-    display: flex;
-    align-items: center;
-  }
   .footer {
     padding: 0 12px;
     display: flex;

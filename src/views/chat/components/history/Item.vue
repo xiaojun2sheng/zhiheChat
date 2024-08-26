@@ -30,7 +30,7 @@ const props = defineProps({
 const selectChat = async () => {
   chatStore.setChat(props.item)
   router.push({ name: "chat", params: { id: props.item.id } })
-  chatStore.setHistory(false)
+  chatStore.setNavType('1')
   chatStore.initMessage(props.item.id)
 //   positionDomViewBottom()
 }

@@ -12,6 +12,7 @@ export const useAppStore = defineStore({
         { key: "glm-4", label: "glm-4" },
         { key: "glm-4-flash", label: "glm-4-flash" },
         { key: "glm-4-9b-chat", label: "glm-4-9b-chat" },
+        { key: "prompter", label: "prompter" },
         ,
       ], // 内置模型
       currentChatModel: "glm-3-turbo",

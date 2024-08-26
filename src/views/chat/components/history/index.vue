@@ -2,7 +2,7 @@
   <div class="history px-4 h-full flex flex-col">
     <div
       class="close w-[35px] h-[35px] absolute top-[80px] left-[20px] flex justify-center items-center rounded-md cursor-pointer"
-      @click="chatStore.setHistory(false)"
+      @click="chatStore.setNavType('1')"
     >
       <SvgIcon
         :width="25"

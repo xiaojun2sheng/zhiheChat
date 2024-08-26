@@ -64,15 +64,19 @@ export const useVideo = (url) => {
   }
 
   let videoInfo = ref()
+  let queryTasking = ref(false)
   const getVideoInfo = async () => {
     if (!generating.value && videoInfo.value.taskId) return
-
+    if (queryTasking.value) return
+    queryTasking.value = true
     const res = await getTaskById(videoInfo.value.taskId).catch((err) => {
       generating.value = false
+      queryTasking.value = false
       localStorage.setItem("chatbot-video-generating-id", "")
       clearInterval(intervalId.value)
     })
     console.log("getVideoInfo res", res)
+    queryTasking.value = false
     if (!generating.value) return
     const creation =
       videoSetting.model === "vidu"

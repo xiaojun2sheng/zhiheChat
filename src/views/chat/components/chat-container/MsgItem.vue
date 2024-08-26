@@ -123,10 +123,12 @@ const handlerAction = (type) => {
       word-break: break-all;
       min-height: 37px;
       min-width: 60px;
+      white-space: pre;
+      display: inline-flex;
     }
     &.msg-item__left {
       align-self: flex-start;
-      z-index: -1;
+      // z-index: -1;
     }
     &.msg-item__right {
       align-self: flex-end;
