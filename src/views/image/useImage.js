@@ -28,16 +28,20 @@ export const useImage = (url) => {
       generateFaces()
       return
     }
-    loading.value = true
-    imageUrls.value = []
-    if (sourceImage.value?.url) {
-      imageSetting.value.url = sourceImage.value.url
+    try {
+      loading.value = true
+      imageUrls.value = []
+      if (sourceImage.value?.url) {
+        imageSetting.value.url = sourceImage.value.url
+      }
+      let res = await generateImageTask(imageSetting.value)
+      imageUrls.value = res.data || []
+      loading.value = false
+      addHistory(res.data)
+      initHistory()
+    } catch (error) {
+      loading.value = false
     }
-    let res = await generateImageTask(imageSetting.value)
-    imageUrls.value = res.data || []
-    loading.value = false
-    addHistory(res.data)
-    initHistory()
   }
 
   const addHistory = async (images) => {

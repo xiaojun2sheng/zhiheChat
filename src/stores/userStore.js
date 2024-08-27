@@ -16,5 +16,11 @@ export const useUserStore = defineStore({
     setLogin(isLogin) {
       this.isLogin = isLogin
     },
+    setUser(data) {
+      this.user = data
+    },
+    setAccountToken(data) {
+      this.account.token = data
+    },
   },
 })

@@ -1,6 +1,8 @@
 <template>
   <div class="agents w-full h-full flex flex-col items-center">
-    <div class="banner"></div>
+    <div class="banner">
+      <img src="@/assets/chat-plus-bg.jpg" />
+    </div>
     <div class="content">
       👋 大家好，这里是 火宝 的新朋友们 <br />
       和 火宝 聊天时，随时@fire+，召唤你的私人助理

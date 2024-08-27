@@ -34,13 +34,16 @@
       :options="options"
       @select="handleSelect"
     >
-      <SvgIcon
-        class="ml-2"
-        :width="35"
-        :height="35"
-        hover
-        icon="mingcute:user-4-fill"
-      ></SvgIcon>
+      <div class="flex gap-2 items-center">
+        <SvgIcon
+          class="ml-2"
+          :width="35"
+          :height="35"
+          hover
+          icon="mingcute:user-4-fill"
+        ></SvgIcon>
+        <span>{{ userStore.user.nickName }}</span>
+      </div>
     </n-dropdown>
     <n-button
       v-if="!userStore.isLogin"
@@ -62,6 +65,7 @@ import UserCenter from "./userCenter.vue"
 import LoginPopup from "@/components/login-popup/index.vue"
 import { useAppStore, useUserStore } from "@/stores"
 import { useLogin } from "@/hooks/useLogin"
+import { useUser } from "@/hooks/useUser"
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -69,6 +73,7 @@ const router = useRouter()
 const route = useRoute()
 const loginRef = ref()
 
+const { initUser } = useUser()
 const { toLogout } = useLogin()
 
 const menuList = [
@@ -80,7 +85,7 @@ const menuList = [
   { title: "提示词工厂", id: "6", url: "/robot-market" },
   { title: "工具箱", id: "7", url: "/tools" },
   // { title: "提示词优化", id: "6", url: "/betterPrompt" },
-  // { title: "账户", id: "7", url: "/payment" },
+  { title: "账户", id: "8", url: "/payment" },
 ]
 
 const tabName = computed(() => {
@@ -99,7 +104,7 @@ onMounted(() => {
   setTimeout(() => {
     getMenuActice()
   }, 1000)
-  // loginRef.value.show()
+  initUser()
 })
 const getMenuActice = () => {
   let menuItem = menuList.find((item) => {

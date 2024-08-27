@@ -3,6 +3,8 @@ export * from "./chat-stream"
 export * from "./video"
 export * from "./image"
 export * from "./login"
+export * from "./user"
+export * from "./pay"
 console.log("import.meta.env.", import.meta.env)
 const isENV = import.meta.env.DEV
 const commonPrefix = isENV ? "/commonapi" : "https://api.chatfire.cn"

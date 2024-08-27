@@ -1,4 +1,5 @@
 import { login, logout, register } from "@/api/login"
+import { queryUser } from "@/api/user"
 import { useUserStore } from "@/stores/userStore"
 
 export const useLogin = () => {
