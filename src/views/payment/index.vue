@@ -48,7 +48,12 @@
         确认支付
       </n-button>
     </div>
-    <canvas id="codeCanvas"></canvas>
+    <div v-show="codeSuccess">
+      <canvas id="codeCanvas"></canvas>
+      <n-button class="mt-4 shadow-sm w-full" type="primary" @click="initAccount">
+        已支付(点击刷新)
+      </n-button>
+    </div>
   </div>
 </template>
 
@@ -58,7 +63,7 @@ import { useUserStore } from "@/stores"
 import { usePay } from "./usePay"
 
 const userStore = useUserStore()
-const { total, currentPackage, packages, pay, selectPrice } = usePay()
+const { codeSuccess, total, currentPackage, packages, initAccount, pay, selectPrice } = usePay()
 </script>
 
 <style lang="scss" scoped>

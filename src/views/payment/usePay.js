@@ -80,6 +80,7 @@ export const usePay = () => {
   }
 
   const pay = async () => {
+    codeSuccess.value = false
     const url = await createOrderById(currentPackage.value.id)
     drawCodeImage(url)
   }
@@ -90,30 +91,14 @@ export const usePay = () => {
     packages.value[0].checked = true
   }
 
+  const codeSuccess = ref(false)
   const drawCodeImage = (qrcodeUrl) => {
     const canvas = document.getElementById("codeCanvas")
-    debugger
     QRCode.toCanvas(canvas, qrcodeUrl, function (error) {
       if (error) console.error(error)
       console.log("success!")
+      codeSuccess.value = true
     })
-    // return new Promise((resolve) => {
-    //   debugger
-    //   // 生成中空的二维码
-    //   setTimeout(() => {
-    //     let codeCanvas = document.getElementById("codeCanvas")
-    //     codeCanvas.width = 200
-    //     codeCanvas.height = 200
-    //     let ctx = codeCanvas.getContext("2d")
-    //     // 二维码中间logo
-    //     var img = new Image(200, 200)
-    //     img.src = qrcodeUrl
-    //     img.onload = function () {
-    //       ctx.drawImage(img, 0, 0, 200, 200)
-    //       resolve()
-    //     }
-    //   }, 500)
-    // })
   }
 
   onMounted(() => {
@@ -123,9 +108,11 @@ export const usePay = () => {
 
   return {
     total,
+    codeSuccess,
     packages,
     currentPackage,
     pay,
+    initAccount,
     drawCodeImage,
     selectPrice,
   }
