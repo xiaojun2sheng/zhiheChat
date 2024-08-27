@@ -14,6 +14,7 @@ export const useImage = (url) => {
     prompt: "",
     n: 1,
     size: "1024x1024",
+    url: "",
   })
 
   const loading = ref(false)
@@ -29,6 +30,9 @@ export const useImage = (url) => {
     }
     loading.value = true
     imageUrls.value = []
+    if (sourceImage.value?.url) {
+      imageSetting.value.url = sourceImage.value.url
+    }
     let res = await generateImageTask(imageSetting.value)
     imageUrls.value = res.data || []
     loading.value = false
@@ -90,15 +94,20 @@ export const useImage = (url) => {
   }
 
   const intervalCode = ref("")
+  const queryTasking = ref(false)
   const getTaskInterval = async (id) => {
     intervalCode.value = setInterval(async () => {
-      if (loading.value) return
+      if (queryTasking.value) return
+      queryTasking.value = true
       const res = await getTaskById(id).catch(() => {
+        loading.value = false
+        queryTasking.value = false
         clearInterval(intervalCode.value)
         localStorage.setItem("chatbot-image-generating-id", "")
       })
       if (res?.imageUrl) {
         loading.value = false
+        queryTasking.value = false
         imageUrls.value = [{ url: res.imageUrl }]
 
         addHistory(imageUrls.value)

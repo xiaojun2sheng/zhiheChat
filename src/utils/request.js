@@ -43,6 +43,10 @@ instance.interceptors.response.use(
     } catch (error) {
       if (res.config.responseType === "stream") code = 200
     }
+    // 适配语音
+    if (res?.data instanceof Blob) {
+      return res.data
+    }
     if (code === 200) {
       return res.data?.data || res.data
     } else {

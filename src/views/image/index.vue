@@ -132,7 +132,7 @@
                 <n-image
                   width="240"
                   :preview-disabled="true"
-                  :src="item[0]?.url"
+                  :src="item?.[0]?.url"
                   @click="selectHistory(item)"
                 />
                 <SvgIcon
