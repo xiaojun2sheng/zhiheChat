@@ -16,7 +16,11 @@ export const useSend = () => {
       onDownloadProgress: (event) => {
         const chunk = event.event.target.responseText
         console.log("输出中", chunk)
-        if (chunk.includes("{") && chunk.includes("}")) {
+        if (
+          chunk.startsWith("{") &&
+          chunk.includes("{") &&
+          chunk.includes("}")
+        ) {
           try {
             const { msg } = JSON.parse(chunk)
             content.value = msg
