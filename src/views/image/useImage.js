@@ -48,8 +48,8 @@ export const useImage = (url) => {
     const json = localStorage.getItem("chatbot-image-history") || "[]"
     let historys = JSON.parse(json)
     historys.push(images)
-    historyImgs.value = images
     localStorage.setItem("chatbot-image-history", JSON.stringify(historys))
+    initHistory()
   }
 
   const historyImgs = ref([])
@@ -89,6 +89,7 @@ export const useImage = (url) => {
       return
     }
     loading.value = true
+    imageUrls.value = []
     const { id } = await generateFaceswap({
       sourceUrl: sourceImage.value.url,
       targetUrl: targetImage.value.url,
