@@ -16,17 +16,10 @@
         <p class="title flex gap-2">
           <img class="shrink-0" src="@/assets/wx.png" />
           请用微信扫码支付金额:
-          <span class="dollar">¥</span><span class="v">{{order.amount}}</span> 元
+          <span class="dollar">¥</span
+          ><span class="v">{{ order.amount }}</span> 元
         </p>
-        <p class="desc clickable">
-          支付即视您已同意
-          <a
-            href="/docs/payment-policy"
-            target="_blank"
-            style="margin-left: 0px"
-            >《火宝AI付费服务协议》</a
-          >
-        </p>
+        <p class="desc clickable">支付即视您已同意《火宝AI付费服务协议》 ></p>
       </div>
     </div>
   </NModal>
