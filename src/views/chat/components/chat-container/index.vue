@@ -37,7 +37,7 @@
       <img src="@/assets/logo.png" alt="" />
     </div>
     <div class="footer">
-      <AgentPanel ref="agentPanelRef"></AgentPanel>
+      <!-- <AgentPanel ref="agentPanelRef"></AgentPanel> -->
       <Send
         class="w-full"
         ref="sendRef"
