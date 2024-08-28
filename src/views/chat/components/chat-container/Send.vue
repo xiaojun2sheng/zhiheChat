@@ -66,27 +66,7 @@ const emit = defineEmits([
   "on-error",
 ])
 const sendContent = ref("")
-
-// kimi 才支持文件解析
-const showUpload = computed(
-  () => chatStore.tabIndex == 1 && sendOptions.value.model.includes("kimi")
-)
-
-const showFile = computed(() => showUpload.value && chatStore.chat.file)
-const fileId = computed(() => {
-  if (chatStore.tabIndex == 2) {
-    return chatStore.chat.id
-  } else {
-    return chatStore.chat.file?.id || ""
-  }
-})
-
 const placeholder = computed(() => "传递的你的想法")
-
-const sendOptions = ref({
-  model: "kimi-all",
-  temperature: 0.7,
-})
 
 // 监听消息响应
 watch(
@@ -143,7 +123,7 @@ const shortcut = (val) => {
   submit()
 }
 
-defineExpose({ shortcut, setContent, sendOptions, handleStop, running })
+defineExpose({ shortcut, setContent, handleStop, running })
 </script>
 <style lang="scss" scoped>
 .send-box {

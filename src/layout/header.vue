@@ -34,16 +34,7 @@
       :options="options"
       @select="handleSelect"
     >
-      <div class="flex gap-2 items-center">
-        <SvgIcon
-          class="ml-2"
-          :width="35"
-          :height="35"
-          hover
-          icon="mingcute:user-4-fill"
-        ></SvgIcon>
-        <span>{{ userStore.user.nickName }}</span>
-      </div>
+      <n-avatar class="mx-2" round size="small" :src="Avatar" />
     </n-dropdown>
     <n-button
       v-if="!userStore.isLogin"
@@ -59,13 +50,15 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue"
+import { onMounted, ref, computed, h } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import UserCenter from "./userCenter.vue"
 import LoginPopup from "@/components/login-popup/index.vue"
 import { useAppStore, useUserStore } from "@/stores"
 import { useLogin } from "@/hooks/useLogin"
 import { useUser } from "@/hooks/useUser"
+import Avatar from "@/assets/avatar-g.png"
+import { NAvatar, NText, useMessage } from "naive-ui"
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -121,10 +114,46 @@ const switchTheme = () => {
 
 const options = ref([
   {
+    key: "header",
+    type: "render",
+    render: renderCustomHeader,
+  },
+  {
+    key: "header-divider",
+    type: "divider",
+  },
+  {
     label: "退出登录",
     key: "logout",
   },
 ])
+function renderCustomHeader() {
+  return h(
+    "div",
+    {
+      class: "flex items-center px-3 py-2",
+    },
+    [
+      h(NAvatar, {
+        round: true,
+        class: "mr-3",
+        src: Avatar,
+      }),
+      h("div", null, [
+        h("div", null, [
+          h(NText, { depth: 2 }, { default: () => userStore.user?.nickName }),
+          h("div", { style: "font-size: 12px;" }, [
+            h(
+              NText,
+              { depth: 3 },
+              { default: () => "毫无疑问，你是办公室里最亮的仔🌟" }
+            ),
+          ]),
+        ]),
+      ]),
+    ]
+  )
+}
 const handleSelect = async (key) => {
   if (key == "logout") {
     await toLogout()

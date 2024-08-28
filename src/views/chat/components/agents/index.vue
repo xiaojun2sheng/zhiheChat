@@ -7,18 +7,16 @@
       👋 大家好，这里是 火宝 的新朋友们 <br />
       和 火宝 聊天时，随时@fire+，召唤你的私人助理
     </div>
-    <div class="flex flex-wrap gap-2  min-w-[760px]">
-      <Item></Item>
-      <Item></Item>
-      <Item></Item>
-      <Item></Item>
-      <Item></Item>
-      <Item></Item>
+    <div class="flex flex-wrap gap-5 min-w-[760px]">
+      <Item :item="item" v-for="item in agents"></Item>
     </div>
   </div>
 </template>
 <script setup>
+import { useAgent } from "./useAgent"
 import Item from "./Item.vue"
+
+const { agents } = useAgent()
 </script>
 <style lang="scss" scoped>
 .agents {

@@ -13,9 +13,7 @@ export const useChatStore = defineStore({
       chatInfo: {}, // 当前聊天信息
       isHistory: false, // 是否是历史记录
       navType: "1", // 1 chat 2 histort 3 agents
-      sendOptions: {
-        model: "qwen-turbo",
-      }, // 发送的配置信息
+      panelData: {},
     }
   },
   getters: {
@@ -24,6 +22,10 @@ export const useChatStore = defineStore({
     },
   },
   actions: {
+    setPanelData(agent, file) {
+      if (agent) this.panelData.agents = [agent]
+      if (file) this.panelData.files = [file]
+    },
     setNavType(type) {
       this.navType = type
     },
@@ -41,18 +43,9 @@ export const useChatStore = defineStore({
     },
     // chat 相关
     initChat() {
-      const route = useRoute()
-      const router = useRouter()
       const chatListJson = localStorage.getItem("chatbot-chat-list") || "[]"
       const list = JSON.parse(chatListJson)
       this.chatList = list
-      // if (this.chatList.length == 0) this.createChat()
-      // let t = this.chatList[0]
-      // if (route.params.id) {
-      //   t = this.chatList.find((i) => i.id == route.params.id)
-      // }
-      // router.replace(`/chat/${t.id}`)
-      // this.setChat(t)
     },
     createChat() {
       const item = {
@@ -61,6 +54,8 @@ export const useChatStore = defineStore({
         headImg: "",
         lastMsg: "",
         updateTime: "",
+        agentIds: [],
+        fileList: [],
       }
       this.chatList.push(item)
       localStorage.setItem("chatbot-chat-list", JSON.stringify(this.chatList))
@@ -140,10 +135,6 @@ export const useChatStore = defineStore({
       const map = JSON.parse(messageMapJson)
       map[this.chatId] = this.messageList
       localStorage.setItem("chatbot-chat-message-map", JSON.stringify(map))
-    },
-    // 文件相关
-    setSendOptions(data) {
-      this.sendOptions = data
     },
   },
 })

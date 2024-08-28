@@ -55,8 +55,12 @@ const md = markdownit({
   html: false, // 在源码中启用 HTML 标签
   linkify: true, // 将类似 URL 的文本自动转换为链接。
   typographer: true, // 启用一些语言中立的替换 + 引号美化
-  highlight: function (str) {
-    return hljs.highlightAuto(str).value
+  highlight: function (str, lang) {
+    const html = hljs.highlightAuto(str).value
+    const val = `<pre class="code-body">
+        <code class="hljs">${html}</code>
+      </pre>`
+    return val
   },
 })
 

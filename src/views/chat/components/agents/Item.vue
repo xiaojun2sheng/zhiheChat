@@ -1,18 +1,18 @@
 <template>
-  <div class="agent-card">
+  <div class="agent-card" @click="chatStore.setPanelData(item)">
     <div class="card_left">
       <div class="MuiBox-root css-5nczy5">
         <img
-          src="https://kimi-img.moonshot.cn/prod-chat-kimi/avatar/kimiplus/prompt.png"
+          :src="item.avatar"
           alt=""
           style="border-radius: 50%; width: 100%; height: 100%"
         />
       </div>
     </div>
     <div class="card_right">
-      <p class="">提示词专家</p>
-      <p class="my-2">零门槛成为提示词大师，更好地向 火宝 提问</p>
-      <p class="">来自火宝</p>
+      <p class="font-semibold">{{ item.name }}</p>
+      <p class="my-2">{{ item.intro }}</p>
+      <p class="">来自{{ item.creator }}</p>
     </div>
   </div>
 </template>
@@ -20,6 +20,9 @@
 <script setup>
 import { robotList } from "@/utils"
 import { copy } from "@/utils"
+import { useChatStore } from "@/stores"
+
+const chatStore = useChatStore()
 const props = defineProps({
   item: {
     type: Object,
@@ -38,10 +41,10 @@ const list = ref(robotList)
 </script>
 <style lang="scss" scoped>
 .agent-card {
-  max-width: 372px;
+  width: 372px;
   height: 100px;
   background: #31313a;
-  margin-bottom: 12px;
+  // margin-bottom: 12px;
   border-radius: 12px;
   padding: 12px;
   display: flex;
