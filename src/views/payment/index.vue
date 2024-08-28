@@ -1,6 +1,5 @@
 <template>
-  <div class="flex w-full">
-    <div class="payment p-4 w-max">
+    <div class="payment p-4 w-full w-max">
       <h3 class="text-xl mb-4">账户总览</h3>
       <div>
         <span class="label">账户余额：</span>
@@ -48,22 +47,17 @@
         确认支付
       </n-button>
     </div>
-    <div v-show="codeSuccess">
-      <canvas id="codeCanvas"></canvas>
-      <n-button class="mt-4 shadow-sm w-full" type="primary" @click="initAccount">
-        已支付(点击刷新)
-      </n-button>
-    </div>
-  </div>
+      <PayPopup ref="payPopupRef"></PayPopup>
 </template>
 
 <script setup>
 import { ref } from "vue"
 import { useUserStore } from "@/stores"
 import { usePay } from "./usePay"
+import PayPopup from './PayPopup.vue'
 
 const userStore = useUserStore()
-const { codeSuccess, total, currentPackage, packages, initAccount, pay, selectPrice } = usePay()
+const { payPopupRef, total, currentPackage, packages, initAccount, pay, selectPrice } = usePay()
 </script>
 
 <style lang="scss" scoped>

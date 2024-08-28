@@ -3,7 +3,7 @@ import { useUser } from "@/hooks/useUser"
 import { getAccountPackage } from "@/api/pay"
 import { usePayment } from "@/hooks/usePayment"
 // import * as wx from 'path/to/wxjsapi'; // 引入微信JS-SDK
-import QRCode from 'qrcode'
+import QRCode from "qrcode"
 
 export const usePay = () => {
   const { initAccount } = useUser()
@@ -79,26 +79,19 @@ export const usePay = () => {
     }
   }
 
+  const payPopupRef = ref()
   const pay = async () => {
-    codeSuccess.value = false
     const url = await createOrderById(currentPackage.value.id)
-    drawCodeImage(url)
+    payPopupRef.value.show({
+      url,
+      order: currentPackage.value,
+    })
   }
 
   const packages = ref([])
   const initAccountPackage = async () => {
     packages.value = await getAccountPackage()
     packages.value[0].checked = true
-  }
-
-  const codeSuccess = ref(false)
-  const drawCodeImage = (qrcodeUrl) => {
-    const canvas = document.getElementById("codeCanvas")
-    QRCode.toCanvas(canvas, qrcodeUrl, function (error) {
-      if (error) console.error(error)
-      console.log("success!")
-      codeSuccess.value = true
-    })
   }
 
   onMounted(() => {
@@ -108,12 +101,11 @@ export const usePay = () => {
 
   return {
     total,
-    codeSuccess,
+    payPopupRef,
     packages,
     currentPackage,
     pay,
     initAccount,
-    drawCodeImage,
     selectPrice,
   }
 }

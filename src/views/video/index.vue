@@ -2,7 +2,7 @@
   <div class="common_page flex gap-2">
     <div class="w-[400px] shrink-0">
       <n-tabs type="line" v-model:value="activeName" animated>
-        <n-tab-pane name="text" tab="文字生成视频">
+        <n-tab-pane name="text" tab="文字生成视频" display-directive="show">
           <Panel icon="flat-color-icons:idea" title="创意描述">
             <template #content>
               <div class="prompt">
@@ -43,7 +43,7 @@
             </template>
           </Panel>
         </n-tab-pane>
-        <n-tab-pane name="image" tab="图片生成视频">
+        <n-tab-pane name="image" tab="图片生成视频" display-directive="show">
           <Panel icon="flat-color-icons:idea" title="图片创意描述">
             <template #content>
               <div class="base-image">

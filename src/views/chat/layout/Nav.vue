@@ -81,10 +81,10 @@ const handleSelect = (key) => {
 
 const newChat = () => {
   router.push("/chat")
-  chatStore.setNavType('1')
+  chatStore.setNavType("1")
 }
 const toMarket = () => {
-  chatStore.setNavType('3')
+  chatStore.setNavType("3")
   // router.push("/robot-market")
 }
 </script>
