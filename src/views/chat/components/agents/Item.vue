@@ -1,5 +1,5 @@
 <template>
-  <div class="agent-card" @click="chatStore.setPanelData(item)">
+  <div class="agent-card" @click="selectAgent">
     <div class="card_left">
       <div class="MuiBox-root css-5nczy5">
         <img
@@ -38,6 +38,11 @@ const handlerAction = (type, item) => {
 }
 
 const list = ref(robotList)
+
+const selectAgent = () => {
+  chatStore.setPanelData(props.item)
+  chatStore.switchPanel(true)
+}
 </script>
 <style lang="scss" scoped>
 .agent-card {

@@ -13,6 +13,7 @@ export const useChatStore = defineStore({
       chatInfo: {}, // 当前聊天信息
       isHistory: false, // 是否是历史记录
       navType: "1", // 1 chat 2 histort 3 agents
+      panelShow: false,
       panelData: {},
     }
   },
@@ -22,6 +23,9 @@ export const useChatStore = defineStore({
     },
   },
   actions: {
+    switchPanel(data) {
+      this.panelShow = data
+    },
     setPanelData(agent, file) {
       if (agent) this.panelData.agents = [agent]
       if (file) this.panelData.files = [file]

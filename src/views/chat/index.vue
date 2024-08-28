@@ -9,11 +9,13 @@
         <Agents v-if="chatStore.navType === '3'"></Agents>
       </div>
     </div>
+    <Panel ref="panelRef"></Panel>
   </div>
 </template>
 <script setup>
 import Nav from "./layout/Nav.vue"
 import Header from "./layout/Header.vue"
+import Panel from "./layout/Panel.vue"
 import ChatContainer from "./components/chat-container/index.vue"
 import History from "./components/history/index.vue"
 import Agents from "./components/agents/index.vue"

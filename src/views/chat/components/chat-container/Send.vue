@@ -17,7 +17,20 @@
     ></NInput>
     <div class="footer w-full px-3 pb-2">
       <div></div>
-      <div class=" flex gap-2">
+      <div class="flex gap-2">
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <div class="item" @click="selectAgent">
+              <SvgIcon
+                :width="20"
+                :height="20"
+                icon="mdi:robot-excited-outline"
+                color="#fff"
+              ></SvgIcon>
+            </div>
+          </template>
+          选择智能体
+        </n-tooltip>
         <n-tooltip trigger="hover">
           <template #trigger>
             <div class="item" @click="upload">
@@ -76,6 +89,9 @@ watch(
   }
 )
 
+const selectAgent = () => {
+  emit("on-agent")
+}
 // 上传成功更新文件列表，插入chat对象
 const upload = (file) => {
   $message.success("开发中，请期待。。。")

@@ -13,17 +13,15 @@
     </div>
     <div class="mask"></div>
   </div>
-  <Panel ref="panelRef"></Panel>
 </template>
 <script setup>
-import Panel from "./Panel.vue"
 import { useChatStore } from "@/stores"
 
 const chatStore = useChatStore()
 const panelRef = ref()
 
 const showPanel = () => {
-  panelRef.value.switchShow()
+  chatStore.switchPanel(!chatStore.panelShow)
 }
 </script>
 

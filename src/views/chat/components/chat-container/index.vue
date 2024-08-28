@@ -37,6 +37,7 @@
       <img src="@/assets/logo.png" alt="" />
     </div>
     <div class="footer">
+      <AgentPanel ref="agentPanelRef"></AgentPanel>
       <Send
         class="w-full"
         ref="sendRef"
@@ -44,6 +45,7 @@
         @on-before="beforeSend"
         @on-end="endSend"
         @on-error="onError"
+        @on-agent="showAgent"
       ></Send>
     </div>
   </div>
@@ -57,6 +59,7 @@ import Send from "./Send.vue"
 import MsgItem from "./MsgItem.vue"
 import { positionDomViewBottom } from "@/utils"
 import { useChatStore } from "@/stores"
+import AgentPanel from "./AgentPanel.vue"
 
 const router = useRouter()
 const route = useRoute()
@@ -100,6 +103,11 @@ const msgChange = (val) => {
   positionDomViewBottom()
 }
 
+const agentPanelRef = ref()
+const showAgent = () => {
+  agentPanelRef.value.show()
+}
+
 let handleStop
 onMounted(() => {
   console.log("加载")
@@ -123,6 +131,7 @@ onUnmounted(() => {
     overflow: auto;
   }
   .footer {
+    position: relative;
     max-height: 145px;
   }
 }

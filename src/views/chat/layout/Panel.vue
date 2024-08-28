@@ -12,11 +12,12 @@
           :width="25"
           :height="25"
           icon="mingcute:close-line"
-          @click="open = false"
+          @click="chatStore.switchPanel(false)"
         ></SvgIcon>
       </span>
       <div class="p-4">
-        <div class="agent-box">
+        <div class="agent-box mb-4">
+          <p class="leading-7 text-base mb-2 font-semibold">火宝 +</p>
           <div
             class="agent-bg"
             v-for="agent in agents"
@@ -30,36 +31,32 @@
           </div>
         </div>
         <div class="file-box">
-          <template>
+          <p class="leading-7 text-base mb-2 font-semibold">会话中的文件</p>
+          <template v-if="files?.length > 0">
             <div class="file" v-for="file in files"></div>
           </template>
+          <div v-else class="empty-block">
+            <img src="@/assets/file-empty.png" alt="" width="92" height="60" />
+            <div class="intro">本轮会话暂无文件</div>
+            <div class="des text-center text-xs">
+              支持的文件格式：PDF、Word 文档（DOC、DOCX）、Excel
+              表格（XLSX）、PPT（PPT、PPTX）、TXT、CSV、MD。
+            </div>
+          </div>
         </div>
-        <h2>敬请期待</h2>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, watch } from "vue"
 import { useChatStore } from "@/stores"
 
 const chatStore = useChatStore()
-const open = ref(false)
 
 const agents = computed(() => chatStore.panelData?.agents)
 const files = computed(() => chatStore.panelData?.files)
-
-const show = () => {
-  open.value = !open.value
-}
-const close = () => {
-  open.value = false
-}
-
-const switchShow = () => {
-  open.value = !open.value
-}
-defineExpose({ switchShow, show, close })
+const open = computed(() => chatStore.panelShow)
 </script>
 <style lang="scss">
 .side-panel {
@@ -105,6 +102,24 @@ defineExpose({ switchShow, show, close })
         rgba(49, 49, 58, 0.86) 34.85%,
         #31313a 44.47%
       );
+    }
+  }
+  .file-box {
+    .file {
+      width: 100%;
+      height: 100px;
+      background: #31313a;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .empty-block {
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      border-radius: 12px;
+      border: 1px dashed #45454e;
     }
   }
 }
