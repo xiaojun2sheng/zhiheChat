@@ -109,16 +109,16 @@ export const useImage = (url) => {
         clearInterval(intervalCode.value)
         localStorage.setItem("chatbot-image-generating-id", "")
       })
+      queryTasking.value = false
       if (res?.imageUrl) {
         loading.value = false
-        queryTasking.value = false
         imageUrls.value = [{ url: res.imageUrl }]
 
         addHistory(imageUrls.value)
         clearInterval(intervalCode.value)
         localStorage.setItem("chatbot-image-generating-id", "")
       }
-    }, 10000)
+    }, 5000)
   }
   onMounted(() => {
     initHistory()
