@@ -69,6 +69,19 @@
               </div>
             </template>
           </Panel>
+          <Panel icon="flat-color-icons:settings" title="参数设置">
+            <template #content>
+              <div>
+                <span>设置模型：</span>
+                <div class="prompt">
+                  <n-select
+                    v-model:value="videoSetting.model"
+                    :options="modelOptions"
+                  />
+                </div>
+              </div>
+            </template>
+          </Panel>
         </n-tab-pane>
       </n-tabs>
       <div class="flex justify-end mt-2 gap-4">

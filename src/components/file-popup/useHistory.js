@@ -8,11 +8,12 @@ export const useHistory = (emit) => {
         localStorage.getItem("chatbot-image-history") || "[]"
       )
       aiImages.forEach((list) => {
-        fileList.value.push(
-          ...list.map((item) => {
+        if (list) {
+          const subAiImg = list.map((item) => {
             return { ...item, type: "ai" }
           })
-        )
+          fileList.value.push(...subAiImg)
+        }
       })
     } catch (e) {}
   }

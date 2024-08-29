@@ -1,5 +1,11 @@
 import { ref, onMounted } from "vue"
-import { generateImageTask, generateFaceswap, getTaskById } from "@/api/index"
+import {
+  generateImageTask,
+  generateFaceswap,
+  getTaskById,
+  generateImagePcedit,
+} from "@/api/index"
+import { imageToolsOptions } from "@/utils/constant"
 
 export const useImage = (url) => {
   const activeName = ref("text")
@@ -26,6 +32,10 @@ export const useImage = (url) => {
     }
     if (activeName.value == "face") {
       generateFaces()
+      return
+    }
+    if (activeName.value == "tools") {
+      generatePcedit()
       return
     }
     try {
@@ -130,7 +140,48 @@ export const useImage = (url) => {
       window.$message.warning("发现未完成图片任务生成，正在继续生成")
       getTaskInterval(imageGeneratingId)
     }
+
+    imageTools.value = imageToolsOptions.map((t) => {
+      return { ...t, checked: false }
+    })
+    imageTools.value[1].checked = true
   })
+
+  const imageTools = ref([])
+  const currentToolType = computed(() => {
+    return imageTools.value.find((t) => t.checked)?.value
+  })
+  const imageToolSelect = (label) => {
+    imageTools.value.forEach((t) => {
+      if (t.label == label) {
+        t.checked = true
+        // voiceSoundConfig.value.voice = label
+      } else t.checked = false
+    })
+  }
+  const generatePcedit = async () => {
+    if (loading.value) {
+      window.$message.warning("正在生成图片，请稍后")
+      return
+    }
+    // if (!sourceImage.value?.url || !targetImage.value?.url) {
+    //   window.$message.warning("请上传图片")
+    //   return
+    // }
+    loading.value = true
+    imageUrls.value = []
+    const req = getPceditReq(
+      sourceImage.value.url,
+      targetImage.value.url,
+      currentToolType.value
+    )
+    const { id } = await generateImagePcedit(req).catch(
+      () => (loading.value = false)
+    )
+    if (!id) return
+    localStorage.setItem("chatbot-image-generating-id", id)
+    getTaskInterval(id)
+  }
   return {
     activeName,
     historyImgs,
@@ -138,10 +189,32 @@ export const useImage = (url) => {
     loading,
     imageUrls,
     imageSetting,
+    imageTools,
+    imageToolSelect,
     sourceImageSuccess,
     targetImageSuccess,
     selectHistory,
     deleteHistory,
     generateImage,
+  }
+}
+
+function getPceditReq(original_url, thumb_url, type) {
+  return {
+    type,
+    original_url,
+    thumb_url,
+    query: "ChatfireAI图片助手",
+    image_source: "1",
+    picInfo: "",
+    picInfo2: "",
+    text: "",
+    ext_ratio: "",
+    expand_zoom: "",
+    clid: "1",
+    front_display: "2",
+    create_level: "0",
+    style: "",
+    is_first: true,
   }
 }

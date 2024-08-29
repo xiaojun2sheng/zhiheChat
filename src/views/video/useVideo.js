@@ -7,7 +7,7 @@ export const useVideo = (url) => {
   const activeName = ref("text")
   const videoPrompt = ref("")
   const videoSetting = ref({
-    model: "kling",
+    model: "vidu",
   })
   const modelOptions = ref([
     {

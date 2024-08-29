@@ -78,6 +78,56 @@
             </template>
           </Panel>
         </n-tab-pane>
+        <n-tab-pane name="tools" tab="图片百宝箱" display-directive="show">
+          <Panel icon="flat-color-icons:settings" title="上传图片">
+            <template #content>
+              <div>
+                <UploadImage
+                  class="mb-2"
+                  type="vidu"
+                  placeholder="请上传原始图片"
+                  @on-success="sourceImageSuccess"
+                ></UploadImage>
+                <UploadImage
+                  type="vidu"
+                  placeholder="请上传被替换的图片"
+                  @on-success="targetImageSuccess"
+                ></UploadImage>
+              </div>
+            </template>
+          </Panel>
+          <Panel icon="flat-color-icons:settings" title="参数设置">
+            <template #content>
+              <div>
+                <span>处理方式：</span>
+                <div>
+                  <n-tag
+                    class="m-1"
+                    v-for="item in imageTools"
+                    :key="item.label"
+                    v-model:checked="item.checked"
+                    checkable
+                    @click="imageToolSelect(item.label)"
+                    >{{ item.label }}
+                  </n-tag>
+                </div>
+                <div>
+                  <span>设置模型：</span>
+                  <div class="prompt">
+                    <n-input
+                      v-model:value="imageSetting.model"
+                      class="textarea__inner"
+                      rows="4"
+                      autocomplete="off"
+                      placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
+                      :style="inputStyle"
+                    ></n-input>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </Panel>
+        </n-tab-pane>
       </n-tabs>
       <div class="flex justify-end mt-2 gap-4">
         <!-- <n-button
@@ -190,6 +240,8 @@ const {
   loading,
   imageUrls,
   imageSetting,
+  imageTools,
+  imageToolSelect,
   targetImageSuccess,
   sourceImageSuccess,
   generateImage,

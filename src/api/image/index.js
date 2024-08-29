@@ -40,8 +40,8 @@ export const generateFaceswap = (data) =>
  */
 export const generateImagePcedit = (data) =>
   request({
-    url: `${commonPrefix}/tasks/pcedit`,
-    // url: `box/chat/pcedit`,
+    // url: `${commonPrefix}/tasks/pcedit`,
+    url: `/box/chat/pcedit`,
     method: "post",
     data,
   })
