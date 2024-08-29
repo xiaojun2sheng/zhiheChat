@@ -121,14 +121,18 @@ export const useImage = (url) => {
         localStorage.setItem("chatbot-image-generating-id", "")
       })
       queryTasking.value = false
-      if (res?.imageUrl) {
-        loading.value = false
+      if (res.picArr) {
+        imageUrls.value = res.picArr.map((t) => {
+          return { url: t.src }
+        })
+      } else if (res?.imageUrl) {
         imageUrls.value = [{ url: res.imageUrl }]
-
-        addHistory(imageUrls.value)
-        clearInterval(intervalCode.value)
-        localStorage.setItem("chatbot-image-generating-id", "")
       }
+      loading.value = false
+      if (imageUrls.value.length == 0) return
+      addHistory(imageUrls.value)
+      clearInterval(intervalCode.value)
+      localStorage.setItem("chatbot-image-generating-id", "")
     }, 5000)
   }
   onMounted(() => {
@@ -159,20 +163,23 @@ export const useImage = (url) => {
       } else t.checked = false
     })
   }
+  const pceditOptions = ref({
+    style: "clay",
+  })
   const generatePcedit = async () => {
     if (loading.value) {
       window.$message.warning("正在生成图片，请稍后")
       return
     }
-    // if (!sourceImage.value?.url || !targetImage.value?.url) {
-    //   window.$message.warning("请上传图片")
-    //   return
-    // }
+    if (!sourceImage.value?.url) {
+      window.$message.warning("请上传图片")
+      return
+    }
     loading.value = true
     imageUrls.value = []
     const req = getPceditReq(
       sourceImage.value.url,
-      targetImage.value.url,
+      sourceImage.value.url,
       currentToolType.value
     )
     const { id } = await generateImagePcedit(req).catch(
@@ -209,12 +216,12 @@ function getPceditReq(original_url, thumb_url, type) {
     picInfo: "",
     picInfo2: "",
     text: "",
-    ext_ratio: "",
+    ext_ratio: type == 4 ? "4:3" : "", // 扩图比例 1:1   3:4   4:3,
     expand_zoom: "",
     clid: "1",
     front_display: "2",
-    create_level: "0",
-    style: "",
+    create_level: type == 6 ? "3" : "0", // 重绘 0～6
+    style: type == 14 ? "clay" : "", // 风格 clay  橡皮泥的风 miyazaki 宫崎骏 monet 油画
     is_first: true,
   }
 }

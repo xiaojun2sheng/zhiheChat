@@ -192,12 +192,12 @@ export const agentList = [
 export const imageToolsOptions = [
   { label: "变清晰", value: "3" },
   { label: "去水印", value: "1" },
-  { label: "提取线稿", value: "15" },
-  { label: "智能抠图", value: "9" },
-  { label: "涂抹消除", value: "10" },
-  { label: "背景替换", value: "12" },
+  // { label: "提取线稿", value: "15" },
+  // { label: "智能抠图", value: "9" },
+  // { label: "涂抹消除", value: "10" },
+  // { label: "背景替换", value: "12" },
   { label: "AI扩图", value: "4" },
   { label: "AI重绘", value: "6" },
-  { label: "AI相似图", value: "7" },
+  // { label: "AI相似图", value: "7" },
   { label: "风格转换", value: "14" },
 ]
