@@ -165,6 +165,8 @@ export const useImage = (url) => {
   }
   const pceditOptions = ref({
     style: "clay",
+    create_level: "0",
+    ext_ratio: "1:1",
   })
   const generatePcedit = async () => {
     if (loading.value) {
