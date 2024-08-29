@@ -79,17 +79,17 @@ export const useVideo = (url) => {
     queryTasking.value = false
     if (!generating.value) return
     const creation =
-      videoSetting.model === "vidu"
+      videoSetting.value.model === "vidu"
         ? res?.creations[0]
         : res?.data?.works[0]?.resource?.resource
     if (creation) {
-      if (videoSetting.model === "vidu") {
+      if (videoSetting.value.model === "vidu") {
         const creation = res?.creations[0]
         creation.taskId = creation.task_id
         creation.creationId = creation.id
         videoInfo.value = creation
       }
-      if (videoSetting.model === "kling") {
+      if (videoSetting.value.model === "kling") {
         const videoUrl = res?.data?.works[0]?.resource?.resource
         const coverUrl = res?.data?.works[0]?.cover?.resource
         videoUrl &&

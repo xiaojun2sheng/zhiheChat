@@ -17,17 +17,14 @@
       >
       </n-tab-pane>
     </n-tabs>
-    <!-- <SvgIcon
-      class="mr-2"
-      :width="35"
-      :height="35"
-      hover
-      :icon="
-        appStore.theme == 'light' ? 'ic:round-dark-mode' : 'ic:round-light-mode'
-      "
-      @click="switchTheme"
-    ></SvgIcon> -->
-    <UserCenter></UserCenter>
+    <SvgIcon
+      class="mr-2 heartbeat"
+      :width="30"
+      :height="30"
+      icon="cryptocurrency-color:gold"
+      @click="sigin"
+    ></SvgIcon>
+    <UserCenter class="mx-2"></UserCenter>
     <n-dropdown
       v-if="userStore.isLogin"
       trigger="hover"
@@ -59,6 +56,7 @@ import { useLogin } from "@/hooks/useLogin"
 import { useUser } from "@/hooks/useUser"
 import Avatar from "@/assets/avatar-g.png"
 import { NAvatar, NText, useMessage } from "naive-ui"
+import { signIn } from "@/api/pay"
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -154,6 +152,14 @@ function renderCustomHeader() {
     ]
   )
 }
+const sigin = async (key) => {
+  const res = await signIn()
+  if (res.includes("请勿重复")) {
+    window.$message.warning(res)
+  } else {
+    window.$message.success(res)
+  }
+}
 const handleSelect = async (key) => {
   if (key == "logout") {
     await toLogout()
@@ -183,6 +189,72 @@ const handleSelect = async (key) => {
 :deep(.n-tabs) {
   .n-tabs-nav-scroll-content {
     border-bottom: none !important;
+  }
+}
+
+.heartbeat {
+  -webkit-animation: jello-horizontal 0.9s infinite both;
+  animation: jello-horizontal 0.9s infinite both;
+}
+
+@-webkit-keyframes jello-horizontal {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+    transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+@keyframes jello-horizontal {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+    transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
   }
 }
 </style>

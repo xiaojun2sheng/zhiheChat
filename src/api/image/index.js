@@ -19,3 +19,29 @@ export const generateFaceswap = (data) =>
     method: "post",
     data,
   })
+
+// https://api.chatfire.cn/tasks/pcedit
+/**
+ * 工具
+ * {
+"变清晰": "3",
+"去水印": "1",
+"提取线稿": "15",
+"智能抠图": "9",
+"涂抹消除": "10",
+"背景替换": "12",
+"AI扩图": "4",
+"AI重绘": "6",
+"AI相似图": "7",
+"风格转换": "14"
+}
+ * @param {*} data 
+ * @returns 
+ */
+export const generateImagePcedit = (data) =>
+  request({
+    url: `${commonPrefix}/tasks/pcedit`,
+    // url: `box/chat/pcedit`,
+    method: "post",
+    data,
+  })
