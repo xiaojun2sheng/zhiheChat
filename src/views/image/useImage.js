@@ -15,6 +15,16 @@ export const useImage = (url) => {
     "--n-box-shadow-focus": "none",
   })
 
+  const modelOptions = ref([
+    {
+      label: "可灵",
+      value: "kling",
+    },
+    {
+      label: "flux-pro",
+      value: "flux-pro",
+    },
+  ])
   const imageSetting = ref({
     model: "flux-pro",
     prompt: "",
@@ -128,8 +138,8 @@ export const useImage = (url) => {
       } else if (res?.imageUrl) {
         imageUrls.value = [{ url: res.imageUrl }]
       }
-      loading.value = false
       if (imageUrls.value.length == 0) return
+      loading.value = false
       addHistory(imageUrls.value)
       clearInterval(intervalCode.value)
       localStorage.setItem("chatbot-image-generating-id", "")
@@ -148,22 +158,35 @@ export const useImage = (url) => {
     imageTools.value = imageToolsOptions.map((t) => {
       return { ...t, checked: false }
     })
-    imageTools.value[1].checked = true
+    imageTools.value[0].checked = true
   })
 
+  const styleOptions = ref([
+    { label: "橡皮泥的风", key: "clay", checked: true },
+    { label: "宫崎骏", key: "miyazaki", checked: false },
+    { label: "油画", key: "monet", checked: false },
+  ])
   const imageTools = ref([])
-  const currentToolType = computed(() => {
-    return imageTools.value.find((t) => t.checked)?.value
-  })
-  const imageToolSelect = (label) => {
-    imageTools.value.forEach((t) => {
-      if (t.label == label) {
-        t.checked = true
-        // voiceSoundConfig.value.voice = label
-      } else t.checked = false
-    })
+  const settingTagSelect = (type, label) => {
+    if (type === "type") {
+      imageTools.value.forEach((t) => {
+        if (t.label == label) {
+          t.checked = true
+          pceditSetting.value.type = t.value
+        } else t.checked = false
+      })
+    }
+    if (type === "style") {
+      styleOptions.value.forEach((t) => {
+        if (t.label == label) {
+          t.checked = true
+          pceditSetting.value.style = t.key
+        } else t.checked = false
+      })
+    }
   }
-  const pceditOptions = ref({
+  const pceditSetting = ref({
+    type: "3",
     style: "clay",
     create_level: "0",
     ext_ratio: "1:1",
@@ -182,7 +205,7 @@ export const useImage = (url) => {
     const req = getPceditReq(
       sourceImage.value.url,
       sourceImage.value.url,
-      currentToolType.value
+      pceditSetting.value
     )
     const { id } = await generateImagePcedit(req).catch(
       () => (loading.value = false)
@@ -192,6 +215,9 @@ export const useImage = (url) => {
     getTaskInterval(id)
   }
   return {
+    pceditSetting,
+    styleOptions,
+    modelOptions,
     activeName,
     historyImgs,
     inputStyle,
@@ -199,7 +225,7 @@ export const useImage = (url) => {
     imageUrls,
     imageSetting,
     imageTools,
-    imageToolSelect,
+    settingTagSelect,
     sourceImageSuccess,
     targetImageSuccess,
     selectHistory,
@@ -208,7 +234,8 @@ export const useImage = (url) => {
   }
 }
 
-function getPceditReq(original_url, thumb_url, type) {
+function getPceditReq(original_url, thumb_url, pceditSetting) {
+  const { type, style } = pceditSetting
   return {
     type,
     original_url,
@@ -223,7 +250,7 @@ function getPceditReq(original_url, thumb_url, type) {
     clid: "1",
     front_display: "2",
     create_level: type == 6 ? "3" : "0", // 重绘 0～6
-    style: type == 14 ? "clay" : "", // 风格 clay  橡皮泥的风 miyazaki 宫崎骏 monet 油画
+    style: type == 14 ? style : "", // 风格 clay  橡皮泥的风 miyazaki 宫崎骏 monet 油画
     is_first: true,
   }
 }

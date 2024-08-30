@@ -29,12 +29,16 @@
               </div>
             </template>
           </Panel>
-          <Panel icon="flat-color-icons:settings" title="上传图片">
+          <Panel
+            v-if="imageSetting.model == 'kling'"
+            icon="flat-color-icons:settings"
+            title="垫图/参考图"
+          >
             <template #content>
               <div>
                 <UploadImage
                   class="mb-2"
-                  type="kling"
+                  :type="imageSetting.model == 'kling' ? 'kling' : 'oss'"
                   placeholder="参考图"
                   @on-success="sourceImageSuccess"
                 ></UploadImage>
@@ -46,14 +50,10 @@
               <div>
                 <span>设置模型：</span>
                 <div class="prompt">
-                  <n-input
+                  <n-select
                     v-model:value="imageSetting.model"
-                    class="textarea__inner"
-                    rows="4"
-                    autocomplete="off"
-                    placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
-                    :style="inputStyle"
-                  ></n-input>
+                    :options="modelOptions"
+                  />
                 </div>
               </div>
             </template>
@@ -65,12 +65,12 @@
               <div>
                 <UploadImage
                   class="mb-2"
-                  type="vidu"
+                  type="'oss'"
                   placeholder="请上传原始图片"
                   @on-success="sourceImageSuccess"
                 ></UploadImage>
                 <UploadImage
-                  type="vidu"
+                  type="oss"
                   placeholder="请上传被替换的图片"
                   @on-success="targetImageSuccess"
                 ></UploadImage>
@@ -88,11 +88,6 @@
                   placeholder="请上传原始图片"
                   @on-success="sourceImageSuccess"
                 ></UploadImage>
-                <!-- <UploadImage
-                  type="vidu"
-                  placeholder="请上传被替换的图片"
-                  @on-success="targetImageSuccess"
-                ></UploadImage> -->
               </div>
             </template>
           </Panel>
@@ -107,22 +102,23 @@
                     :key="item.label"
                     v-model:checked="item.checked"
                     checkable
-                    @click="imageToolSelect(item.label)"
+                    @click="settingTagSelect('type', item.label)"
                     >{{ item.label }}
                   </n-tag>
                 </div>
+              </div>
+              <div v-if="pceditSetting.type === '14' ">
+                <span>风格选择：</span>
                 <div>
-                  <span>设置模型：</span>
-                  <div class="prompt">
-                    <n-input
-                      v-model:value="imageSetting.model"
-                      class="textarea__inner"
-                      rows="4"
-                      autocomplete="off"
-                      placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
-                      :style="inputStyle"
-                    ></n-input>
-                  </div>
+                  <n-tag
+                    class="m-1"
+                    v-for="item in styleOptions"
+                    :key="item.label"
+                    v-model:checked="item.checked"
+                    checkable
+                    @click="settingTagSelect('style', item.label)"
+                    >{{ item.label }}
+                  </n-tag>
                 </div>
               </div>
             </template>
@@ -130,14 +126,6 @@
         </n-tab-pane>
       </n-tabs>
       <div class="flex justify-end mt-2 gap-4">
-        <!-- <n-button
-          class="prompt-btn__primary"
-          round
-          @click="betterPrompt"
-          :disabled="!imageSetting.prompt"
-          type="primary"
-          >优化提示词</n-button
-        > -->
         <n-button
           class="prompt-btn__primary"
           round
@@ -155,6 +143,7 @@
           <n-image
             v-for="item in imageUrls"
             class="rounded-md w-full h-full flex justify-center"
+            object-fit="contain"
             :src="item.url"
           />
         </n-image-group>
@@ -198,34 +187,9 @@
         </HistorySide>
       </KeepAlive>
     </div>
-
-    <!-- 优化提示词 -->
-    <el-dialog
-      v-model="dialogVisible"
-      title="优化提示词"
-      width="500"
-      :before-close="cancelBetterPrompt"
-    >
-      <span v-if="batterImageDesc">{{ batterImageDesc }}</span>
-      <span v-else>正在生成提示词优化，请耐心等待...</span>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="cancelBetterPrompt">取消</el-button>
-          <el-button
-            type="primary"
-            :disabled="!batterImageDesc"
-            @click="submitBetterPrompt"
-            >替换</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 <script setup>
-import { ref } from "vue"
-import { ElMessage } from "element-plus"
-import axios from "axios"
 import Panel from "@/components/panel/index.vue"
 import UploadImage from "@/components/upload-image/index.vue"
 import HistorySide from "@/components/history-side/index.vue"
@@ -233,6 +197,9 @@ import { imageRecommendPrompt } from "@/utils"
 import { useImage } from "./useImage"
 
 const {
+  pceditSetting,
+  styleOptions,
+  modelOptions,
   activeName,
   historyImgs,
   inputStyle,
@@ -240,44 +207,13 @@ const {
   imageUrls,
   imageSetting,
   imageTools,
-  imageToolSelect,
+  settingTagSelect,
   targetImageSuccess,
   sourceImageSuccess,
   generateImage,
   deleteHistory,
   selectHistory,
 } = useImage()
-
-let batterImageDesc = ref("")
-// 优化提示词
-let dialogVisible = ref(false)
-const betterPrompt = async () => {
-  dialogVisible.value = true
-  // https://openai.chatfire.cn/prompts?prompt=一直带有雄鹰翅膀的老虎，飞翔在大海上方
-  axios
-    .get(
-      "https://openai.chatfire.cn/prompts?prompt=" + imageSetting.value.prompt
-    )
-    .then((res) => {
-      batterImageDesc.value = res.data.result
-    })
-    .catch((error) => {
-      ElMessage({ message: "优化提示词失败，请重新尝试一下", type: "warning" })
-      dialogVisible.value = false
-    })
-}
-
-// 确认替换提示词
-const submit = () => {
-  imageSetting.value = batterImageDesc.value
-  batterImageDesc.value = ""
-  dialogVisible.value = false
-}
-// 取消替换提示词
-const cancelBetterPrompt = () => {
-  batterImageDesc.value = ""
-  dialogVisible.value = false
-}
 </script>
 
 <style scoped lang="scss">
@@ -303,6 +239,11 @@ const cancelBetterPrompt = () => {
     .svg-icon {
       display: block;
     }
+  }
+}
+:deep(.n-select) {
+  .n-base-selection {
+    border-radius: 10px !important;
   }
 }
 </style>
