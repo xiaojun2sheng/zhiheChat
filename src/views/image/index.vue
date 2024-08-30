@@ -84,7 +84,7 @@
               <div>
                 <UploadImage
                   class="mb-2"
-                  type="vidu"
+                  type="oss"
                   placeholder="请上传原始图片"
                   @on-success="sourceImageSuccess"
                 ></UploadImage>
@@ -154,8 +154,7 @@
         <n-image-group v-if="imageUrls.length > 0" show-toolbar-tooltip>
           <n-image
             v-for="item in imageUrls"
-            class="rounded-md"
-            width="240"
+            class="rounded-md w-full h-full flex justify-center"
             :src="item.url"
           />
         </n-image-group>

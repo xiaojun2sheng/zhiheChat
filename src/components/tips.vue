@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full justify-center">
+  <div class="flex w-full justify-center h-10 my-2">
     <span class="waring_desc">
       请遵守中华人民共和国网络安全法，
       严禁生成涉及政治人物，色情、恐怖等不良内容， 如有违规封号处理</span
