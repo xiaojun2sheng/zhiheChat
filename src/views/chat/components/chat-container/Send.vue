@@ -12,6 +12,7 @@
       }"
       v-model:value="sendContent"
       maxlength="500"
+      :autofocus="true"
       :autosize="{ minRows: 2, maxRows: 4 }"
       :placeholder="placeholder"
       @keydown.enter="submit"
@@ -21,7 +22,7 @@
       <div class="flex gap-2">
         <n-tooltip trigger="hover">
           <template #trigger>
-            <div class="item" @click="emit('switch-agent-panel')">
+            <div class="item" @click="showAgent">
               <SvgIcon
                 :width="20"
                 :height="20"
@@ -88,6 +89,13 @@ watch(
     if (running.value) emit("change", val)
   }
 )
+
+const showAgent = () => {
+  emit("switch-agent-panel")
+  setTimeout(() => {
+    handleFocus()
+  }, 1000)
+}
 
 const inputInstRef = ref()
 const handleFocus = () => {

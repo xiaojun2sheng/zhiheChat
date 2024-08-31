@@ -142,7 +142,7 @@
         <n-image-group v-if="imageUrls.length > 0" show-toolbar-tooltip>
           <n-image
             v-for="item in imageUrls"
-            class="rounded-md w-full h-full flex justify-center"
+            class="rounded-md w-full flex justify-center"
             object-fit="contain"
             :src="item.url"
           />

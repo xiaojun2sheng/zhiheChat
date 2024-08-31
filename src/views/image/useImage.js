@@ -6,6 +6,7 @@ import {
   generateImagePcedit,
 } from "@/api/index"
 import { imageToolsOptions } from "@/utils/constant"
+import { base64ToImage } from "@/utils/tools"
 
 export const useImage = (url) => {
   const activeName = ref("text")
@@ -67,7 +68,7 @@ export const useImage = (url) => {
   const addHistory = async (images) => {
     const json = localStorage.getItem("chatbot-image-history") || "[]"
     let historys = JSON.parse(json)
-    historys.push(images)
+    historys.unshift(images)
     localStorage.setItem("chatbot-image-history", JSON.stringify(historys))
     initHistory()
   }

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { generateUUID } from "@/utils"
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 
 export const useChatStore = defineStore({
   id: "chat",
@@ -66,6 +66,12 @@ export const useChatStore = defineStore({
       const list = JSON.parse(chatListJson)
       this.chatList = list
     },
+    resetChat() {
+      this.setNavType("1")
+      this.switchPanel(false)
+      this.setChat(null)
+      // router.push("/chat")
+    },
     createChat() {
       const item = {
         id: generateUUID(),
@@ -99,7 +105,7 @@ export const useChatStore = defineStore({
     },
     setChat(data) {
       this.chatId = data?.id
-      this.chatInfo = convertChat(data) || {}
+      this.chatInfo = data?convertChat(data) : {}
       function convertChat(data = {}) {
         return {
           ...data,

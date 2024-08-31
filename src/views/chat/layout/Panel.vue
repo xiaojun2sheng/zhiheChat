@@ -5,7 +5,7 @@
       open,
     }"
   >
-    <div class="container">
+    <div class="container flex flex-col h-full">
       <span class="flex justify-between p-4">
         <span class="text-lg">智能体工作台</span>
         <SvgIcon
@@ -30,7 +30,7 @@
             </div>
           </div>
         </div>
-        <div class="file-box">
+        <div v-if="!inAgentPanel" class="file-box">
           <p class="leading-7 text-base mb-2 font-semibold">会话中的文件</p>
           <template v-if="files?.length > 0">
             <div class="file" v-for="file in files"></div>
@@ -45,18 +45,35 @@
           </div>
         </div>
       </div>
+      <div
+        v-if="inAgentPanel"
+        class="flex justify-center items-end flex-1 w-full mb-4"
+      >
+        <n-button round color="#5280FD" text-color="#ffffff" @click="newChat">
+          开启新会话
+        </n-button>
+      </div>
     </div>
   </div>
 </template>
 <script setup>
-import { ref, computed, watch } from "vue"
+import { computed } from "vue"
 import { useChatStore } from "@/stores"
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const chatStore = useChatStore()
 
 const agents = computed(() => chatStore.panelData?.agents)
 const files = computed(() => chatStore.panelData?.files)
 const open = computed(() => chatStore.panelShow)
+const inAgentPanel = computed(() => chatStore.navType === "3")
+
+const newChat = () => {
+  chatStore.resetChat()
+  chatStore.setAgent(agents.value[0])
+  router.push("/chat")
+}
 </script>
 <style lang="scss">
 .side-panel {

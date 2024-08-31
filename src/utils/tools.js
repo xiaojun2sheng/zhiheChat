@@ -41,3 +41,39 @@ export const copy = async (val) => {
   document.execCommand("copy")
   document.body.removeChild(copyInput)
 }
+
+export const base64ToImage = (base64String, callback) => {
+  // 创建一个新的Image对象
+  var img = new Image()
+
+  // 设置图像加载完成后的回调函数
+  img.onload = function () {
+    // 创建一个新的canvas元素
+    var canvas = document.createElement("canvas")
+    var ctx = canvas.getContext("2d")
+
+    // 设置canvas的大小为图像的大小
+    canvas.width = img.width
+    canvas.height = img.height
+
+    // 将图像绘制到canvas上
+    ctx.drawImage(img, 0, 0)
+
+    // 将canvas转换为Blob对象
+    canvas.toBlob(function (blob) {
+      // 创建一个新的File对象
+      var file = new File([blob], "image.png", { type: blob.type })
+
+      // 调用回调函数，并传入File对象
+      callback(file)
+    }, "image/png") // 指定文件类型，例如'image/jpeg'或'image/png'
+  }
+
+  // 设置图像的源为Base64字符串
+  img.src = base64String
+
+  // 如果图像的源是Base64字符串，可能需要设置crossOrigin属性
+  if (img.crossOrigin === "anonymous") {
+    img.crossOrigin = ""
+  }
+}

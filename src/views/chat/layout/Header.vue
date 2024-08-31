@@ -1,10 +1,10 @@
 <template>
   <div class="header flex justify-between items-center shrink-0">
-    <span></span>
+    <span v-if="chatStore.agent"></span>
     <div class="flex gap-4">
       <span>{{ chatStore.chatInfo?.title?.substring(0, 20) }} </span>
     </div>
-    <div class="" @click="showPanel">
+    <div v-if="chatStore.agent" class="" @click="showPanel">
       <SvgIcon
         :width="25"
         :height="25"
