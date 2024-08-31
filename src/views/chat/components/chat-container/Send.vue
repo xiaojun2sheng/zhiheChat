@@ -1,7 +1,8 @@
 <template>
   <div class="send-box flex flex-col">
-    <Plugins></Plugins>
+    <Plugins ref="pluginRef"></Plugins>
     <NInput
+      ref="inputInstRef"
       type="textarea"
       :style="{
         '--n-border-hover': '1px solid gba(255, 255, 255, 0)',
@@ -20,7 +21,7 @@
       <div class="flex gap-2">
         <n-tooltip trigger="hover">
           <template #trigger>
-            <div class="item" @click="selectAgent">
+            <div class="item" @click="emit('switch-agent-panel')">
               <SvgIcon
                 :width="20"
                 :height="20"
@@ -62,14 +63,14 @@
 <script setup>
 import { ref, watch, computed } from "vue"
 import { useSend } from "@/hooks/useSend"
-import { useChatStore, useAppStore } from "@/stores"
-import { isPhone } from "@/utils"
+import { useChatStore } from "@/stores"
 import Plugins from "./Plugins.vue"
 
 const list = ref([])
-const appStore = useAppStore()
 const chatStore = useChatStore()
 const { running, content, send, handleStop } = useSend(list)
+
+const sendContent = ref("")
 
 const emit = defineEmits([
   "submit",
@@ -78,7 +79,6 @@ const emit = defineEmits([
   "on-end",
   "on-error",
 ])
-const sendContent = ref("")
 const placeholder = computed(() => "传递的你的想法")
 
 // 监听消息响应
@@ -89,9 +89,11 @@ watch(
   }
 )
 
-const selectAgent = () => {
-  emit("on-agent")
+const inputInstRef = ref()
+const handleFocus = () => {
+  inputInstRef.value?.focus()
 }
+
 // 上传成功更新文件列表，插入chat对象
 const upload = (file) => {
   $message.success("开发中，请期待。。。")
@@ -120,8 +122,13 @@ const submit = async (e) => {
       role: "user",
     })
   }
+  let model = chatStore.currentChatModel
+  // 判断是否选择了 agent 有的话需要以 agent 为准
+  if (chatStore.agent) {
+    model = chatStore.agent.model
+  }
   const req = {
-    model: appStore.currentChatModel,
+    model,
     messages: list,
     stream: true,
   }
@@ -139,7 +146,14 @@ const shortcut = (val) => {
   submit()
 }
 
-defineExpose({ shortcut, setContent, handleStop, running })
+defineExpose({
+  sendContent,
+  shortcut,
+  setContent,
+  handleStop,
+  running,
+  handleFocus,
+})
 </script>
 <style lang="scss" scoped>
 .send-box {

@@ -9,7 +9,7 @@
           @select="handleSelect"
           trigger="hover"
           placement="right"
-          :options="appStore.presetChatModels"
+          :options="chatStore.presetChatModels"
         >
           <div class="item">
             <SvgIcon :width="25" :height="25" icon="ph:open-ai-logo"></SvgIcon>
@@ -64,19 +64,18 @@
 </template>
 <script setup>
 import { ref } from "vue"
-import { useChatStore, useAppStore } from "@/stores"
+import { useChatStore } from "@/stores"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 
-const appStore = useAppStore()
 const chatStore = useChatStore()
 const isClose = ref(false)
 const close = () => {
   isClose.value = !isClose.value
 }
 const handleSelect = (key) => {
-  appStore.setCurrentChatModel(key)
+  chatStore.setCurrentChatModel(key)
 }
 
 const newChat = () => {

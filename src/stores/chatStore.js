@@ -13,8 +13,17 @@ export const useChatStore = defineStore({
       chatInfo: {}, // 当前聊天信息
       isHistory: false, // 是否是历史记录
       navType: "1", // 1 chat 2 histort 3 agents
+      agent: undefined,
       panelShow: false,
       panelData: {},
+      presetChatModels: [
+        { key: "glm-3-turbo", label: "glm-3-turbo" },
+        { key: "glm-4-air", label: "glm-4-air" },
+        { key: "glm-4", label: "glm-4" },
+        { key: "glm-4-flash", label: "glm-4-flash" },
+        { key: "glm-4-9b-chat", label: "glm-4-9b-chat" },
+      ], // 内置模型
+      currentChatModel: "glm-3-turbo",
     }
   },
   getters: {
@@ -23,8 +32,14 @@ export const useChatStore = defineStore({
     },
   },
   actions: {
+    setCurrentChatModel(date) {
+      this.currentChatModel = date
+    },
     switchPanel(data) {
       this.panelShow = data
+    },
+    setAgent(data) {
+      this.agent = data
     },
     setPanelData(agent, file) {
       if (agent) this.panelData.agents = [agent]

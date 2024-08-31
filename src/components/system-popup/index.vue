@@ -43,10 +43,11 @@
 
 <script setup>
 import { ref, reactive } from "vue"
-import { useAppStore } from "@/stores"
+import { useAppStore, useChatStore } from "@/stores"
 import WxCode from "@/assets/images/help/weixinqun.jpg"
 
 const appStore = useAppStore()
+const chatStore = useChatStore()
 const emit = defineEmits(["submit"])
 
 const visible = ref(false)
@@ -62,7 +63,7 @@ const open = () => {
 
 const show = () => {
   setting.apiKey = appStore.apiKey
-  setting.presetChatModels = appStore.presetChatModels
+  setting.presetChatModels = chatStore.presetChatModels
   setting.currentModel = appStore.currentModel
   visible.value = true
 }

@@ -37,7 +37,7 @@
       <img src="@/assets/logo.png" alt="" />
     </div>
     <div class="footer">
-      <!-- <AgentPanel ref="agentPanelRef"></AgentPanel> -->
+      <AgentPanel ref="agentPanelRef"></AgentPanel>
       <Send
         class="w-full"
         ref="sendRef"
@@ -45,7 +45,7 @@
         @on-before="beforeSend"
         @on-end="endSend"
         @on-error="onError"
-        @on-agent="showAgent"
+        @switch-agent-panel="switchAgentPanel"
       ></Send>
     </div>
   </div>
@@ -60,10 +60,13 @@ import MsgItem from "./MsgItem.vue"
 import { positionDomViewBottom } from "@/utils"
 import { useChatStore } from "@/stores"
 import AgentPanel from "./AgentPanel.vue"
+import { useAgent } from "./useAgent"
 
 const router = useRouter()
 const route = useRoute()
 const chatStore = useChatStore()
+const sendRef = ref()
+const { sendContent, agentPanelRef, switchAgentPanel } = useAgent(sendRef)
 
 watchEffect(() => {
   const { id } = route.params
@@ -71,7 +74,7 @@ watchEffect(() => {
   positionDomViewBottom()
 })
 
-const sendRef = ref()
+
 const selectPrompt = (val) => {
   sendRef.value.setContent(val)
 }
@@ -99,13 +102,9 @@ const endSend = () => {
 }
 
 const msgChange = (val) => {
+  sendContent.value = val
   chatStore.updateLastMessage(val)
   positionDomViewBottom()
-}
-
-const agentPanelRef = ref()
-const showAgent = () => {
-  agentPanelRef.value.show()
 }
 
 let handleStop

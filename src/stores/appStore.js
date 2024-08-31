@@ -6,16 +6,6 @@ export const useAppStore = defineStore({
       theme: "auto",
       baseUrl: "",
       apiKey: "",
-      presetChatModels: [
-        { key: "glm-3-turbo", label: "glm-3-turbo" },
-        { key: "glm-4-air", label: "glm-4-air" },
-        { key: "glm-4", label: "glm-4" },
-        { key: "glm-4-flash", label: "glm-4-flash" },
-        { key: "glm-4-9b-chat", label: "glm-4-9b-chat" },
-        { key: "prompter", label: "prompter" },
-        ,
-      ], // 内置模型
-      currentChatModel: "glm-3-turbo",
       customModels: [], // 自定义模型
     }
   },
@@ -36,9 +26,6 @@ export const useAppStore = defineStore({
     },
   },
   actions: {
-    setCurrentChatModel(date) {
-      this.currentChatModel = date
-    },
     resolveSettings() {
       const json = localStorage.getItem("chatbot-api-settings") || "{}"
       const jsonObj = JSON.parse(json)

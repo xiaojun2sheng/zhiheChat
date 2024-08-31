@@ -1,11 +1,13 @@
 <template>
-  <div class="plugins" v-if="isPrompter">
+  <div class="plugins" v-if="chatStore.agent">
     <div class="tag">
       <div class="flex justify-center items-center">
         <div class="talking">
-          和<span class="name___BePAl">提示词专家</span>聊聊
+          和
+          <span class="name">{{ chatStore.agent.name }}</span>
+          聊聊
         </div>
-        <SvgIcon icon="mingcute:close-line"></SvgIcon>
+        <SvgIcon icon="mingcute:close-line" @click="close"></SvgIcon>
       </div>
     </div>
   </div>
@@ -17,9 +19,9 @@ import { useChatStore, useAppStore } from "@/stores"
 const appStore = useAppStore()
 const chatStore = useChatStore()
 
-const isPrompter = computed(() => {
-  return appStore.currentChatModel == "prompter"
-})
+const close = () => {
+  chatStore.setAgent()
+}
 </script>
 <style lang="scss" scoped>
 .plugins {
@@ -46,6 +48,10 @@ const isPrompter = computed(() => {
       text-align: center;
       display: flex;
       gap: 4px;
+      margin: 0 8px 0 4px;
+      .name {
+        font-weight: bold;
+      }
     }
   }
 }
