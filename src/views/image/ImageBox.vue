@@ -19,15 +19,15 @@
           <div>
             <n-tag
               class="m-1"
-              v-for="item in imageTools"
+              v-for="item in pceditTypeOptions"
               :key="item.label"
               v-model:checked="item.checked"
               checkable
-              @click="imageToolSelect(item.label)"
+              @click="pceditTypeChange(item.label)"
               >{{ item.label }}
             </n-tag>
           </div>
-          <div>
+          <div v-if="pceditSettings.type == 14">
             <span>风格选择：</span>
             <div>
               <n-tag
@@ -41,7 +41,7 @@
               </n-tag>
             </div>
           </div>
-          <div>
+          <div v-if="pceditSettings.type == 4">
             <span>比例选择：</span>
             <div>
               <n-tag
@@ -55,10 +55,29 @@
               </n-tag>
             </div>
           </div>
+          <div v-if="pceditSettings.type == 6">
+            <span>创造性：</span>
+            <div>
+              <n-slider
+                v-model:value="pceditSettings.create_level"
+                :min="0"
+                :max="6"
+                :step="1"
+              />
+            </div>
+          </div>
         </div>
       </template>
     </Panel>
     <div class="flex justify-end mt-2 gap-4">
+      <n-button
+        v-if="loading"
+        class="prompt-btn__primary"
+        round
+        type="primary"
+        @click="clearTask"
+        >终止任务</n-button
+      >
       <n-button
         class="prompt-btn__primary"
         round
@@ -72,17 +91,21 @@
 <script setup>
 import Panel from "@/components/panel/index.vue"
 import UploadImage from "@/components/upload-image/index.vue"
-import { usePcedit } from "./usePcedit"
+import { useImageBox } from "./useImageBox"
 
-const emit = defineEmits(["on-pcedit-generate"])
+const emit = defineEmits(["on-success", "on-generating"])
 const {
-  pceditSettings,
+  loading,
   ratioOptions,
   styleOptions,
-  imageToolSelect,
+  pceditTypeOptions,
+  pceditSettings,
+  clearTask,
+  sourceImageSuccess,
   ratioSelect,
   styleSelect,
+  pceditTypeChange,
   generatePcedit,
-} = usePcedit(emit)
+} = useImageBox(emit)
 </script>
 <style lang="sass" scoped></style>

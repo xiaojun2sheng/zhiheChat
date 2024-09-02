@@ -81,7 +81,7 @@ export const usePay = () => {
 
   const payPopupRef = ref()
   const pay = async () => {
-    const url = await createOrderById(currentPackage.value.id)
+    const { url } = await createOrderById(currentPackage.value.id)
     payPopupRef.value.show({
       url,
       order: currentPackage.value,

@@ -3,137 +3,27 @@
     <div class="w-[400px] shrink-0 overflow-auto">
       <n-tabs type="line" v-model:value="activeName" animated>
         <n-tab-pane name="text" tab="生成图片" display-directive="show">
-          <Panel icon="flat-color-icons:idea" title="创意描述">
-            <template #content>
-              <div class="prompt">
-                <n-input
-                  v-model:value="imageSetting.prompt"
-                  class="textarea__inner"
-                  rows="4"
-                  autocomplete="off"
-                  placeholder="请输入您要生成图片的描述，可以描述主题，场景，风格等等"
-                  type="textarea"
-                  :style="inputStyle"
-                ></n-input>
-              </div>
-            </template>
-            <template #footer>
-              <div class="footer">
-                <span class="label">推荐尝试：</span>
-                <span
-                  class="val mr-2 cursor-pointer"
-                  v-for="item in imageRecommendPrompt"
-                  @click="imageSetting.prompt = item.desc"
-                  >{{ item.label }}</span
-                >
-              </div>
-            </template>
-          </Panel>
-          <Panel
-            v-if="imageSetting.model == 'kling'"
-            icon="flat-color-icons:settings"
-            title="垫图/参考图"
-          >
-            <template #content>
-              <div>
-                <UploadImage
-                  class="mb-2"
-                  :type="imageSetting.model == 'kling' ? 'kling' : 'oss'"
-                  placeholder="参考图"
-                  @on-success="sourceImageSuccess"
-                ></UploadImage>
-              </div>
-            </template>
-          </Panel>
-          <Panel icon="flat-color-icons:settings" title="参数设置">
-            <template #content>
-              <div>
-                <span>设置模型：</span>
-                <div class="prompt">
-                  <n-select
-                    v-model:value="imageSetting.model"
-                    :options="modelOptions"
-                  />
-                </div>
-              </div>
-            </template>
-          </Panel>
+          <ImageText
+            @on-success="onSuccess"
+            @on-loading="onLoading"
+            @on-end="onEnd"
+          ></ImageText>
         </n-tab-pane>
         <n-tab-pane name="face" tab="AI 换脸" display-directive="show">
-          <Panel icon="flat-color-icons:settings" title="上传图片">
-            <template #content>
-              <div>
-                <UploadImage
-                  class="mb-2"
-                  type="'oss'"
-                  placeholder="请上传原始图片"
-                  @on-success="sourceImageSuccess"
-                ></UploadImage>
-                <UploadImage
-                  type="oss"
-                  placeholder="请上传被替换的图片"
-                  @on-success="targetImageSuccess"
-                ></UploadImage>
-              </div>
-            </template>
-          </Panel>
+          <ImageFace
+            @on-success="onSuccess"
+            @on-loading="onLoading"
+            @on-end="onEnd"
+          ></ImageFace>
         </n-tab-pane>
         <n-tab-pane name="tools" tab="图片百宝箱" display-directive="show">
-          <Panel icon="flat-color-icons:settings" title="上传图片">
-            <template #content>
-              <div>
-                <UploadImage
-                  class="mb-2"
-                  type="oss"
-                  placeholder="请上传原始图片"
-                  @on-success="sourceImageSuccess"
-                ></UploadImage>
-              </div>
-            </template>
-          </Panel>
-          <Panel icon="flat-color-icons:settings" title="参数设置">
-            <template #content>
-              <div>
-                <span>处理方式：</span>
-                <div>
-                  <n-tag
-                    class="m-1"
-                    v-for="item in imageTools"
-                    :key="item.label"
-                    v-model:checked="item.checked"
-                    checkable
-                    @click="settingTagSelect('type', item.label)"
-                    >{{ item.label }}
-                  </n-tag>
-                </div>
-              </div>
-              <div v-if="pceditSetting.type === '14' ">
-                <span>风格选择：</span>
-                <div>
-                  <n-tag
-                    class="m-1"
-                    v-for="item in styleOptions"
-                    :key="item.label"
-                    v-model:checked="item.checked"
-                    checkable
-                    @click="settingTagSelect('style', item.label)"
-                    >{{ item.label }}
-                  </n-tag>
-                </div>
-              </div>
-            </template>
-          </Panel>
+          <ImageBox
+            @on-success="onSuccess"
+            @on-loading="onLoading"
+            @on-end="onEnd"
+          ></ImageBox>
         </n-tab-pane>
       </n-tabs>
-      <div class="flex justify-end mt-2 gap-4">
-        <n-button
-          class="prompt-btn__primary"
-          round
-          @click="generateImage"
-          type="primary"
-          >生成图片</n-button
-        >
-      </div>
     </div>
     <div class="flex flex-col w-full h-full items-center justify-between pt-10">
       <div
@@ -190,27 +80,20 @@
   </div>
 </template>
 <script setup>
-import Panel from "@/components/panel/index.vue"
-import UploadImage from "@/components/upload-image/index.vue"
 import HistorySide from "@/components/history-side/index.vue"
-import { imageRecommendPrompt } from "@/utils"
+import ImageText from "./ImageText.vue"
+import ImageFace from "./ImageFace.vue"
+import ImageBox from "./ImageBox.vue"
 import { useImage } from "./useImage"
 
 const {
-  pceditSetting,
-  styleOptions,
-  modelOptions,
   activeName,
   historyImgs,
-  inputStyle,
   loading,
   imageUrls,
-  imageSetting,
-  imageTools,
-  settingTagSelect,
-  targetImageSuccess,
-  sourceImageSuccess,
-  generateImage,
+  onLoading,
+  onSuccess,
+  onEnd,
   deleteHistory,
   selectHistory,
 } = useImage()

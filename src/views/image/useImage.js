@@ -22,8 +22,24 @@ export const useImage = (url) => {
       value: "kling",
     },
     {
+      label: "dall-e-3",
+      value: "dall-e-3",
+    },
+    {
+      label: "step-1x-medium",
+      value: "step-1x-medium",
+    },
+    {
       label: "flux-pro",
       value: "flux-pro",
+    },
+    {
+      label: "flux-pro-max",
+      value: "flux-pro-max",
+    },
+    {
+      label: "stable-diffusion-3",
+      value: "stable-diffusion-3",
     },
   ])
   const imageSetting = ref({
@@ -36,6 +52,14 @@ export const useImage = (url) => {
 
   const loading = ref(false)
   const imageUrls = ref([])
+
+  const onGenerateSuccess = (data) => {
+    imageUrls.value = data || []
+    loading.value = false
+    addHistory(data)
+    initHistory()
+  }
+
   const generateImage = async () => {
     if (loading.value) {
       window.$message.warning("正在生成图片，请稍后")
@@ -215,6 +239,23 @@ export const useImage = (url) => {
     localStorage.setItem("chatbot-image-generating-id", id)
     getTaskInterval(id)
   }
+  // -----------------
+  const onLoading = (data) => {
+    loading.value = data
+    if (data) {
+      imageUrls.value = []
+    }
+  }
+  const onSuccess = (data) => {
+    imageUrls.value = data || []
+    loading.value = false
+    addHistory(data)
+    initHistory()
+  }
+  const onEnd = () => {
+    loading.value = false
+    localStorage.setItem("chatbot-image-generating-id", "")
+  }
   return {
     pceditSetting,
     styleOptions,
@@ -232,6 +273,10 @@ export const useImage = (url) => {
     selectHistory,
     deleteHistory,
     generateImage,
+    // -------------------
+    onLoading,
+    onSuccess,
+    onEnd,
   }
 }
 

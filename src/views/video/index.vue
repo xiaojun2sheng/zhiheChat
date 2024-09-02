@@ -148,7 +148,7 @@
                 v-for="item in historyVideos"
                 width="240"
                 :preview-disabled="true"
-                :src="item.cover_uri"
+                :src="item.uploadImage?.url"
                 @click="selectHistory(item)"
               />
             </div>
@@ -156,35 +156,11 @@
         </HistorySide>
       </KeepAlive>
     </div>
-    <!-- 优化提示词 -->
-    <el-dialog
-      v-model="dialogVisible"
-      title="优化提示词"
-      width="500"
-      :before-close="cancelBetterPrompt"
-    >
-      <span v-if="batterVideoDesc">{{ batterVideoDesc }}</span>
-      <span v-else>正在生成提示词优化，请耐心等待...</span>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="cancelBetterPrompt">取消</el-button>
-          <el-button
-            type="primary"
-            :disabled="!batterVideoDesc"
-            @click="submitBetterPrompt"
-            >替换</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue"
-import { ElMessage } from "element-plus"
-import axios from "axios"
+import { ref } from "vue"
 import Panel from "@/components/panel/index.vue"
-import UploadFile from "@/components/upload/index.vue"
 import UploadImage from "@/components/upload-image/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
@@ -209,35 +185,6 @@ const {
   onUploading,
   onUploadSuccess,
 } = useVideo()
-
-let batterVideoDesc = ref("")
-// 优化提示词
-let dialogVisible = ref(false)
-const betterPrompt = async () => {
-  dialogVisible.value = true
-  // https://openai.chatfire.cn/prompts?prompt=一直带有雄鹰翅膀的老虎，飞翔在大海上方
-  axios
-    .get("https://openai.chatfire.cn/prompts?prompt=" + videoDesc.value)
-    .then((res) => {
-      batterVideoDesc.value = res.data.result
-    })
-    .catch((error) => {
-      ElMessage({ message: "优化提示词失败，请重新尝试一下", type: "warning" })
-      dialogVisible.value = false
-    })
-}
-
-// 确认替换提示词
-const submitBetterPrompt = () => {
-  videoDesc.value = batterVideoDesc.value
-  batterVideoDesc.value = ""
-  dialogVisible.value = false
-}
-// 取消替换提示词
-const cancelBetterPrompt = () => {
-  batterVideoDesc.value = ""
-  dialogVisible.value = false
-}
 </script>
 
 <style scoped lang="scss">

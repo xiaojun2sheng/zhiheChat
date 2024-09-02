@@ -10,6 +10,13 @@ export const generateImageTask = (data) =>
     method: "post",
     data,
   })
+export const generateImageApi = (data) =>
+  request({
+    // url: `${commonPrefix}/v1/images/generations`,
+    url: `/box/chat/image`,
+    method: "post",
+    data,
+  })
 
 // 换脸
 export const generateFaceswap = (data) =>
