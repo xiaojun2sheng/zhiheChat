@@ -5,7 +5,14 @@ export const createOrder = (params) =>
   request({
     url: `/box/system/order/create`,
     method: "get",
-    params
+    params,
+  })
+//  查询用户信息
+export const getOrderInfo = (orderId) =>
+  request({
+    url: `/box/system/order/orderInfo`,
+    method: "get",
+    params: { orderId },
   })
 
 //  查询充值套餐信息

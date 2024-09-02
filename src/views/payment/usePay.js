@@ -1,6 +1,6 @@
 import { ref, onMounted, computed } from "vue"
 import { useUser } from "@/hooks/useUser"
-import { getAccountPackage } from "@/api/pay"
+import { getAccountPackage, getOrderInfo } from "@/api/pay"
 import { usePayment } from "@/hooks/usePayment"
 // import * as wx from 'path/to/wxjsapi'; // 引入微信JS-SDK
 import QRCode from "qrcode"
@@ -81,10 +81,10 @@ export const usePay = () => {
 
   const payPopupRef = ref()
   const pay = async () => {
-    const { url } = await createOrderById(currentPackage.value.id)
+    const { url, orderId } = await createOrderById(currentPackage.value.id)
     payPopupRef.value.show({
       url,
-      order: currentPackage.value,
+      order: { ...currentPackage.value, orderId },
     })
   }
 

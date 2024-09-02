@@ -11,7 +11,7 @@
     style="width: 480px"
   >
     <div class="payment-popup flex justify-center gap-4">
-      <canvas id="codeCanvas" class="rounded-lg"></canvas>
+      <canvas id="codeCanvas" class="rounded-lg w-[150px] h-[150px]"></canvas>
       <div class="details text-xs">
         <p class="title flex gap-2">
           <img class="shrink-0" src="@/assets/wx.png" />
@@ -27,6 +27,7 @@
 
 <script setup>
 import { ref } from "vue"
+import { getOrderInfo } from "@/api/pay"
 import QRCode from "qrcode"
 
 const emit = defineEmits(["submit"])
@@ -47,8 +48,22 @@ const show = (data) => {
   visible.value = true
   setTimeout(() => {
     drawCodeImage(data.url)
+    // queryStatus()
   }, 500)
 }
+
+const intervalCode = ref('')
+const queryStatus = () => {
+  intervalCode.value = setInterval(() => {
+    getOrderInfo(order.value.orderId).then((res) => {
+      if (res.data) {
+       
+      }
+    })
+  }, 1000)
+  
+}
+
 const close = () => {
   visible.value = false
 }
