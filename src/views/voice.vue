@@ -81,6 +81,35 @@
       </n-spin>
       <Tips></Tips>
     </div>
+    <div v-if="historyVoice.length > 0">
+      <KeepAlive>
+        <HistorySide>
+          <template #content>
+            <div>
+              <div
+                class="relative cursor-pointer image-history h-[50px]"
+                v-for="(item, index) in historyVoice"
+                :key="index"
+              >
+                <div
+                  class="h-full flex gap-2 items-center"
+                  @click="resData = item.audioUrl"
+                >
+                  <SvgIcon
+                    class="shrink-0"
+                    :width="30"
+                    :height="30"
+                    hover
+                    icon="teenyicons:mp3-outline"
+                  ></SvgIcon>
+                  <span class="truncate">{{ item.prompt }}</span>
+                </div>
+              </div>
+            </div>
+          </template>
+        </HistorySide>
+      </KeepAlive>
+    </div>
   </div>
 </template>
 <script setup>
@@ -153,10 +182,12 @@ const createVoice = async () => {
   }
 }
 
+const historyVoice = ref([])
 const mergeBlobToMp3 = (voiceBlobList) => {
   const blob = new Blob(voiceBlobList, { type: "audio/mpeg" })
   const audioUrl = URL.createObjectURL(blob)
   resData.value = audioUrl
+  historyVoice.value.unshift({ prompt: voiceSoundConfig.value.input, audioUrl })
   loading.value = false
 }
 

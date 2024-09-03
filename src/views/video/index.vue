@@ -159,7 +159,6 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue"
 import Panel from "@/components/panel/index.vue"
 import UploadImage from "@/components/upload-image/index.vue"
 import Tips from "@/components/tips.vue"

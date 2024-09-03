@@ -132,6 +132,7 @@ export const useVideo = (url) => {
     let historys = JSON.parse(json)
     historys.push(video)
     localStorage.setItem("chatbot-video-history", JSON.stringify(historys))
+    initHistory()
   }
   const historyVideos = ref([])
   const initHistory = async () => {
