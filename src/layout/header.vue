@@ -68,15 +68,15 @@ const { initUser } = useUser()
 const { toLogout } = useLogin()
 
 const menuList = [
+  { title: "问答", id: "4", url: "/chat" },
+  { title: "图片", id: "3", url: "/image" },
+  { title: "语音", id: "5", url: "/voice" },
   { title: "视频", id: "1", url: "/video" },
   // { title: '音乐', id: '2', url: '/music' },
-  { title: "图片", id: "3", url: "/image" },
-  { title: "问答", id: "4", url: "/chat" },
-  { title: "语音", id: "5", url: "/voice" },
   { title: "提示词工厂", id: "6", url: "/robot-market" },
-  { title: "工具箱", id: "7", url: "/tools" },
+  // { title: "工具箱", id: "7", url: "/tools" },
   // { title: "提示词优化", id: "6", url: "/betterPrompt" },
-  { title: "账户", id: "8", url: "/payment" },
+  // { title: "账户", id: "8", url: "/payment" },
 ]
 
 const tabName = computed(() => {
@@ -119,6 +119,10 @@ const options = ref([
   {
     key: "header-divider",
     type: "divider",
+  },
+  {
+    label: "我的账户",
+    key: "payment",
   },
   {
     label: "退出登录",
@@ -164,6 +168,11 @@ const handleSelect = async (key) => {
   if (key == "logout") {
     await toLogout()
     window.$message.success("退出登录成功")
+  }
+  if (key == "payment") {
+    router.push({
+      path: "/payment",
+    })
   }
 }
 </script>

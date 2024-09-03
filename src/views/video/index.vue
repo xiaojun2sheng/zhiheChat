@@ -148,7 +148,7 @@
                 v-for="item in historyVideos"
                 width="240"
                 :preview-disabled="true"
-                :src="item.uploadImage?.url"
+                :src="item.cover_uri"
                 @click="selectHistory(item)"
               />
             </div>

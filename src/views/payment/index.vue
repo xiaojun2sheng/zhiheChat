@@ -47,7 +47,7 @@
         确认支付
       </n-button>
     </div>
-      <PayPopup ref="payPopupRef"></PayPopup>
+      <PayPopup ref="payPopupRef" @pay-success="initAccount"></PayPopup>
 </template>
 
 <script setup>

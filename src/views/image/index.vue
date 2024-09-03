@@ -9,15 +9,31 @@
             @on-end="onEnd"
           ></ImageText>
         </n-tab-pane>
-        <n-tab-pane name="face" tab="AI 换脸" display-directive="show">
+        <!-- <n-tab-pane name="face" tab="AI 换脸" display-directive="show">
           <ImageFace
             @on-success="onSuccess"
             @on-loading="onLoading"
             @on-end="onEnd"
           ></ImageFace>
-        </n-tab-pane>
+        </n-tab-pane> -->
         <n-tab-pane name="tools" tab="图片百宝箱" display-directive="show">
           <ImageBox
+            @on-success="onSuccess"
+            @on-loading="onLoading"
+            @on-end="onEnd"
+          ></ImageBox>
+        </n-tab-pane>
+        <n-tab-pane name="watermark" tab="去水印" display-directive="show">
+          <ImageBox
+            type="watermark"
+            @on-success="onSuccess"
+            @on-loading="onLoading"
+            @on-end="onEnd"
+          ></ImageBox>
+        </n-tab-pane>
+        <n-tab-pane name="oldphotos" tab="照片修复" display-directive="show">
+          <ImageBox
+            type="oldphotos"
             @on-success="onSuccess"
             @on-loading="onLoading"
             @on-end="onEnd"

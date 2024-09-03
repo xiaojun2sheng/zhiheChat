@@ -86,6 +86,7 @@ export const useVideo = (url) => {
       if (videoSetting.value.model === "vidu") {
         const creation = res?.creations[0]
         creation.taskId = creation.task_id
+        if(!creation.taskId.includes("vidu-")) creation.taskId = `vidu-${creation.taskId}`
         creation.creationId = creation.id
         videoInfo.value = creation
       }
@@ -102,7 +103,7 @@ export const useVideo = (url) => {
       addHistory({
         videoPrompt: videoPrompt.value,
         uploadImage: uploadImage.value,
-        uri: videoInfo.value.uri,
+        ...videoInfo.value,
       })
       window.$message.success("视频生成成功")
       clearInterval(intervalId.value)

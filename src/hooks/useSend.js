@@ -33,7 +33,6 @@ export const useSend = () => {
         } else {
         }
         content.value = chunk
-        console.log("输出中 content.value", content.value)
       },
       signal: controller.signal,
     })

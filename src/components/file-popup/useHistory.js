@@ -7,14 +7,14 @@ export const useHistory = (emit) => {
       const aiImages = JSON.parse(
         localStorage.getItem("chatbot-image-history") || "[]"
       )
-      aiImages.forEach((list) => {
-        if (list) {
-          const subAiImg = list.map((item) => {
-            return { ...item, type: "ai" }
-          })
-          fileList.value.push(...subAiImg)
-        }
-      })
+      // aiImages.forEach((list) => {
+      //   if (list) {
+      //     const subAiImg = list.map((item) => {
+      //       return { ...item, type: "ai" }
+      //     })
+      //     fileList.value.push(...subAiImg)
+      //   }
+      // })
     } catch (e) {}
   }
 

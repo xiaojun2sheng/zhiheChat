@@ -12,7 +12,7 @@
         </div>
       </template>
     </Panel>
-    <Panel icon="flat-color-icons:settings" title="参数设置">
+    <Panel v-if="!type" icon="flat-color-icons:settings" title="参数设置">
       <template #content>
         <div>
           <span>处理方式：</span>
@@ -94,6 +94,10 @@ import UploadImage from "@/components/upload-image/index.vue"
 import { useImageBox } from "./useImageBox"
 
 const emit = defineEmits(["on-success", "on-generating"])
+const props = defineProps({
+  type: String,
+})
+
 const {
   loading,
   ratioOptions,
@@ -106,6 +110,6 @@ const {
   styleSelect,
   pceditTypeChange,
   generatePcedit,
-} = useImageBox(emit)
+} = useImageBox(emit, props)
 </script>
 <style lang="sass" scoped></style>

@@ -9,6 +9,8 @@ export const useImage = (url) => {
     const json = localStorage.getItem("chatbot-image-history") || "[]"
     let historys = JSON.parse(json)
     historys.unshift(images)
+    // 缓存 10 个数据
+    historys.splice(10)
     localStorage.setItem("chatbot-image-history", JSON.stringify(historys))
     initHistory()
   }

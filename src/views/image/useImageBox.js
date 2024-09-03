@@ -3,7 +3,7 @@ import { getTaskById, generateImagePcedit } from "@/api/index"
 import { imageToolsOptions } from "@/utils/constant"
 import { base64ToImage } from "@/utils/tools"
 
-export const useImageBox = (emit) => {
+export const useImageBox = (emit, props) => {
   const sourceImage = ref("")
   const sourceImageSuccess = (data) => {
     sourceImage.value = data
@@ -58,6 +58,10 @@ export const useImageBox = (emit) => {
     style: "clay",
     create_level: "3",
     ext_ratio: "1:1",
+  })
+  onMounted(() => {
+    if(props.type == 'watermark') pceditSettings.value.type = '1'
+    if(props.type == 'oldphotos') pceditSettings.value.type = '3'
   })
   const pceditTypeChange = (label) => {
     pceditTypeOptions.value.forEach((t) => {

@@ -30,7 +30,7 @@ import { ref } from "vue"
 import { getOrderInfo } from "@/api/pay"
 import QRCode from "qrcode"
 
-const emit = defineEmits(["submit"])
+const emit = defineEmits(["submit", "pay-success"])
 const visible = ref(false)
 const codeSuccess = ref(false)
 
@@ -48,20 +48,20 @@ const show = (data) => {
   visible.value = true
   setTimeout(() => {
     drawCodeImage(data.url)
-    // queryStatus()
+    queryStatus()
   }, 500)
 }
 
-const intervalCode = ref('')
-const queryStatus = () => {
-  intervalCode.value = setInterval(() => {
-    getOrderInfo(order.value.orderId).then((res) => {
-      if (res.data) {
-       
-      }
-    })
-  }, 1000)
-  
+const intervalCode = ref("")
+const queryStatus = async () => {
+  intervalCode.value = setInterval(async () => {
+    const res = await getOrderInfo(order.value.orderId)
+    if (res.orderStatus === 1) {
+      window.$message.success("支付成功")
+      clearInterval(intervalCode.value)
+      emit("pay-success")
+    }
+  }, 2000)
 }
 
 const close = () => {
