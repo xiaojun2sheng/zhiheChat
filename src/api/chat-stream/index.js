@@ -21,8 +21,8 @@ function getHeaders() {
 //   })
 // }
 
-export const chat2gpt = ({ data, onDownloadProgress, signal }) =>
-  request({
+export const chat2gpt = ({ data, onDownloadProgress, signal }) => {
+  return request({
     url: `/box/chat/ask`,
     method: "post",
     headers: {
@@ -33,3 +33,4 @@ export const chat2gpt = ({ data, onDownloadProgress, signal }) =>
     onDownloadProgress,
     data,
   })
+}
