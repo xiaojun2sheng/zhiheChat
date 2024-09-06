@@ -139,7 +139,7 @@ export const useChatStore = defineStore({
         },
         {
           content: "",
-          role: "assitant",
+          role: "assistant",
           status: "loading",
         }
       )
