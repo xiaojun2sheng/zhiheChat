@@ -3,6 +3,7 @@ export const useHistory = (emit) => {
   const fileList = ref([])
   const initFileList = () => {
     fileList.value = JSON.parse(localStorage.getItem("chatbot-files") || "[]")
+    fileList.value.reverse()
     try {
       const aiImages = JSON.parse(
         localStorage.getItem("chatbot-image-history") || "[]"
