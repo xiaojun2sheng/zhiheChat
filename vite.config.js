@@ -48,8 +48,12 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/imageapi/, ""),
       },
+      // "/box": {
+      //   target: "https://agi.chatfire.cn",
+      //   changeOrigin: true,
+      // },
       "/box": {
-        target: "https://agi.chatfire.cn",
+        target: "http://103.74.173.48:6101",
         changeOrigin: true,
       },
     },

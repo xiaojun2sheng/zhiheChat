@@ -18,7 +18,14 @@
       @keydown.enter="submit"
     ></NInput>
     <div class="footer w-full px-3 pb-2">
-      <div></div>
+      <div>
+        <n-switch
+          size="small"
+          v-model:value="chatStore.isNetwork"
+          @update:value="handleChange"
+        />
+        <span v-if="chatStore.isNetwork" class="network-tips">联网搜索</span>
+      </div>
       <div class="flex gap-2">
         <n-tooltip trigger="hover">
           <template #trigger>
@@ -72,7 +79,9 @@ const chatStore = useChatStore()
 const { running, content, send, handleStop } = useSend(list)
 
 const sendContent = ref("")
-
+const handleChange = (val) => {
+  chatStore.switchNetwork(val)
+}
 const emit = defineEmits([
   "submit",
   "change",
@@ -135,6 +144,10 @@ const submit = async (e) => {
   if (chatStore.agent) {
     model = chatStore.agent.model
   }
+  // 联网默认 kimi
+  if (chatStore.isNetwork) {
+    model = "kimi"
+  }
   const req = {
     model,
     messages: list,
@@ -176,6 +189,11 @@ defineExpose({
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .network-tips {
+      margin-left: 5px;
+      font-size: 12px;
+      color: rgb(193, 203, 220);
+    }
     .item {
       width: 30px;
       height: 30px;

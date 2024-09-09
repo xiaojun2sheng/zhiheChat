@@ -24,6 +24,7 @@ export const useChatStore = defineStore({
         { key: "glm-4-9b-chat", label: "glm-4-9b-chat" },
       ], // 内置模型
       currentChatModel: "glm-3-turbo",
+      isNetwork: false, // 是否是网络对话
     }
   },
   getters: {
@@ -32,6 +33,9 @@ export const useChatStore = defineStore({
     },
   },
   actions: {
+    switchNetwork(isNetwork) {
+      this.isNetwork = isNetwork
+    },
     setCurrentChatModel(date) {
       this.currentChatModel = date
     },
@@ -105,7 +109,7 @@ export const useChatStore = defineStore({
     },
     setChat(data) {
       this.chatId = data?.id
-      this.chatInfo = data?convertChat(data) : {}
+      this.chatInfo = data ? convertChat(data) : {}
       function convertChat(data = {}) {
         return {
           ...data,

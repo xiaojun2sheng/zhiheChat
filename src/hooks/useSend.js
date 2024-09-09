@@ -1,6 +1,5 @@
 import { ref } from "vue"
 import { chat2gpt } from "@/api"
-import { set } from "@vueuse/core/index.cjs"
 
 export const useSend = () => {
   const running = ref(false)
@@ -15,24 +14,32 @@ export const useSend = () => {
       data,
       onDownloadProgress: (event) => {
         const chunk = event.event.target.responseText
-        console.log("输出中", chunk)
-        if (
-          chunk.startsWith("{") &&
-          chunk.includes("{") &&
-          chunk.includes("}")
-        ) {
-          try {
-            const { msg } = JSON.parse(chunk)
-            content.value = msg
-          } catch (e) {
-            console.log("流异常", e)
-            content.value = "系统异常"
-          } finally {
-            return
-          }
-        } else {
+        // console.log("输出中", chunk)
+
+        const t = getOpenAIContent(chunk)
+        console.log("输出中", t)
+        content.value += t
+        if (chunk.includes("[DONE]")) {
+          console.log("输出结束")
+          running.value = false
         }
-        content.value = chunk
+        // if (
+        //   chunk.startsWith("{") &&
+        //   chunk.includes("{") &&
+        //   chunk.includes("}")
+        // ) {
+        //   try {
+        //     const { msg } = JSON.parse(chunk)
+        //     content.value = msg
+        //   } catch (e) {
+        //     console.log("流异常", e)
+        //     content.value = "系统异常"
+        //   } finally {
+        //     return
+        //   }
+        // } else {
+        // }
+        // content.value = chunk
       },
       signal: controller.signal,
     })
@@ -52,32 +59,6 @@ export const useSend = () => {
         // content.value = ""
       })
   }
-
-  // 文件流处理
-  const readerStream = async (res) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const reader = res.body.getReader()
-        while (true) {
-          const { value, done } = await reader.read()
-          let decodeVal = new TextDecoder().decode(value)
-          console.log("decodeVal", decodeVal)
-          // TODO 异常直接终止
-          if (done) break
-          content.value += getVal(decodeVal)
-        }
-        resolve()
-      } catch (error) {
-        if (error.name === "AbortError") {
-          resolve()
-        } else {
-          console.log(error)
-          reject(error)
-        }
-      }
-    })
-  }
-
   const handleStop = () => {
     if (running.value) {
       controller.abort()
@@ -92,10 +73,10 @@ export const useSend = () => {
   }
 }
 
-function getVal(val) {
+function getOpenAIContent(chunk) {
   let content = ""
   try {
-    const list = val.split("data: ")
+    const list = chunk.split("data:")
     list.forEach((item) => {
       if (item) content += JSON.parse(item).choices[0].delta.content || ""
     })
