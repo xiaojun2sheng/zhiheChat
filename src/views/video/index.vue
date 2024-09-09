@@ -143,14 +143,28 @@
       <KeepAlive>
         <HistorySide>
           <template #content>
-            <div>
-              <n-image
-                v-for="item in historyVideos"
-                width="240"
-                :preview-disabled="true"
-                :src="item.cover_uri"
+            <div class="flex flex-col gap-2">
+              <div
+                class="relative cursor-pointer video-history"
+                v-for="(item, index) in historyVideos"
+                :key="index"
                 @click="selectHistory(item)"
-              />
+              >
+                <n-image
+                  width="240"
+                  :preview-disabled="true"
+                  :src="item.cover_uri"
+                  fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                />
+                <SvgIcon
+                  class="absolute top-0 right-0"
+                  :width="20"
+                  :height="20"
+                  hover
+                  icon="ion:close"
+                  @click="deleteHistory(index)"
+                ></SvgIcon>
+              </div>
             </div>
           </template>
         </HistorySide>
@@ -198,6 +212,18 @@ const {
 .video-progress-container {
   background-color: #191d21dd;
   color: #c5c7d5;
+}
+.video-history {
+  width: 120px;
+  height: 65px;
+  .svg-icon {
+    display: none;
+  }
+  &:hover {
+    .svg-icon {
+      display: block;
+    }
+  }
 }
 :deep(.n-select) {
   .n-base-selection {

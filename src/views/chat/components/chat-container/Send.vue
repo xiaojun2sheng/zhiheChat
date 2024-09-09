@@ -19,12 +19,12 @@
     ></NInput>
     <div class="footer w-full px-3 pb-2">
       <div>
-        <n-switch
+        <!-- <n-switch
           size="small"
           v-model:value="chatStore.isNetwork"
           @update:value="handleChange"
         />
-        <span v-if="chatStore.isNetwork" class="network-tips">联网搜索</span>
+        <span v-if="chatStore.isNetwork" class="network-tips">联网搜索</span> -->
       </div>
       <div class="flex gap-2">
         <n-tooltip trigger="hover">

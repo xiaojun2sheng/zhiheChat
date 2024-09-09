@@ -16,30 +16,30 @@ export const useSend = () => {
         const chunk = event.event.target.responseText
         // console.log("输出中", chunk)
 
-        const t = getOpenAIContent(chunk)
-        console.log("输出中", t)
-        content.value += t
-        if (chunk.includes("[DONE]")) {
-          console.log("输出结束")
-          running.value = false
-        }
-        // if (
-        //   chunk.startsWith("{") &&
-        //   chunk.includes("{") &&
-        //   chunk.includes("}")
-        // ) {
-        //   try {
-        //     const { msg } = JSON.parse(chunk)
-        //     content.value = msg
-        //   } catch (e) {
-        //     console.log("流异常", e)
-        //     content.value = "系统异常"
-        //   } finally {
-        //     return
-        //   }
-        // } else {
+        // const t = getOpenAIContent(chunk)
+        // console.log("输出中", t)
+        // content.value += t
+        // if (chunk.includes("[DONE]")) {
+        //   console.log("输出结束")
+        //   running.value = false
         // }
-        // content.value = chunk
+        if (
+          chunk.startsWith("{") &&
+          chunk.includes("{") &&
+          chunk.includes("}")
+        ) {
+          try {
+            const { msg } = JSON.parse(chunk)
+            content.value = msg
+          } catch (e) {
+            console.log("流异常", e)
+            content.value = "系统异常"
+          } finally {
+            return
+          }
+        } else {
+        }
+        content.value = chunk
       },
       signal: controller.signal,
     })

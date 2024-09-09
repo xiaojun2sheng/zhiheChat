@@ -139,9 +139,11 @@ export const useVideo = (url) => {
     const json = localStorage.getItem("chatbot-video-history") || "[]"
     const t = JSON.parse(json)
     historyVideos.value = t
+    historyVideos.value.reverse()
   }
 
   const selectHistory = (data) => {
+    debugger
     videoInfo.value = data
     videoPrompt.value = data.videoPrompt
     uploadImage.value = data.uploadImage
