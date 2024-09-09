@@ -143,7 +143,6 @@ export const useVideo = (url) => {
   }
 
   const selectHistory = (data) => {
-    debugger
     videoInfo.value = data
     videoPrompt.value = data.videoPrompt
     uploadImage.value = data.uploadImage
