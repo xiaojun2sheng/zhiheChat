@@ -50,8 +50,8 @@ export default defineConfig({
       },
 
       "/box": {
-        target: "https://agi.chatfire.cn",
-        // target: "http://103.74.173.48:6101",
+        // target: "https://agi.chatfire.cn",
+        target: "http://103.74.173.48:6101",
         changeOrigin: true,
       },
     },

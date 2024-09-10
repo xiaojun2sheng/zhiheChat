@@ -16,38 +16,19 @@ export const useSend = () => {
         const chunk = event.event.target.responseText
         // console.log("输出中", chunk)
 
-        // const t = getOpenAIContent(chunk)
-        // console.log("输出中", t)
-        // content.value += t
-        // if (chunk.includes("[DONE]")) {
-        //   console.log("输出结束")
-        //   running.value = false
-        // }
-        if (
-          chunk.startsWith("{") &&
-          chunk.includes("{") &&
-          chunk.includes("}")
-        ) {
-          try {
-            const { msg } = JSON.parse(chunk)
-            content.value = msg
-          } catch (e) {
-            console.log("流异常", e)
-            content.value = "系统异常"
-          } finally {
-            return
-          }
-        } else {
+        const t = getOpenAIContent(chunk)
+        console.log("输出中", t)
+        content.value += t
+        if (chunk.includes("[DONE]")) {
+          console.log("输出结束")
+          setTimeout(() => {
+            running.value = false
+          }, 500)
         }
-        content.value = chunk
       },
       signal: controller.signal,
     })
       .then(async (res) => {
-        // setTimeout(() => {
-        //   console.log("输出结束")
-        //   return Promise.resolve(res)
-        // }, 1000)
       })
       .catch((err) => {
         window.$messages.error(err)
@@ -74,14 +55,16 @@ export const useSend = () => {
 }
 
 function getOpenAIContent(chunk) {
-  let content = ""
+  let result = ""
   try {
     const list = chunk.split("data:")
     list.forEach((item) => {
-      if (item) content += JSON.parse(item).choices[0].delta.content || ""
+      item = item.replace("<|-hold-|>", "")
+      if (item && !item.includes("[DONE]"))
+        result += JSON.parse(item).choices[0].delta.content || ""
     })
   } catch (error) {
   } finally {
-    return content
+    return result
   }
 }
