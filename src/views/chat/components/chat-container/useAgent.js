@@ -8,7 +8,6 @@ export const useAgent = (sendRef) => {
   watch(
     () => sendRef.value?.sendContent,
     (newVal) => {
-      console.log("useCommand", newVal)
       if (newVal === "@") {
         showAgent()
       }

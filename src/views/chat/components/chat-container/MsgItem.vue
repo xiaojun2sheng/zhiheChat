@@ -91,7 +91,6 @@ const searchContentHtml = computed(() => {
       .replaceAll('...', "")
       .replaceAll(/\(http/g, "<|-suffix-|>\(http")
     val = val.replaceAll("<|-prefix-|>", "[").replaceAll("<|-suffix-|>", "]")
-    debugger
   }
   return (val && md.render(val)) || ""
 })

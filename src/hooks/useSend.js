@@ -15,8 +15,6 @@ export const useSend = () => {
       data,
       onDownloadProgress: (chunk) => {
         const { value, searchValue } = getOpenAIContent(chunk)
-        console.log("输出中", value, searchValue)
-
         content.value = value
         searchContent.value = searchValue
         if (chunk.includes("[DONE]")) {
