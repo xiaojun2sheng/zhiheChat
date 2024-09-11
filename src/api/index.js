@@ -30,7 +30,6 @@ export const getTaskById = (id) =>
 export const textToVoice = (config = {}) =>
   request({
     url: `/box/chat/speech`,
-    // url: `${commonPrefix}/v1/audio/speech`,
     method: "post",
     ...config,
   })
@@ -43,5 +42,11 @@ export const betterPromptApi = (prompt) => {
     params: {
       Prompt: prompt,
     },
+  })
+}
+export const getHot = () => {
+  return request({
+    url: `https://openai-dev.chatfire.cn/tools/v1/news/baidu`,
+    method: "get",
   })
 }

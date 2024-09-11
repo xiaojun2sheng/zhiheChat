@@ -120,7 +120,7 @@ const upload = (file) => {
 
 // 消息发送 ctrl + enter 换行
 const submit = async (e) => {
-  if (e.shiftKey) return
+  if (e?.shiftKey) return
   if (running.value || !sendContent.value) return
 
   emit("on-before", sendContent.value)

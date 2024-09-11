@@ -30,12 +30,7 @@
         停止接收
       </n-button>
     </div>
-    <div
-      v-else
-      class="homepage py-20 flex flex-col justify-center items-center"
-    >
-      <img src="@/assets/logo.png" alt="" />
-    </div>
+    <Homepage v-else @hot-item-select="hotItemSelect"></Homepage>
     <div class="footer">
       <AgentPanel ref="agentPanelRef"></AgentPanel>
       <Send
@@ -60,6 +55,7 @@ import MsgItem from "./MsgItem.vue"
 import { positionDomViewBottom } from "@/utils"
 import { useChatStore } from "@/stores"
 import AgentPanel from "./AgentPanel.vue"
+import Homepage from "./Homepage.vue"
 import { useAgent } from "./useAgent"
 
 const router = useRouter()
@@ -74,9 +70,8 @@ watchEffect(() => {
   positionDomViewBottom()
 })
 
-
-const selectPrompt = (val) => {
-  sendRef.value.setContent(val)
+const hotItemSelect = (val) => {
+  sendRef.value.shortcut(val)
 }
 
 let newId = ""

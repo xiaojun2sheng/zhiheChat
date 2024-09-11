@@ -12,13 +12,10 @@ export const useSend = () => {
     content.value = ""
     return chat2gpt({
       data,
-      onDownloadProgress: (event) => {
-        const chunk = event.event.target.responseText
-        // console.log("输出中", chunk)
-
+      onDownloadProgress: (chunk) => {
         const t = getOpenAIContent(chunk)
         console.log("输出中", t)
-        content.value += t
+        content.value = t
         if (chunk.includes("[DONE]")) {
           console.log("输出结束")
           setTimeout(() => {
@@ -28,8 +25,7 @@ export const useSend = () => {
       },
       signal: controller.signal,
     })
-      .then(async (res) => {
-      })
+      .then(async (res) => {})
       .catch((err) => {
         window.$messages.error(err)
       })
@@ -57,9 +53,9 @@ export const useSend = () => {
 function getOpenAIContent(chunk) {
   let result = ""
   try {
-    const list = chunk.split("data:")
+    const list = chunk.split("<|-hold-|>")
     list.forEach((item) => {
-      item = item.replace("<|-hold-|>", "")
+      item = item.replace("data:", "")
       if (item && !item.includes("[DONE]"))
         result += JSON.parse(item).choices[0].delta.content || ""
     })

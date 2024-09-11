@@ -34,6 +34,10 @@ instance.interceptors.response.use(
   (res) => {
     // 对响应数据做处理，例如只返回data部分
     let { data, code, msg } = res.data
+    // 热榜单独处理
+    if (res.config.url.includes("openai-dev.chatfire.cn")) {
+      return res.data
+    }
     let streamData
     // 流的异常响应也是流，唔要单独处理
     try {

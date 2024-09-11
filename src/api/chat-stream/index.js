@@ -22,15 +22,34 @@ function getHeaders() {
 // }
 
 export const chat2gpt = ({ data, onDownloadProgress, signal }) => {
-  return request({
-    url: `/box/chat/ask`,
+  // return request({
+  //   url: `/box/chat/ask`,
+  //   method: "post",
+  //   headers: {
+  //     Accept: "text/event-stream",
+  //   },
+  //   signal,
+  //   responseType: "stream",
+  //   onDownloadProgress,
+  //   data,
+  // })
+  let content = ""
+  return fetch(`/box/chat/ask`, {
     method: "post",
-    headers: {
-      Accept: "text/event-stream",
-    },
-    signal,
-    responseType: "stream",
-    onDownloadProgress,
-    data,
+    body: JSON.stringify(data),
+    signal: signal,
+    headers: getHeaders(),
+  }).then(async (res) => {
+    const reader = res.body.getReader()
+    while (true) {
+      const { value, done } = await reader.read()
+      let decodeVal = new TextDecoder().decode(value)
+      console.log("decodeVal", decodeVal)
+      content += decodeVal
+      onDownloadProgress(content)
+      if (done) {
+        break
+      }
+    }
   })
 }
