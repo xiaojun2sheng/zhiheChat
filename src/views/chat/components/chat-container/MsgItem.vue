@@ -84,7 +84,15 @@ const contentHtml = computed(() => {
   return md.render(val)
 })
 const searchContentHtml = computed(() => {
-  const val = props.item?.searchContent || ""
+  let val = props.item?.searchContent || ""
+  if (val) {
+    val = val
+      .replaceAll('检索 ', "<|-prefix-|>")
+      .replaceAll('...', "")
+      .replaceAll(/\(http/g, "<|-suffix-|>\(http")
+    val = val.replaceAll("<|-prefix-|>", "[").replaceAll("<|-suffix-|>", "]")
+    debugger
+  }
   return (val && md.render(val)) || ""
 })
 const status = computed(() => props.item.status)
@@ -162,4 +170,5 @@ const handlerAction = (type) => {
   padding: 16px 20px 0;
   font-size: 14px;
 }
+
 </style>

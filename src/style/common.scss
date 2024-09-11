@@ -35,6 +35,13 @@
 
 /* 滚动条的滑块部分 */
 ::-webkit-scrollbar-thumb {
-  background-color: #7A7A84; /* 滑块的背景颜色 */
+  background-color: #7a7a84; /* 滑块的背景颜色 */
   border-radius: 6px; /* 滑块的圆角 */
+}
+
+.msg-item__box {
+  a {
+    display: block;
+    color: #66a1ff;
+  }
 }
