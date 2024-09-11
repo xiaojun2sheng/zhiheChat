@@ -143,6 +143,7 @@ export const useChatStore = defineStore({
         },
         {
           content: "",
+          searchContent: "",
           role: "assistant",
           status: "loading",
         }
@@ -154,11 +155,13 @@ export const useChatStore = defineStore({
       localStorage.setItem("chatbot-chat-message-map", JSON.stringify(map))
     },
     // 更新最后一条回复的状态、信息
-    updateLastMessage(content, status) {
+    updateLastMessage(content, status, searchContent) {
       if (!this.messageList[this.messageList.length - 1]) return
       if (status) this.messageList[this.messageList.length - 1].status = status
       if (content)
         this.messageList[this.messageList.length - 1].content = content
+      if (searchContent)
+        this.messageList[this.messageList.length - 1].searchContent = searchContent
       const messageMapJson =
         localStorage.getItem("chatbot-chat-message-map") || "{}"
       const map = JSON.parse(messageMapJson)

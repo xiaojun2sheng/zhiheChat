@@ -4,7 +4,10 @@
       <div class="left_content">
         <div class="flex gap-2">
           <img src="@/assets/logo.png" />
-          <div class="bg-[#2f2f2f] content" v-html="contentHtml"></div>
+          <div class="bg-[#2f2f2f] content">
+            <div v-html="searchContentHtml"></div>
+            <div v-html="contentHtml"></div>
+          </div>
         </div>
         <div v-if="status == 'loading'" class="loading">
           <NSpin :size="15"></NSpin>
@@ -79,6 +82,10 @@ const userStore = useUserStore()
 const contentHtml = computed(() => {
   const val = props.item.userContent || props.item.content
   return md.render(val)
+})
+const searchContentHtml = computed(() => {
+  const val = props.item?.searchContent || ""
+  return (val && md.render(val)) || ""
 })
 const status = computed(() => props.item.status)
 

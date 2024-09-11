@@ -37,6 +37,7 @@
         class="w-full"
         ref="sendRef"
         @change="msgChange"
+        @search-change="searchMsgChange"
         @on-before="beforeSend"
         @on-end="endSend"
         @on-error="onError"
@@ -96,6 +97,11 @@ const endSend = () => {
   }
 }
 
+const searchMsgChange = (val) => {
+  // sendContent.value = val
+  chatStore.updateLastMessage("", "", val)
+  positionDomViewBottom()
+}
 const msgChange = (val) => {
   sendContent.value = val
   chatStore.updateLastMessage(val)

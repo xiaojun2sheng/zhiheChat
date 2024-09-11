@@ -4,6 +4,7 @@ import { chat2gpt } from "@/api"
 export const useSend = () => {
   const running = ref(false)
   const content = ref("")
+  const searchContent = ref("")
   let controller = new AbortController()
   const send = async (data) => {
     // 发送之前进行套餐校验
@@ -13,9 +14,11 @@ export const useSend = () => {
     return chat2gpt({
       data,
       onDownloadProgress: (chunk) => {
-        const t = getOpenAIContent(chunk)
-        console.log("输出中", t)
-        content.value = t
+        const { value, searchValue } = getOpenAIContent(chunk)
+        console.log("输出中", value, searchValue)
+
+        content.value = value
+        searchContent.value = searchValue
         if (chunk.includes("[DONE]")) {
           console.log("输出结束")
           setTimeout(() => {
@@ -27,7 +30,7 @@ export const useSend = () => {
     })
       .then(async (res) => {})
       .catch((err) => {
-        window.$messages.error(err)
+        console.log(err)
       })
       .finally(() => {
         setTimeout(() => {
@@ -44,6 +47,7 @@ export const useSend = () => {
   }
   return {
     content,
+    searchContent,
     running,
     send,
     handleStop,
@@ -51,16 +55,23 @@ export const useSend = () => {
 }
 
 function getOpenAIContent(chunk) {
-  let result = ""
+  let value = ""
+  let searchValue = ""
   try {
     const list = chunk.split("<|-hold-|>")
     list.forEach((item) => {
       item = item.replace("data:", "")
-      if (item && !item.includes("[DONE]"))
-        result += JSON.parse(item).choices[0].delta.content || ""
+      if (item && !item.includes("[DONE]")) {
+        let val = JSON.parse(item).choices[0].delta.content || ""
+        if (val.startsWith("检索 ")) {
+          searchValue += val
+        } else {
+          value += val
+        }
+      }
     })
   } catch (error) {
   } finally {
-    return result
+    return { value, searchValue }
   }
 }

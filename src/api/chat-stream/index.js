@@ -34,6 +34,7 @@ export const chat2gpt = ({ data, onDownloadProgress, signal }) => {
   //   data,
   // })
   let content = ""
+  let searchContent = ''
   return fetch(`/box/chat/ask`, {
     method: "post",
     body: JSON.stringify(data),
@@ -44,7 +45,6 @@ export const chat2gpt = ({ data, onDownloadProgress, signal }) => {
     while (true) {
       const { value, done } = await reader.read()
       let decodeVal = new TextDecoder().decode(value)
-      console.log("decodeVal", decodeVal)
       content += decodeVal
       onDownloadProgress(content)
       if (done) {

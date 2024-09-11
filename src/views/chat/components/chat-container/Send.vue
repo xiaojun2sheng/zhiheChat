@@ -76,7 +76,7 @@ import Plugins from "./Plugins.vue"
 
 const list = ref([])
 const chatStore = useChatStore()
-const { running, content, send, handleStop } = useSend(list)
+const { running, content, searchContent, send, handleStop } = useSend(list)
 
 const sendContent = ref("")
 const handleChange = (val) => {
@@ -96,6 +96,13 @@ watch(
   () => content.value,
   (val) => {
     if (running.value) emit("change", val)
+  }
+)
+// 监听消息响应
+watch(
+  () => searchContent.value,
+  (val) => {
+    if (running.value) emit("search-change", val)
   }
 )
 
@@ -146,7 +153,7 @@ const submit = async (e) => {
   }
   // 联网默认 kimi
   if (chatStore.isNetwork) {
-    model = "kimi"
+    model = "glm-4-all"
   }
   const req = {
     model,
