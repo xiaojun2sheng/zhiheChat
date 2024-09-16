@@ -1,40 +1,23 @@
 import { request } from "@/utils"
+import { useUserStore } from "@/stores"
+
 function getHeaders() {
-  const token = localStorage.getItem("chatbot-token")
-  return {
+  const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
     "no-cors": true,
     mode: "no-cors",
   }
+  const token = localStorage.getItem("chatbot-token")
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`
+  }
+  return headers
 }
 
-// gpt 问答
-// export const chat2gpt = async (data, { signal }) => {
-//   // return fetch(`${import.meta.env.VITE_APP_BASE_API}/v1/chat/completions`, {
-//   // return fetch(`/box/chat/ask`, {
-//   return fetch(`https://agi.chatfire.cn/box/chat/ask`, {
-//     method: "post",
-//     signal,
-//     body: JSON.stringify(data),
-//     headers: getHeaders(),
-//   })
-// }
-
 export const chat2gpt = ({ data, onDownloadProgress, signal }) => {
-  // return request({
-  //   url: `/box/chat/ask`,
-  //   method: "post",
-  //   headers: {
-  //     Accept: "text/event-stream",
-  //   },
-  //   signal,
-  //   responseType: "stream",
-  //   onDownloadProgress,
-  //   data,
-  // })
   let content = ""
-  let searchContent = ''
+  let searchContent = ""
+  const userStore = useUserStore()
   return fetch(`/box/chat/ask`, {
     method: "post",
     body: JSON.stringify(data),
@@ -45,6 +28,12 @@ export const chat2gpt = ({ data, onDownloadProgress, signal }) => {
     while (true) {
       const { value, done } = await reader.read()
       let decodeVal = new TextDecoder().decode(value)
+      if (decodeVal.includes(`"code":401`)) {
+        onDownloadProgress("登录失效，请重新登录")
+        window.$message.error("请重新登录")
+        userStore.setShowLogin(true)
+        break
+      }
       content += decodeVal
       onDownloadProgress(content)
       if (done) {

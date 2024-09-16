@@ -81,7 +81,7 @@ export const usePoster = () => {
 
     const isENV = import.meta.env.DEV
     fetch(
-      `${isENV ? "" : "https://xy.siliconflow.cn/"}/siliconflow/api/chat`,
+      `${isENV ? "/siliconflow" : "https://xy.siliconflow.cn"}/api/chat`,
       requestOptions
     )
       .then((response) => {

@@ -2,7 +2,7 @@
   <div class="common_page flex gap-2">
     <div class="w-[400px] shrink-0 overflow-auto">
       <n-tabs type="line" v-model:value="activeName" animated>
-        <n-tab-pane name="text" tab="生成图片" display-directive="show">
+        <n-tab-pane name="text" tab="文生图" display-directive="show">
           <ImageText
             @on-success="onSuccess"
             @on-loading="onLoading"
@@ -16,13 +16,7 @@
             @on-end="onEnd"
           ></ImageFace>
         </n-tab-pane> -->
-        <n-tab-pane name="tools" tab="图片百宝箱" display-directive="show">
-          <ImageBox
-            @on-success="onSuccess"
-            @on-loading="onLoading"
-            @on-end="onEnd"
-          ></ImageBox>
-        </n-tab-pane>
+
         <n-tab-pane name="watermark" tab="去水印" display-directive="show">
           <ImageBox
             type="watermark"
@@ -34,6 +28,21 @@
         <n-tab-pane name="oldphotos" tab="照片修复" display-directive="show">
           <ImageBox
             type="oldphotos"
+            @on-success="onSuccess"
+            @on-loading="onLoading"
+            @on-end="onEnd"
+          ></ImageBox>
+        </n-tab-pane>
+        <!-- <n-tab-pane name="idPhotos" tab="证件照" display-directive="show">
+          <ImageID
+            type="idPhotos"
+            @on-success="onSuccess"
+            @on-loading="onLoading"
+            @on-end="onEnd"
+          ></ImageID>
+        </n-tab-pane> -->
+        <n-tab-pane name="tools" tab="百宝箱" display-directive="show">
+          <ImageBox
             @on-success="onSuccess"
             @on-loading="onLoading"
             @on-end="onEnd"
@@ -100,6 +109,7 @@ import HistorySide from "@/components/history-side/index.vue"
 import ImageText from "./ImageText.vue"
 import ImageFace from "./ImageFace.vue"
 import ImageBox from "./ImageBox.vue"
+import ImageID from "./ImageID.vue"
 import { useImage } from "./useImage"
 
 const {

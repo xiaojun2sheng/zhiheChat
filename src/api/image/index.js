@@ -47,8 +47,15 @@ export const generateFaceswap = (data) =>
  */
 export const generateImagePcedit = (data) =>
   request({
-    // url: `${commonPrefix}/tasks/pcedit`,
     url: `/box/chat/pcedit`,
+    method: "post",
+    data,
+  })
+
+// 证件照
+export const generateImageIDPhoto = (data) =>
+  request({
+    url: `/box/chat/idPhoto`,
     method: "post",
     data,
   })

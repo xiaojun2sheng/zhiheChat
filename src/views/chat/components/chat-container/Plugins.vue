@@ -1,6 +1,24 @@
 <template>
-  <div class="plugins" v-if="chatStore.agent">
-    <div class="tag">
+  <div class="plugins">
+    <!-- 有 agent 优先展示 agent -->
+    <div v-if="chatStore.currentChatModel && !chatStore.agent" class="tag">
+      <div class="flex justify-center items-center">
+        <div class="talking">
+          <n-dropdown
+            @select="handleSelect"
+            trigger="hover"
+            placement="right"
+            :options="chatStore.presetChatModels"
+          >
+            <p>
+              当前模型
+              <span class="name">{{ chatStore.currentChatModel }}</span>
+            </p>
+          </n-dropdown>
+        </div>
+      </div>
+    </div>
+    <div v-if="chatStore.agent" class="tag">
       <div class="flex justify-center items-center">
         <div class="talking">
           和
@@ -21,6 +39,9 @@ const chatStore = useChatStore()
 
 const close = () => {
   chatStore.setAgent()
+}
+const handleSelect = (key) => {
+  chatStore.setCurrentChatModel(key)
 }
 </script>
 <style lang="scss" scoped>

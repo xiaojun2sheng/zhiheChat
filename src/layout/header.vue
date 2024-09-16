@@ -17,14 +17,14 @@
       >
       </n-tab-pane>
     </n-tabs>
-    <SvgIcon
+    <!-- <SvgIcon
       class="mr-2"
       :width="30"
       :height="30"
       icon="fluent:share-android-32-filled"
       color="#1E88E5"
       @click="showShareModal"
-    ></SvgIcon>
+    ></SvgIcon> -->
     <SvgIcon
       class="mr-2 heartbeat"
       :width="30"
