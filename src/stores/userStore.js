@@ -4,6 +4,7 @@ export const useUserStore = defineStore({
   id: "user",
   state: () => {
     return {
+      showLogin: false, // 是否显示登录框
       isLogin: !!localStorage.getItem("chatbot-token"),
       account: {
         token: 0,
@@ -13,6 +14,9 @@ export const useUserStore = defineStore({
   },
   getters: {},
   actions: {
+    setShowLogin(showLogin) {
+      this.showLogin = showLogin
+    },
     setLogin(isLogin) {
       this.isLogin = isLogin
     },

@@ -98,7 +98,6 @@ const endSend = () => {
 }
 
 const searchMsgChange = (val) => {
-  // sendContent.value = val
   chatStore.updateLastMessage("", "", val)
   positionDomViewBottom()
 }

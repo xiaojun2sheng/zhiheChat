@@ -1,6 +1,6 @@
 <template>
   <NModal
-    v-model:show="visible"
+    v-model:show="userStore.showLogin"
     :auto-focus="false"
     preset="dialog"
     :title="isLogin ? '登录' : '注册'"
@@ -59,7 +59,7 @@
         <n-button text @click="isLogin = !isLogin">
           {{ isLogin ? "去注册" : "去登录" }}
         </n-button>
-        <n-button @click="visible = false">取消</n-button>
+        <n-button @click="close">取消</n-button>
         <n-button type="primary" @click="submit"> {{ btnText }} </n-button>
       </div>
     </div>
@@ -68,11 +68,13 @@
 
 <script setup>
 import { useInit } from "./useInit"
+import { useUserStore } from "@/stores"
+
+const userStore = useUserStore()
 
 const {
   btnText,
   isLogin,
-  visible,
   codeImg,
   rules,
   loginInfo,

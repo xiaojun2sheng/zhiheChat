@@ -151,7 +151,7 @@ const submit = async (e) => {
   if (chatStore.agent) {
     model = chatStore.agent.model
   }
-  // 联网默认 kimi
+  // 联网默认 glm-4-all
   if (chatStore.isNetwork) {
     model = "glm-4-all"
   }

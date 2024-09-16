@@ -38,6 +38,11 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 8020,
     proxy: {
+      "/siliconflow": {
+        target: "https://xy.siliconflow.cn",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/siliconflow/, ""),
+      },
       "/commonapi": {
         target: "https://api.chatfire.cn",
         changeOrigin: true,

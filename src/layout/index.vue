@@ -8,7 +8,10 @@
 </template>
 <script setup>
 import Header from "./header.vue"
+import { onMounted } from "vue"
 
+onMounted(() => {
+})
 defineProps({})
 </script>
 

@@ -1,11 +1,11 @@
 import { ref, watch, onMounted, computed } from "vue"
-import { useAppStore } from "@/stores"
+import { useAppStore, useUserStore } from "@/stores"
 import { generateCode } from "@/api"
 import { useLogin } from "@/hooks/useLogin"
 
 export const useInit = () => {
-  const visible = ref(false)
   const isLogin = ref(true)
+  const userStore = useUserStore()
   const { toLogin, toRegister } = useLogin()
 
   const btnText = computed(() => (isLogin.value ? "登录" : "注册"))
@@ -20,8 +20,8 @@ export const useInit = () => {
   }
 
   watch(
-    () => visible.value,
-    () => refreshCode(),
+    () => userStore.showLogin,
+    (val) => val && refreshCode(),
     { immediate: true }
   )
 
@@ -33,7 +33,7 @@ export const useInit = () => {
       code: "",
       uuid: "",
     }
-    visible.value = true
+    userStore.setShowLogin(true)
   }
 
   const rules = {
@@ -60,7 +60,7 @@ export const useInit = () => {
   }
 
   const close = () => {
-    visible.value = false
+    userStore.setShowLogin(false)
   }
 
   const formRef = ref(null)
@@ -104,14 +104,13 @@ export const useInit = () => {
   }
 
   onMounted(() => {
-    !localStorage.getItem("chatbot-token") && (visible.value = true)
+    !localStorage.getItem("chatbot-token") && userStore.setShowLogin(true)
   })
   return {
     isLogin,
     rules,
     loginInfo,
     formRef,
-    visible,
     codeImg,
     btnText,
     refreshCode,

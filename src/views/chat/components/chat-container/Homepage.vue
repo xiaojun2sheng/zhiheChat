@@ -23,7 +23,7 @@ onMounted(() => {
 const list = ref([])
 const initHot = async () => {
   const res = await getHot()
-  console.log(res)
+  // console.log(res)
   let t = res.split("\n").splice(0, 20)
   try {
     t = t.map((val) => val.replaceAll(/^\d+./g, "").trim())

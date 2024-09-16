@@ -58,6 +58,7 @@ instance.interceptors.response.use(
       msg = msg || streamData?.msg
       if (code === 401) {
         const userStore = useUserStore()
+        userStore.setShowLogin(true)
         userStore.setLogin(false)
         localStorage.removeItem("chatbot-token")
       }
@@ -66,7 +67,7 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
-    const msg = error.response.data?.error?.message || "系统异常"
+    const msg = error.response?.data?.error?.message || "系统异常"
     window.$message.error(msg)
     return Promise.reject(error)
   }

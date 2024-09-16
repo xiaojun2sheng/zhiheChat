@@ -18,6 +18,14 @@
       </n-tab-pane>
     </n-tabs>
     <SvgIcon
+      class="mr-2"
+      :width="30"
+      :height="30"
+      icon="fluent:share-android-32-filled"
+      color="#1E88E5"
+      @click="showShareModal"
+    ></SvgIcon>
+    <SvgIcon
       class="mr-2 heartbeat"
       :width="30"
       :height="30"
@@ -43,6 +51,7 @@
     >
 
     <LoginPopup ref="loginRef"></LoginPopup>
+    <PosterPopup ref="posterRef"></PosterPopup>
   </div>
 </template>
 
@@ -51,6 +60,7 @@ import { onMounted, ref, computed, h } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import UserCenter from "./userCenter.vue"
 import LoginPopup from "@/components/login-popup/index.vue"
+import PosterPopup from "@/components/poster-popup/index.vue"
 import { useAppStore, useUserStore } from "@/stores"
 import { useLogin } from "@/hooks/useLogin"
 import { useUser } from "@/hooks/useUser"
@@ -90,7 +100,7 @@ const jumpPage = (url) => {
 }
 
 let activeIndex = ref("1")
-
+const posterRef = ref(null)
 onMounted(() => {
   setTimeout(() => {
     getMenuActice()
@@ -103,11 +113,6 @@ const getMenuActice = () => {
   })
   if (!menuItem) return
   activeIndex.value = menuItem.url
-}
-
-const switchTheme = () => {
-  if (appStore.theme == "light") appStore.theme = "dark"
-  else appStore.theme = "light"
 }
 
 const options = ref([
@@ -156,6 +161,11 @@ function renderCustomHeader() {
     ]
   )
 }
+
+const showShareModal = () => {
+  posterRef.value.show()
+}
+
 const sigin = async (key) => {
   const res = await signIn()
   if (res.includes("请勿重复")) {
