@@ -124,10 +124,12 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
+  
 
   .body {
     flex: 1;
     overflow: auto;
+    padding-right: 5px;
   }
   .footer {
     position: relative;

@@ -35,7 +35,7 @@ onMounted(() => {
     margin: 0 auto;
     height: calc(100% - 46px);
     padding-bottom: 10px;
-    max-width: 792px;
+    max-width: 850px;
   }
 }
 </style>

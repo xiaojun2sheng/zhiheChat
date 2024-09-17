@@ -29,13 +29,13 @@
 }
 /* 滚动条整体部分 */
 ::-webkit-scrollbar {
-  width: 12px; /* 横向滚动条的宽度 */
+  width: 2px; /* 横向滚动条的宽度 */
   height: 2px; /* 纵向滚动条的高度 */
 }
 
 /* 滚动条的滑块部分 */
 ::-webkit-scrollbar-thumb {
-  background-color: #7a7a84; /* 滑块的背景颜色 */
+  background-color: #7a7a84 !important; /* 滑块的背景颜色 */
   border-radius: 6px; /* 滑块的圆角 */
 }
 

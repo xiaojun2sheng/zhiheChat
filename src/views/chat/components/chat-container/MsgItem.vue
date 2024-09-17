@@ -41,8 +41,10 @@
       v-if="position == 'right'"
       :class="['msg-item__box', 'msg-item__right']"
     >
-      <div class="content" v-html="contentHtml"></div>
-      <!-- <img :src="userStore.avatar" /> -->
+      <div class="flex gap-2">
+        <div class="content" v-html="contentHtml"></div>
+        <n-avatar round size="small" :src="Avatar" :size="30" />
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +55,7 @@ import { useUserStore } from "@/stores"
 import { copy } from "@/utils"
 import markdownit from "markdown-it"
 import hljs from "highlight.js/lib/core"
+import Avatar from "@/assets/avatar-g.png"
 
 const md = markdownit({
   html: false, // 在源码中启用 HTML 标签
@@ -87,8 +90,8 @@ const searchContentHtml = computed(() => {
   let val = props.item?.searchContent || ""
   if (val) {
     val = val
-      .replaceAll('检索 ', "<|-prefix-|>")
-      .replaceAll('...', "")
+      .replaceAll("检索 ", "<|-prefix-|>")
+      .replaceAll("...", "")
       .replaceAll(/\(http/g, "<|-suffix-|>\(http")
     val = val.replaceAll("<|-prefix-|>", "[").replaceAll("<|-suffix-|>", "]")
   }
@@ -149,8 +152,8 @@ const handlerAction = (type) => {
     &.msg-item__right {
       align-self: flex-end;
       border-radius: 10px;
-      background-color: #28499d;
       .content {
+        background-color: #28499d;
       }
     }
   }
@@ -169,5 +172,4 @@ const handlerAction = (type) => {
   padding: 16px 20px 0;
   font-size: 14px;
 }
-
 </style>
