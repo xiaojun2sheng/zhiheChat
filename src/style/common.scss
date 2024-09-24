@@ -45,3 +45,18 @@
     color: #66a1ff;
   }
 }
+
+.common_page {
+  .n-tabs-nav {
+    padding: 5px 0 10px 0;
+  }
+}
+
+.n-tabs {
+  .n-tab-pane {
+    padding: 0 !important;
+  }
+  .n-tabs-tab {
+    padding: 5px 0 !important;
+  }
+}

@@ -193,10 +193,9 @@ const handleSelect = async (key) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // height: 55px;
+  gap: 5px;
+  padding: 5px 0;
   .logo {
-    padding: 0 8px;
-    // width: 120px;
     img {
       width: 40px;
     }
