@@ -32,7 +32,7 @@ import { copy } from "@/utils"
 const handlerAction = (type, item) => {
   if (type == "copy") {
     copy(item.prompt)
-    $message.success("复制成功")
+    // $message.success("复制成功")
   }
 }
 
