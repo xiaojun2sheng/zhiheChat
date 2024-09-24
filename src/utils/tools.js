@@ -40,6 +40,7 @@ export const copy = async (val) => {
   copyInput.select()
   document.execCommand("copy")
   document.body.removeChild(copyInput)
+  window.$message.success("复制成功")
 }
 
 export const base64ToImage = (base64String, callback) => {

@@ -7,6 +7,7 @@
       <div class="header">
         <div class="header_left">
           <span class="tag">AI 机器人</span>
+          <span v-if="data.model" class="tag">{{ data.model }}</span>
           <span class="time">{{ data.time }}</span>
         </div>
         <div v-show="mediaData" class="header_right">
@@ -21,8 +22,17 @@
         </div>
       </div>
       <div class="content">
-        <p class="prompt-zh">
-          {{ data.prompt || data.videoPrompt }}
+        <p v-if="prompt" class="prompt-zh flex justify-between">
+          {{ prompt }}
+          <!-- lucide-lab:copy-text -->
+          <SvgIcon
+            class="ml-2 cursor-pointer shrink-0"
+            :width="15"
+            :height="15"
+            hover
+            icon="lucide-lab:copy-text"
+            @click="copy(prompt)"
+          ></SvgIcon>
         </p>
         <div class="media-box">
           <template v-if="type === 'images'">
@@ -62,10 +72,7 @@
           <template v-else-if="type === 'audios'">
             <n-spin v-if="loading"></n-spin>
             <div v-else>
-              <audio
-                :src="mediaData.url"
-                controls="controls"
-              ></audio>
+              <audio :src="mediaData.url" controls="controls"></audio>
             </div>
           </template>
           <template v-else-if="type === 'empty'">
@@ -81,6 +88,7 @@
 import { computed, onMounted, onUnmounted } from "vue"
 import LogoAvatar from "@/assets/logo.png"
 import { useCountDown } from "@/hooks/useCountDown"
+import { copy } from "@/utils/tools"
 
 const { progress, initCountDown, clearCountDown } = useCountDown()
 
@@ -91,6 +99,7 @@ const props = defineProps({
 })
 const emit = defineEmits(["delete", "upscale-video"])
 const mediaData = computed(() => props.data?.data)
+const prompt = computed(() => props.data.prompt || props.data.videoPrompt)
 
 const deleteMedia = () => {
   emit("delete")

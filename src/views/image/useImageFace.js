@@ -44,7 +44,12 @@ export const useImageFace = (emit) => {
       })
       queryTasking.value = false
       if (res?.imageUrl) {
-        emit("on-success", [{ url: res.imageUrl }])
+        emit("on-success", {
+          data:[{ url: res.imageUrl }],
+          prompt: "换脸",
+          sourceImages: [sourceImage.value.url, targetImage.value.url],
+        })
+        // { data: res.data, prompt: imageSetting.value.prompt, model: imageSetting.value.model }
         clearTask()
       }
       if (res.status == "failed") {

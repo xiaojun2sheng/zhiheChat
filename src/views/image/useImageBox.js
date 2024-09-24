@@ -48,7 +48,12 @@ export const useImageBox = (emit, props) => {
         })
       }
       if (list.length == 0) return
-      emit("on-success", list)
+      emit("on-success", {
+        data: list,
+        prompt: styleOptions.value.find((t) => t.checked)?.label,
+        model: pceditTypeOptions.value.find((t) => t.checked)?.label,
+        sourceImages: [sourceImage.value.url],
+      })
       clearTask()
     }, 3000)
   }
@@ -60,8 +65,8 @@ export const useImageBox = (emit, props) => {
     ext_ratio: "1:1",
   })
   onMounted(() => {
-    if(props.type == 'watermark') pceditSettings.value.type = '1'
-    if(props.type == 'oldphotos') pceditSettings.value.type = '3'
+    if (props.type == "watermark") pceditSettings.value.type = "1"
+    if (props.type == "oldphotos") pceditSettings.value.type = "3"
   })
   const pceditTypeChange = (label) => {
     pceditTypeOptions.value.forEach((t) => {

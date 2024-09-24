@@ -36,7 +36,7 @@ const bindAttrs = computed(() => {
 .dark{
   .svg-icon {
   &.has-hover:hover {
-    color: #666666;
+    color: #ffffff;
   }
 }
 }
