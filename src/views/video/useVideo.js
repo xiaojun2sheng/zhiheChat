@@ -106,12 +106,8 @@ export const useVideo = (url) => {
         data: videoInfo.value,
         prompt: videoPrompt.value,
         imageUrl: uploadImage.value,
+        model: videoSetting.value.model,
       })
-      // addHistory({
-      //   videoPrompt: videoPrompt.value,
-      //   uploadImage: uploadImage.value,
-      //   ...videoInfo.value,
-      // })
       window.$message.success("视频生成成功")
       // clearInterval(intervalId.value)
       localStorage.setItem("chatbot-video-generating-id", "")
