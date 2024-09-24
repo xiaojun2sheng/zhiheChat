@@ -16,10 +16,11 @@ export const useHistory = () => {
     let historyFiles = JSON.parse(fileJson)
 
     // 模型改造
+    debugger
     historyImages = historyImages.map((item) => {
       let result = {}
       if (!item.uuid) {
-        result.data = item.data ? { ...item } : { data: item }
+        result.data = item
         result.uuid = generateUUID()
       } else result = item.data ? item : { data: item, ...item }
       return result
