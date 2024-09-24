@@ -16,7 +16,6 @@ export const useHistory = () => {
     let historyFiles = JSON.parse(fileJson)
 
     // 模型改造
-    debugger
     historyImages = historyImages.map((item) => {
       let result = {}
       if (!item.uuid) {
