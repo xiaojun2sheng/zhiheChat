@@ -7,12 +7,17 @@
       <div class="header">
         <div class="header_left">
           <span class="tag">AI 机器人</span>
-          <span class="time">2024-09-19 22:31:06 </span>
+          <span class="time">{{ data.time }}</span>
         </div>
-        <div class="header_right">
+        <div v-show="mediaData" class="header_right">
           <!-- <span class="cursor-pointer">分享</span> -->
           <span class="cursor-pointer" @click="deleteMedia">删除</span>
-          <span v-if="mediaData?.grade == 'draft'" class="cursor-pointer" @click="emit('upscale-video')">视频优化</span>
+          <span
+            v-if="mediaData?.grade == 'draft'"
+            class="cursor-pointer"
+            @click="emit('upscale-video')"
+            >视频优化</span
+          >
         </div>
       </div>
       <div class="content">
@@ -23,7 +28,10 @@
           <template v-if="type === 'images'">
             <n-spin v-if="loading"></n-spin>
             <div v-else>
-              <n-image width="340px" :src="mediaData?.[0]?.url || mediaData?.url"></n-image>
+              <n-image
+                width="340px"
+                :src="mediaData?.[0]?.url || mediaData?.url"
+              ></n-image>
             </div>
           </template>
           <template v-else-if="type === 'videos'">
@@ -53,7 +61,15 @@
           </template>
           <template v-else-if="type === 'audios'">
             <n-spin v-if="loading"></n-spin>
-            <div v-else></div>
+            <div v-else>
+              <audio
+                :src="mediaData.url"
+                controls="controls"
+              ></audio>
+            </div>
+          </template>
+          <template v-else-if="type === 'empty'">
+            <n-empty description="暂无数据" />
           </template>
         </div>
       </div>
@@ -74,7 +90,7 @@ const props = defineProps({
   loading: Boolean,
 })
 const emit = defineEmits(["delete", "upscale-video"])
-const mediaData = computed(() => props.data.data)
+const mediaData = computed(() => props.data?.data)
 
 const deleteMedia = () => {
   emit("delete")

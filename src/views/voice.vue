@@ -71,7 +71,7 @@
       </n-tabs>
     </div>
     <div class="flex flex-col w-full h-full items-center justify-between pt-10">
-      <n-spin :show="loading">
+      <!-- <n-spin :show="loading">
         <div
           class="image-box px-10 min-h-[300px] flex gap-2 justify-center items-center"
         >
@@ -79,9 +79,10 @@
           <n-empty v-else description="请生成音频" />
         </div>
       </n-spin>
-      <Tips></Tips>
+      <Tips></Tips> -->
+      <MediaHistory type="audios" :generating="loading"></MediaHistory>
     </div>
-    <div v-if="historyVoice.length > 0">
+    <!-- <div v-if="historyVoice.length > 0">
       <KeepAlive>
         <HistorySide>
           <template #content>
@@ -109,7 +110,7 @@
           </template>
         </HistorySide>
       </KeepAlive>
-    </div>
+    </div> -->
   </div>
 </template>
 <script setup>
@@ -117,6 +118,10 @@ import { onMounted, ref, computed } from "vue"
 import { textToVoice } from "@/api/index"
 import Panel from "@/components/panel/index.vue"
 import { voiceSoundOptions } from "@/utils/constant"
+import MediaHistory from "@/components/media-history/index.vue"
+import { useHistory } from "@/hooks/useHistory"
+
+const { initHistory, addAudio } = useHistory()
 
 let activeName = ref("text")
 
@@ -137,6 +142,7 @@ let loading = ref(false)
 
 const voiceSounds = ref([])
 onMounted(() => {
+  initHistory()
   voiceSounds.value = voiceSoundOptions.map((t) => {
     return { label: t, checked: false }
   })
@@ -187,7 +193,8 @@ const mergeBlobToMp3 = (voiceBlobList) => {
   const blob = new Blob(voiceBlobList, { type: "audio/mpeg" })
   const audioUrl = URL.createObjectURL(blob)
   resData.value = audioUrl
-  historyVoice.value.unshift({ prompt: voiceSoundConfig.value.input, audioUrl })
+  addAudio({ prompt: voiceSoundConfig.value.input, data: { url: audioUrl } })
+  // historyVoice.value.unshift({ prompt: voiceSoundConfig.value.input, audioUrl })
   loading.value = false
 }
 

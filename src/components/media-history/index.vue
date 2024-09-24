@@ -9,14 +9,19 @@
       </span>
     </div>
     <div class="list h-full overflow-y-auto">
-      <Item v-if="generating" :data="{}" :type="type" :loading="true"></Item>
-      <Item
-        v-for="item in list"
-        :data="item"
-        :type="type"
-        @delete="removeMedia(item.uuid)"
-        @upscale-video="emit('upscale-video', item.data)"
-      ></Item>
+      <template v-if="list.length == 0">
+        <Item :data="{}" type="empty"></Item>
+      </template>
+      <template v-else>
+        <Item v-if="generating" :data="{}" :type="type" :loading="true"></Item>
+        <Item
+          v-for="item in list"
+          :data="item"
+          :type="type"
+          @delete="removeMedia(item.uuid)"
+          @upscale-video="emit('upscale-video', item.data)"
+        ></Item>
+      </template>
     </div>
   </div>
 </template>

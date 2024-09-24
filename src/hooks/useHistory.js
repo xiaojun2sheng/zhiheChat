@@ -1,6 +1,6 @@
 import { useHistoryStore } from "@/stores"
 import { generateUUID } from "@/utils"
-
+import dayjs from "dayjs"
 export const useHistory = () => {
   const historyStore = useHistoryStore()
 
@@ -60,6 +60,7 @@ export const useHistory = () => {
       {
         ...image,
         uuid: generateUUID(),
+        time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
       },
       ...historyStore.images,
     ])
@@ -75,7 +76,11 @@ export const useHistory = () => {
 
   const addVideo = (video) => {
     historyStore.setVideos([
-      { ...video, uuid: generateUUID() },
+      {
+        ...video,
+        uuid: generateUUID(),
+        time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+      },
       ...historyStore.videos,
     ])
     setLocalStorage()
@@ -89,8 +94,16 @@ export const useHistory = () => {
   }
 
   const addAudio = (audio) => {
-    historyStore.setAudios([...historyStore.audios, audio])
-    setLocalStorage()
+    // 音频缓存无效
+    historyStore.setAudios([
+      {
+        ...audio,
+        uuid: generateUUID(),
+        time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+      },
+      ...historyStore.audios,
+    ])
+    // setLocalStorage()
   }
 
   const removeAudioByUUID = (uuid) => {

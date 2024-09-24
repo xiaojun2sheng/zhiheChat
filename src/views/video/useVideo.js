@@ -1,10 +1,8 @@
 import { ref, onMounted, computed } from "vue"
 import { viduApi, klingApi, getTaskById } from "@/api/index"
-import { useCountDown } from "@/hooks/useCountDown"
 import { useHistory } from "@/hooks/useHistory"
 
 export const useVideo = (url) => {
-  const { progress, initCountDown, clearCountDown } = useCountDown()
   const { initHistory: initMediaHistory, addVideo } = useHistory()
 
   const activeName = ref("text")
@@ -222,7 +220,6 @@ export const useVideo = (url) => {
     inputStyle,
     uploadImage,
     generating,
-    progress,
     videoSetting,
     modelOptions,
     createVideoTask,
