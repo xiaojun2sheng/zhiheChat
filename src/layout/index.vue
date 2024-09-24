@@ -10,13 +10,14 @@
 import Header from "./header.vue"
 import { onMounted } from "vue"
 
-onMounted(() => {
-})
+onMounted(() => {})
 defineProps({})
 </script>
 
 <style lang="scss" scoped>
 .main {
-  height: calc(100% - 35px);
+  // height: calc(100% - 35px);
+  flex: 1;
+  overflow: hidden;
 }
 </style>

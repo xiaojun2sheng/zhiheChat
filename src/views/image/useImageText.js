@@ -61,7 +61,7 @@ export const useImageText = (emit) => {
         loading.value = false
         emit("on-end")
       })
-      emit("on-success", res.data)
+      emit("on-success", { data: res.data, prompt: imageSetting.value.prompt })
     } catch (error) {
       loading.value = false
     }

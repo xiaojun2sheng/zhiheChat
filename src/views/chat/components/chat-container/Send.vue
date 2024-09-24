@@ -11,7 +11,6 @@
         '--n-border': '1px solid gba(255, 255, 255, 0)',
       }"
       v-model:value="sendContent"
-      maxlength="500"
       :autofocus="true"
       :autosize="{ minRows: 2, maxRows: 4 }"
       :placeholder="placeholder"

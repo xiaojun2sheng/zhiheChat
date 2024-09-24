@@ -1,4 +1,5 @@
 import { ref, onMounted } from "vue"
+import { useHistory } from "@/hooks/useHistory"
 
 export const useImage = (url) => {
   const activeName = ref("text")
@@ -33,8 +34,10 @@ export const useImage = (url) => {
     )
   }
 
+  const { initHistory: initMediaHistory, addImage } = useHistory()
   onMounted(() => {
     initHistory()
+    initMediaHistory()
     // const imageGeneratingId = localStorage.getItem(
     //   "chatbot-image-generating-id"
     // )
@@ -42,7 +45,6 @@ export const useImage = (url) => {
     //   window.$message.warning("发现未完成图片任务生成，正在继续生成")
     //   getTaskInterval(imageGeneratingId)
     // }
-
   })
 
   const onLoading = (data) => {
@@ -54,7 +56,7 @@ export const useImage = (url) => {
   const onSuccess = (data) => {
     imageUrls.value = data || []
     loading.value = false
-    addHistory(data)
+    addImage(data)
     initHistory()
   }
   const onEnd = () => {

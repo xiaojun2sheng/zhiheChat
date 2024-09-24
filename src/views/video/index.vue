@@ -101,18 +101,18 @@
           type="primary"
           >生成视频</n-button
         >
-        <n-button
+        <!-- <n-button
           v-if="videoInfo?.grade == 'draft'"
           class="prompt-btn__primary"
           round
           @click="upscaleVideoTask"
           type="primary"
           >视频优化</n-button
-        >
+        > -->
       </div>
     </div>
     <div class="flex flex-col w-full h-full items-center justify-between pt-10">
-      <div
+      <!-- <div
         class="video-box w-4/5 min-h-[300px] flex justify-center items-center"
       >
         <div
@@ -137,9 +137,11 @@
         ></video>
         <n-empty v-else description="快去生成你的创意吧" />
       </div>
-      <Tips></Tips>
+      <Tips></Tips> -->
+      <MediaHistory type="videos" :generating="generating" @upscale-video="upscaleVideoTask"></MediaHistory>
+
     </div>
-    <div v-if="historyVideos.length > 0">
+    <!-- <div v-if="historyVideos.length > 0">
       <KeepAlive>
         <HistorySide>
           <template #content>
@@ -169,7 +171,7 @@
           </template>
         </HistorySide>
       </KeepAlive>
-    </div>
+    </div> -->
   </div>
 </template>
 <script setup>
@@ -178,6 +180,8 @@ import UploadImage from "@/components/upload-image/index.vue"
 import Tips from "@/components/tips.vue"
 import { videoRecommendPrompt } from "@/utils"
 import { useVideo } from "./useVideo"
+import MediaHistory from '@/components/media-history/index.vue'
+
 
 const {
   videoUrl,

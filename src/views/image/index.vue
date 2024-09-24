@@ -1,6 +1,6 @@
 <template>
   <div class="common_page flex gap-2">
-    <div class="w-[400px] shrink-0 overflow-auto">
+    <div class="w-[400px] shrink-0 overflow-auto gap-4">
       <n-tabs type="line" v-model:value="activeName" animated>
         <n-tab-pane name="text" tab="文生图" display-directive="show">
           <ImageText
@@ -50,8 +50,8 @@
         </n-tab-pane>
       </n-tabs>
     </div>
-    <div class="flex flex-col w-full h-full items-center justify-between pt-10">
-      <div
+    <div class="flex flex-col w-full h-full items-center justify-between">
+      <!-- <div
         class="image-box px-10 min-h-[300px] flex gap-2 justify-start items-center flex-wrap overflow-auto"
       >
         <n-image-group v-if="imageUrls.length > 0" show-toolbar-tooltip>
@@ -70,9 +70,10 @@
           description="请生成图片"
         />
       </div>
-      <Tips></Tips>
+      <Tips></Tips> -->
+      <MediaHistory type="images" :generating="loading"></MediaHistory>
     </div>
-    <div v-if="historyImgs.length > 0">
+    <!-- <div v-if="historyImgs.length > 0">
       <KeepAlive>
         <HistorySide>
           <template #content>
@@ -101,7 +102,7 @@
           </template>
         </HistorySide>
       </KeepAlive>
-    </div>
+    </div> -->
   </div>
 </template>
 <script setup>
@@ -110,6 +111,8 @@ import ImageText from "./ImageText.vue"
 import ImageFace from "./ImageFace.vue"
 import ImageBox from "./ImageBox.vue"
 import ImageID from "./ImageID.vue"
+import MediaHistory from '@/components/media-history/index.vue'
+
 import { useImage } from "./useImage"
 
 const {

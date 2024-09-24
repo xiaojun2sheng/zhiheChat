@@ -1,9 +1,12 @@
 import { ref, onMounted, computed } from "vue"
 import { viduApi, klingApi, getTaskById } from "@/api/index"
 import { useCountDown } from "@/hooks/useCountDown"
+import { useHistory } from "@/hooks/useHistory"
 
 export const useVideo = (url) => {
   const { progress, initCountDown, clearCountDown } = useCountDown()
+  const { initHistory: initMediaHistory, addVideo } = useHistory()
+
   const activeName = ref("text")
   const videoPrompt = ref("")
   const videoSetting = ref({
@@ -59,7 +62,7 @@ export const useVideo = (url) => {
     videoInfo.value = { taskId: res.id }
     localStorage.setItem("chatbot-video-generating-id", res.id)
     // 倒计时
-    initCountDown()
+    // initCountDown()
     intervalId.value = setInterval(getVideoInfo, 10000)
   }
 
@@ -86,7 +89,8 @@ export const useVideo = (url) => {
       if (videoSetting.value.model === "vidu") {
         const creation = res?.creations[0]
         creation.taskId = creation.task_id
-        if(!creation.taskId.includes("vidu-")) creation.taskId = `vidu-${creation.taskId}`
+        if (!creation.taskId.includes("vidu-"))
+          creation.taskId = `vidu-${creation.taskId}`
         creation.creationId = creation.id
         videoInfo.value = creation
       }
@@ -100,29 +104,36 @@ export const useVideo = (url) => {
           })
       }
 
-      addHistory({
-        videoPrompt: videoPrompt.value,
-        uploadImage: uploadImage.value,
-        ...videoInfo.value,
+      addVideo({
+        data: videoInfo.value,
+        prompt: videoPrompt.value,
+        imageUrl: uploadImage.value,
       })
+      // addHistory({
+      //   videoPrompt: videoPrompt.value,
+      //   uploadImage: uploadImage.value,
+      //   ...videoInfo.value,
+      // })
       window.$message.success("视频生成成功")
-      clearInterval(intervalId.value)
+      // clearInterval(intervalId.value)
       localStorage.setItem("chatbot-video-generating-id", "")
       generating.value = false
-      clearCountDown()
+      // clearCountDown()
     }
   }
 
-  const upscaleVideoTask = async () => {
+  const isUpscale = ref(false)
+  const upscaleVideoTask = async (data) => {
     const res = await viduApi.videoUpscale({
-      task_id: videoInfo.value.taskId + "",
-      creation_id: videoInfo.value.creationId + "",
+      task_id: data.taskId + "",
+      creation_id: data.creationId + "",
     })
+    isUpscale.value = true
     videoInfo.value = { taskId: res.id }
     localStorage.setItem("chatbot-video-generating-id", res.id)
     console.log("upscaleVideoTask res", res)
     // 倒计时
-    initCountDown()
+    // initCountDown()
     generating.value = true
     intervalId.value = setInterval(getVideoInfo, 3000)
   }
@@ -155,18 +166,18 @@ export const useVideo = (url) => {
     )
   }
   onMounted(() => {
-    initHistory()
-    const videoGeneratingId = localStorage.getItem(
-      "chatbot-video-generating-id"
-    )
-    if (videoGeneratingId) {
-      window.$message.warning("发现未完成视频生成，正在继续生成")
-      videoInfo.value = { taskId: videoGeneratingId }
-      // 倒计时
-      initCountDown()
-      generating.value = true
-      intervalId.value = setInterval(getVideoInfo, 3000)
-    }
+    initMediaHistory()
+    // const videoGeneratingId = localStorage.getItem(
+    //   "chatbot-video-generating-id"
+    // )
+    // if (videoGeneratingId) {
+    //   window.$message.warning("发现未完成视频生成，正在继续生成")
+    //   videoInfo.value = { taskId: videoGeneratingId }
+    //   // 倒计时
+    //   initCountDown()
+    //   generating.value = true
+    //   intervalId.value = setInterval(getVideoInfo, 3000)
+    // }
   })
 
   const videoUrl = computed(() => {

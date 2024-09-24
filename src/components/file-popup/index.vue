@@ -45,7 +45,7 @@
         <n-tab-pane
           class="h-full"
           name="history"
-          tab="历史图片"
+          tab="历史图片(最近10张)"
           display-directive="show"
         >
           <History @on-selected="selectFile"></History>
