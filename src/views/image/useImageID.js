@@ -35,7 +35,7 @@ export const useImageID = (emit, props) => {
 
   const sourceImage = ref("")
   const sourceImageSuccess = (data) => {
-    idPhotoSettings.value.file = data.url
+    idPhotoSettings.value.url = data.url
   }
 
   const loading = ref(false)
@@ -44,14 +44,17 @@ export const useImageID = (emit, props) => {
       window.$message.warning("正在生成图片，请稍后")
       return
     }
-    if (!idPhotoSettings.value.file) {
+    if (!idPhotoSettings.value.url) {
       window.$message.warning("请上传图片")
       return
     }
     loading.value = true
     emit("on-loading", true)
-
-    const res = await generateImageIDPhoto(idPhotoSettings.value)
+    const res = await generateImageIDPhoto(idPhotoSettings.value).catch(() => {
+      loading.value = false
+      emit("on-loading", false)
+      return
+    })
     // if (!id) return
     // localStorage.setItem("chatbot-image-generating-id", id)
     // getTaskInterval(id)
@@ -80,7 +83,7 @@ export const useImageID = (emit, props) => {
   }
 
   const idPhotoSettings = ref({
-    file: "",
+    url: "",
     size: "一寸",
     backgroundColor: "白色",
     renderMode: "pure_color",
