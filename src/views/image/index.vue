@@ -33,14 +33,14 @@
             @on-end="onEnd"
           ></ImageBox>
         </n-tab-pane>
-        <!-- <n-tab-pane name="idPhotos" tab="证件照" display-directive="show">
+        <n-tab-pane name="idPhotos" tab="证件照" display-directive="show">
           <ImageID
             type="idPhotos"
             @on-success="onSuccess"
             @on-loading="onLoading"
             @on-end="onEnd"
           ></ImageID>
-        </n-tab-pane> -->
+        </n-tab-pane>
         <n-tab-pane name="tools" tab="百宝箱" display-directive="show">
           <ImageBox
             @on-success="onSuccess"

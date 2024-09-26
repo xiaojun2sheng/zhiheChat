@@ -50,11 +50,29 @@ export const useImageID = (emit, props) => {
     }
     loading.value = true
     emit("on-loading", true)
-    const res = await generateImageIDPhoto(idPhotoSettings.value).catch(() => {
+    const formData = new FormData()
+    // formData.append("file", file)
+    formData.append("url", idPhotoSettings.value.url)
+    formData.append("size", idPhotoSettings.value.size)
+    formData.append("backgroundColor", idPhotoSettings.value.backgroundColor)
+    formData.append("renderMode", idPhotoSettings.value.renderMode)
+
+    const res = await generateImageIDPhoto(formData).finally(() => {
       loading.value = false
-      emit("on-loading", false)
+      emit("on-end")
       return
     })
+    // if (!res) return
+    emit("on-success", {
+      data: {
+        url: res.img_output_standard,
+        img_output_standard: res.img_output_standard,
+        img_output_standard_hd: res.img_output_standard_hd,
+      },
+      prompt: `${idPhotoSettings.value.size} ${idPhotoSettings.value.backgroundColor}`,
+      model: "证件照",
+    })
+
     // if (!id) return
     // localStorage.setItem("chatbot-image-generating-id", id)
     // getTaskInterval(id)
